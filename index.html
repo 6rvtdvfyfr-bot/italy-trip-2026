@@ -661,6 +661,116 @@
     .action-item { padding: 11px 0; font-size: 0.84rem; }
     .action-dot { width: 8px; height: 8px; margin-top: 4px; }
   }
+
+  /* ─── Today / Now banner ─── */
+  #today-banner {
+    display: none;
+    background: #1a5c8f;
+    color: #fff;
+    padding: 9px 16px;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    flex-wrap: wrap;
+  }
+  #today-banner .tb-main { flex: 1; min-width: 0; }
+  #today-banner strong { font-weight: 700; }
+  #today-banner .tb-until { opacity: 0.78; font-size: 0.74rem; }
+  #today-banner .tb-next { opacity: 0.88; }
+  .tb-maps-btn {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tb-maps-btn:hover { background: rgba(255,255,255,0.3); }
+
+  /* ─── Essentials FAB ─── */
+  #essentials-fab {
+    position: fixed;
+    bottom: 22px;
+    left: 18px;
+    z-index: 1000;
+    background: #2d2d2d;
+    color: #fff;
+    border: none;
+    border-radius: 28px;
+    padding: 13px 18px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  #essentials-fab:active { background: #111; transform: scale(0.97); }
+
+  /* ─── Essentials Drawer ─── */
+  #essentials-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1500;
+  }
+  #essentials-drawer {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 1600;
+    background: #fff;
+    border-radius: 18px 18px 0 0;
+    max-height: 78vh;
+    overflow-y: auto;
+    padding: 0 0 env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 32px rgba(0,0,0,0.22);
+  }
+  #essentials-drawer.open { display: block; }
+  #essentials-overlay.open { display: block; }
+  .ess-handle {
+    width: 38px; height: 4px;
+    background: #ddd; border-radius: 2px;
+    margin: 10px auto 0;
+  }
+  .ess-header {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px 6px;
+    border-bottom: 1px solid #ede7df;
+  }
+  .ess-title { font-size: 1rem; font-weight: 700; color: #1f1510; }
+  .ess-close {
+    background: none; border: none; font-size: 1.2rem;
+    color: #888; cursor: pointer; padding: 4px 8px;
+  }
+  .ess-section { padding: 14px 18px 4px; }
+  .ess-section-title {
+    font-size: 0.65rem; font-weight: 700; color: #8B3A2F;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    margin-bottom: 8px;
+  }
+  .ess-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 7px 0; border-bottom: 1px solid #f2ece6;
+    font-size: 0.82rem; color: #2d1f14;
+  }
+  .ess-row:last-child { border-bottom: none; }
+  .ess-row-label { font-weight: 600; min-width: 80px; color: #8B3A2F; font-size: 0.75rem; flex-shrink: 0; }
+  .ess-row-val { flex: 1; line-height: 1.4; }
+  .ess-row-val a { color: #1a6bbf; text-decoration: none; }
+  .ess-emerg { color: #c0392b !important; font-weight: 700; }
+  #ess-tonight { padding: 10px 18px 12px; background: #f7f2ed; border-radius: 0; }
+  .ess-hotel-name { font-weight: 700; font-size: 0.9rem; color: #1f1510; margin-bottom: 2px; }
+  .ess-hotel-addr { font-size: 0.78rem; color: #5a4535; margin-bottom: 6px; }
 </style>
 </head>
 <body>
@@ -685,6 +795,11 @@
     <button class="tab-btn" data-section="rome">Rome</button>
     <button class="tab-btn" data-section="logistics">Logistics</button>
   </nav>
+
+  <!-- Today / Now banner -->
+  <div id="today-banner">
+    <div class="tb-main" id="today-banner-text"></div>
+  </div>
 
   <!-- Content -->
   <div id="content">
@@ -797,6 +912,52 @@
   </div><!-- /content -->
   <!-- Map toggle FAB (mobile only, shown for city sections) -->
   <button id="map-fab" class="hidden" onclick="showMap()">🗺 View Map</button>
+
+  <!-- Essentials FAB (always visible) -->
+  <button id="essentials-fab" onclick="openEssentials()">🆘 Essentials</button>
+
+  <!-- Essentials Drawer -->
+  <div id="essentials-overlay" onclick="closeEssentials()"></div>
+  <div id="essentials-drawer">
+    <div class="ess-handle"></div>
+    <div class="ess-header">
+      <span class="ess-title">🆘 Essentials</span>
+      <button class="ess-close" onclick="closeEssentials()">✕</button>
+    </div>
+
+    <!-- Tonight's hotel (filled by JS) -->
+    <div id="ess-tonight"></div>
+
+    <!-- Emergency numbers -->
+    <div class="ess-section">
+      <div class="ess-section-title">🚨 Emergency Numbers</div>
+      <div class="ess-row"><span class="ess-row-label">All emergencies</span><span class="ess-row-val ess-emerg"><a href="tel:112">112</a></span></div>
+      <div class="ess-row"><span class="ess-row-label">Police</span><span class="ess-row-val ess-emerg"><a href="tel:113">113</a></span></div>
+      <div class="ess-row"><span class="ess-row-label">Ambulance</span><span class="ess-row-val ess-emerg"><a href="tel:118">118</a></span></div>
+      <div class="ess-row"><span class="ess-row-label">US Embassy</span><span class="ess-row-val"><a href="tel:+390646741">+39 06 4674-1</a> &nbsp;·&nbsp; Rome</span></div>
+    </div>
+
+    <!-- Flights -->
+    <div class="ess-section">
+      <div class="ess-section-title">✈️ Flights</div>
+      <div class="ess-row"><span class="ess-row-label">Outbound</span><span class="ess-row-val">UA 126 &nbsp;·&nbsp; IAD→FCO &nbsp;·&nbsp; Jun 22, 10:20 PM</span></div>
+      <div class="ess-row"><span class="ess-row-label">Return</span><span class="ess-row-val">UA 127 &nbsp;·&nbsp; FCO→IAD &nbsp;·&nbsp; Jul 2, 3:20 PM</span></div>
+    </div>
+
+    <!-- Car rental -->
+    <div class="ess-section">
+      <div class="ess-section-title">🚗 Car Rental</div>
+      <div class="ess-row"><span class="ess-row-label">Return by</span><span class="ess-row-val">FCO &nbsp;·&nbsp; Jun 28 by 5:00 PM</span></div>
+    </div>
+
+    <!-- All hotels -->
+    <div class="ess-section" style="padding-bottom: 24px;">
+      <div class="ess-section-title">🏨 All Accommodations</div>
+      <div class="ess-row"><span class="ess-row-label">Siena</span><span class="ess-row-val">Hotel Athena &nbsp;·&nbsp; Piazza Mascagni 55 &nbsp;·&nbsp; Jun 23–25</span></div>
+      <div class="ess-row"><span class="ess-row-label">Florence</span><span class="ess-row-val">Hotel Horto Convento &nbsp;·&nbsp; Viale Ariosto 13 &nbsp;·&nbsp; Jun 25–28</span></div>
+      <div class="ess-row"><span class="ess-row-label">Rome</span><span class="ess-row-val">AirBnB &nbsp;·&nbsp; Via della Fornaci 44 &nbsp;·&nbsp; Jun 28–Jul 2</span></div>
+    </div>
+  </div>
 
 </div><!-- /app -->
 
@@ -2024,6 +2185,122 @@ function switchSection(section) {
 }
 
 // ─────────────────────────────────────────────
+// TODAY / NOW BANNER + ESSENTIALS
+// ─────────────────────────────────────────────
+
+const TRIP_DAY_MAP = {
+  '2026-06-23': { section: 'siena',    dayIdx: 0 },
+  '2026-06-24': { section: 'siena',    dayIdx: 1 },
+  '2026-06-25': { section: 'florence', dayIdx: 0 },
+  '2026-06-26': { section: 'florence', dayIdx: 1 },
+  '2026-06-27': { section: 'florence', dayIdx: 2 },
+  '2026-06-28': { section: 'rome',     dayIdx: 0 },
+  '2026-06-29': { section: 'rome',     dayIdx: 1 },
+  '2026-06-30': { section: 'rome',     dayIdx: 2 },
+  '2026-07-01': { section: 'rome',     dayIdx: 3 },
+  '2026-07-02': { section: 'rome',     dayIdx: 4 },
+};
+
+const TONIGHT_HOTEL = {
+  '2026-06-23': { name: 'Hotel Athena — Siena',              addr: 'Piazza Mascagni 55, Siena',         coords: [43.3168, 11.3356] },
+  '2026-06-24': { name: 'Hotel Athena — Siena',              addr: 'Piazza Mascagni 55, Siena',         coords: [43.3168, 11.3356] },
+  '2026-06-25': { name: 'Hotel Horto Convento — Florence',   addr: 'Viale Ariosto 13, Florence',        coords: [43.7660, 11.2428] },
+  '2026-06-26': { name: 'Hotel Horto Convento — Florence',   addr: 'Viale Ariosto 13, Florence',        coords: [43.7660, 11.2428] },
+  '2026-06-27': { name: 'Hotel Horto Convento — Florence',   addr: 'Viale Ariosto 13, Florence',        coords: [43.7660, 11.2428] },
+  '2026-06-28': { name: 'AirBnB — Rome',                     addr: 'Via della Fornaci 44, Rome',        coords: [41.8936, 12.4547] },
+  '2026-06-29': { name: 'AirBnB — Rome',                     addr: 'Via della Fornaci 44, Rome',        coords: [41.8936, 12.4547] },
+  '2026-06-30': { name: 'AirBnB — Rome',                     addr: 'Via della Fornaci 44, Rome',        coords: [41.8936, 12.4547] },
+  '2026-07-01': { name: 'AirBnB — Rome',                     addr: 'Via della Fornaci 44, Rome',        coords: [41.8936, 12.4547] },
+};
+
+function getItalyDateStr() {
+  return new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' });
+}
+
+function getItalyNowMin() {
+  const t = new Date().toLocaleTimeString('sv-SE', { timeZone: 'Europe/Rome' });
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function fmtMin(min) {
+  const h = Math.floor(min / 60), m = min % 60;
+  return `${h > 12 ? h - 12 : (h || 12)}:${String(m).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
+}
+
+function updateTodayBanner() {
+  const banner = document.getElementById('today-banner');
+  const textEl = document.getElementById('today-banner-text');
+  const dateStr = getItalyDateStr();
+  const entry = TRIP_DAY_MAP[dateStr];
+  if (!entry) { banner.style.display = 'none'; return; }
+
+  const nowMin = getItalyNowMin();
+  const day = SECTIONS[entry.section].days[entry.dayIdx];
+  const schedule = getStopSchedule(day, entry.section).filter(s => s.stop.type !== 'transport' && s.stop.type !== 'hotel');
+
+  let cur = null, nxt = null;
+  for (let i = 0; i < schedule.length; i++) {
+    const { startMin, durationMin } = schedule[i];
+    if (nowMin >= startMin && nowMin < startMin + durationMin) {
+      cur = schedule[i]; nxt = schedule[i + 1] || null; break;
+    }
+    if (startMin > nowMin) { nxt = schedule[i]; break; }
+    nxt = schedule[i + 1] || null;
+  }
+
+  let html = '', mapsStop = null;
+  if (cur) {
+    const endStr = fmtMin(cur.startMin + cur.durationMin);
+    html = `<strong>Now:</strong> ${cur.stop.name} <span class="tb-until">(until ~${endStr})</span>`;
+    if (nxt) html += ` &nbsp;·&nbsp; <span class="tb-next"><strong>Next:</strong> ${nxt.stop.name}</span>`;
+    mapsStop = cur.stop;
+  } else if (nxt) {
+    const startStr = fmtMin(nxt.startMin);
+    html = `<strong>Up next:</strong> ${nxt.stop.name} <span class="tb-until">at ${startStr}</span>`;
+    mapsStop = nxt.stop;
+  } else {
+    html = `<strong>That's a wrap!</strong> Great day — enjoy the evening. 🍷`;
+  }
+
+  const mapsHref = mapsStop && mapsStop.coords
+    ? `https://maps.apple.com/?daddr=${mapsStop.coords[0]},${mapsStop.coords[1]}&dirflg=w`
+    : null;
+
+  textEl.innerHTML = html;
+  banner.innerHTML = `<div class="tb-main">${html}</div>` +
+    (mapsHref ? `<a class="tb-maps-btn" href="${mapsHref}" target="_blank">🗺 Go</a>` : '');
+  banner.style.display = 'flex';
+}
+
+function openEssentials() {
+  const dateStr = getItalyDateStr();
+  const hotel = TONIGHT_HOTEL[dateStr];
+  const tonightEl = document.getElementById('ess-tonight');
+  if (hotel) {
+    const mapsHref = `https://maps.apple.com/?daddr=${hotel.coords[0]},${hotel.coords[1]}&dirflg=w`;
+    tonightEl.innerHTML = `
+      <div class="ess-section-title" style="padding: 14px 18px 0; font-size:0.65rem; font-weight:700; color:#8B3A2F; text-transform:uppercase; letter-spacing:0.07em;">🏨 Tonight's Hotel</div>
+      <div style="padding: 8px 18px 14px; background:#f7f2ed;">
+        <div class="ess-hotel-name">${hotel.name}</div>
+        <div class="ess-hotel-addr">${hotel.addr}</div>
+        <a class="stop-link maps-link" href="${mapsHref}" target="_blank">🚶 Directions</a>
+      </div>`;
+  } else {
+    tonightEl.innerHTML = '';
+  }
+  document.getElementById('essentials-overlay').classList.add('open');
+  document.getElementById('essentials-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEssentials() {
+  document.getElementById('essentials-overlay').classList.remove('open');
+  document.getElementById('essentials-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2032,7 +2309,19 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 loadOverrides();
 loadDurationOverrides();
-switchSection('overview');
+updateTodayBanner();
+
+// Auto-navigate to today's city + day, fall back to overview
+(function initTodaySection() {
+  const entry = TRIP_DAY_MAP[getItalyDateStr()];
+  if (!entry) { switchSection('overview'); return; }
+  switchSection(entry.section);
+  setTimeout(() => {
+    const day = SECTIONS[entry.section].days[entry.dayIdx];
+    const pill = document.querySelector(`.day-pill[data-day="${day.id}"]`);
+    if (pill) pill.click();
+  }, 60);
+})();
 </script>
 </body>
 </html>
