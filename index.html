@@ -280,6 +280,115 @@
   .stop-lock-icon { margin-left: 6px; font-size: 0.85rem; opacity: 0.4; flex-shrink: 0; align-self: center; }
   .stop-card.locked-stop { opacity: 0.75; }
 
+  /* ─── Timeline View ─── */
+  .timeline-toggle-btn {
+    background: none;
+    border: 1.5px solid #2d6a9f;
+    color: #2d6a9f;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 32px;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .timeline-toggle-btn.active { background: #2d6a9f; color: #fff; }
+  .timeline-toggle-btn:hover { background: #2d6a9f; color: #fff; }
+  .timeline-grid {
+    position: relative;
+    height: 960px;
+    margin: 8px 8px 16px 50px;
+    flex-shrink: 0;
+  }
+  .hour-label {
+    position: absolute;
+    left: -48px;
+    width: 44px;
+    text-align: right;
+    font-size: 0.68rem;
+    color: #bbb;
+    line-height: 1;
+    transform: translateY(-50%);
+    user-select: none;
+  }
+  .hour-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: #ede7df;
+  }
+  .hour-line.hour-line-major { background: #d4c8be; }
+  .timeline-block {
+    position: absolute;
+    left: 0; right: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: filter 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .timeline-block:hover { filter: brightness(0.9); }
+  .timeline-block.tb-locked { opacity: 0.6; cursor: default; }
+  .timeline-block.tb-locked:hover { filter: none; }
+  .tb-name {
+    font-weight: 700;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .tb-time { font-size: 0.63rem; color: rgba(255,255,255,0.88); line-height: 1.3; margin-top: 1px; }
+  .duration-popover {
+    position: fixed;
+    z-index: 2000;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
+    padding: 12px 14px;
+    min-width: 210px;
+  }
+  .dp-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #2a1f17;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+  .dp-dur { font-size: 0.72rem; color: #8B3A2F; font-weight: 700; margin: 2px 0 10px; }
+  .dp-btns { display: flex; gap: 5px; align-items: center; }
+  .dp-btn {
+    background: #f0e8df;
+    border: 1px solid #c8bdb5;
+    border-radius: 8px;
+    padding: 5px 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #3d2b1f;
+    transition: background 0.12s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .dp-btn:hover { background: #e0d5cc; }
+  .dp-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0 2px;
+    line-height: 1;
+  }
+
   /* ─── Map ─── */
   #map-pane {
     flex: 1;
@@ -1186,6 +1295,9 @@ let currentSectionKey = null;
 let mapMarkers = [];
 let activePill = null;
 let editMode = false;
+let timelineMode = false;
+let durationOverrides = {};
+let popoverOutsideHandler = null;
 
 // Deep-copy of original SECTIONS data for reset
 const ORIGINAL_SECTIONS = JSON.parse(JSON.stringify(SECTIONS));
@@ -1229,6 +1341,222 @@ function highlightCard(cardEl) {
     cardEl.classList.add('highlighted');
     cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+}
+
+// ─────────────────────────────────────────────
+// TIMELINE HELPERS
+// ─────────────────────────────────────────────
+function parseTimeToMinutes(timeStr) {
+  if (!timeStr) return null;
+  const s = timeStr.replace(/^~/, '').trim();
+  if (/^morning/i.test(s)) return 9 * 60;
+  if (/^afternoon/i.test(s)) return 14 * 60;
+  if (/^evening/i.test(s)) return 19 * 60;
+  const m = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m) return null;
+  let h = parseInt(m[1]);
+  const mn = parseInt(m[2]);
+  const ap = m[3].toUpperCase();
+  if (ap === 'PM' && h !== 12) h += 12;
+  if (ap === 'AM' && h === 12) h = 0;
+  return h * 60 + mn;
+}
+
+function parseDurationToMinutes(durStr) {
+  if (!durStr) return null;
+  const s = durStr.toLowerCase().replace(/^~/, '').trim();
+  if (s === 'half day') return 240;
+  const hrPlusMatch = s.match(/^(\d+)\s*hr\+/);
+  if (hrPlusMatch) return parseInt(hrPlusMatch[1]) * 60 + 15;
+  const hrMatch = s.match(/^(\d+(?:\.\d+)?)\s*hr/);
+  if (hrMatch) return Math.round(parseFloat(hrMatch[1]) * 60);
+  const minMatch = s.match(/^(\d+)\s*min/);
+  if (minMatch) return parseInt(minMatch[1]);
+  return null;
+}
+
+function getDefaultDuration(stop) {
+  if (stop.type === 'transport') return 120;
+  if (stop.type === 'hotel') return 30;
+  if (stop.tags.includes('restaurant') || /dinner|lunch|breakfast/i.test(stop.name)) return 90;
+  return 60;
+}
+
+function formatDuration(minutes) {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h === 0) return m + ' min';
+  if (m === 0) return h + ' hr' + (h > 1 ? 's' : '');
+  return h + ' hr ' + m + ' min';
+}
+
+function getStopSchedule(day, sectionKey) {
+  const schedule = [];
+  let lastEndMin = 9 * 60;
+  day.stops.forEach(stop => {
+    let startMin = parseTimeToMinutes(stop.time);
+    const ovr = durationOverrides[sectionKey] && durationOverrides[sectionKey][day.id] && durationOverrides[sectionKey][day.id][stop.num];
+    const durationMin = Math.max(15, ovr || parseDurationToMinutes(stop.duration) || getDefaultDuration(stop));
+    if (startMin === null) startMin = Math.max(lastEndMin, 9 * 60);
+    schedule.push({ stop, startMin, durationMin });
+    lastEndMin = startMin + durationMin;
+  });
+  return schedule;
+}
+
+function loadDurationOverrides() {
+  try { durationOverrides = JSON.parse(localStorage.getItem('italy-trip-durations') || '{}'); }
+  catch(e) { durationOverrides = {}; }
+}
+
+function saveDurationOverride(sectionKey, dayId, stopNum, minutes) {
+  if (!durationOverrides[sectionKey]) durationOverrides[sectionKey] = {};
+  if (!durationOverrides[sectionKey][dayId]) durationOverrides[sectionKey][dayId] = {};
+  durationOverrides[sectionKey][dayId][stopNum] = minutes;
+  try { localStorage.setItem('italy-trip-durations', JSON.stringify(durationOverrides)); } catch(e) {}
+  if (currentSectionKey) {
+    const data = SECTIONS[currentSectionKey];
+    if (data) {
+      const di = data.days.findIndex(d => d.id === dayId);
+      if (di >= 0) renderTimeline(currentSectionKey, di);
+    }
+  }
+}
+
+function closeDurationPopover() {
+  const el = document.getElementById('duration-popover');
+  if (el) el.remove();
+  if (popoverOutsideHandler) {
+    document.removeEventListener('click', popoverOutsideHandler, true);
+    popoverOutsideHandler = null;
+  }
+}
+
+function showDurationPopover(blockEl, stop, sectionKey, dayId) {
+  closeDurationPopover();
+  const ovr = durationOverrides[sectionKey] && durationOverrides[sectionKey][dayId] && durationOverrides[sectionKey][dayId][stop.num];
+  let dur = Math.max(15, ovr || parseDurationToMinutes(stop.duration) || getDefaultDuration(stop));
+
+  const pop = document.createElement('div');
+  pop.id = 'duration-popover';
+  pop.className = 'duration-popover';
+  pop.innerHTML = `
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+      <div>
+        <div class="dp-title">${stop.name}</div>
+        <div class="dp-dur" id="dp-dur-display">${formatDuration(dur)}</div>
+      </div>
+      <button class="dp-close" id="dp-close-btn">✕</button>
+    </div>
+    <div class="dp-btns">
+      <button class="dp-btn" data-delta="-60">−1 hr</button>
+      <button class="dp-btn" data-delta="-15">−15</button>
+      <button class="dp-btn" data-delta="15">+15</button>
+      <button class="dp-btn" data-delta="60">+1 hr</button>
+    </div>`;
+  document.body.appendChild(pop);
+
+  const rect = blockEl.getBoundingClientRect();
+  const pw = 220;
+  let left = rect.right + 6;
+  if (left + pw > window.innerWidth - 8) left = rect.left - pw - 6;
+  if (left < 8) left = 8;
+  let top = rect.top;
+  if (top + 120 > window.innerHeight - 8) top = window.innerHeight - 128;
+  if (top < 8) top = 8;
+  pop.style.left = left + 'px';
+  pop.style.top = top + 'px';
+
+  pop.querySelector('#dp-close-btn').addEventListener('click', closeDurationPopover);
+  pop.querySelectorAll('.dp-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dur = Math.max(15, dur + parseInt(btn.dataset.delta));
+      pop.querySelector('#dp-dur-display').textContent = formatDuration(dur);
+      saveDurationOverride(sectionKey, dayId, stop.num, dur);
+    });
+  });
+
+  setTimeout(() => {
+    popoverOutsideHandler = (e) => { if (!pop.contains(e.target)) closeDurationPopover(); };
+    document.addEventListener('click', popoverOutsideHandler, true);
+  }, 10);
+}
+
+function renderTimeline(sectionKey, dayIdx) {
+  const data = SECTIONS[sectionKey];
+  if (!data || !data.days[dayIdx]) return;
+  const day = data.days[dayIdx];
+  const GSTART = 6 * 60;   // 6 AM
+  const GEND = 22 * 60;    // 10 PM
+
+  const listEl = document.getElementById('stops-list');
+  listEl.innerHTML = '';
+
+  const grid = document.createElement('div');
+  grid.className = 'timeline-grid';
+
+  // Hour rows
+  for (let h = 6; h <= 22; h++) {
+    const topPx = h * 60 - GSTART;
+    const label = document.createElement('div');
+    label.className = 'hour-label';
+    label.style.top = topPx + 'px';
+    label.textContent = h === 12 ? '12 PM' : h < 12 ? h + ' AM' : (h - 12) + ' PM';
+    grid.appendChild(label);
+
+    const line = document.createElement('div');
+    line.className = 'hour-line' + (h % 3 === 0 ? ' hour-line-major' : '');
+    line.style.top = topPx + 'px';
+    grid.appendChild(line);
+  }
+
+  // Activity blocks
+  const schedule = getStopSchedule(day, sectionKey);
+  schedule.forEach(({ stop, startMin, durationMin }) => {
+    const cStart = Math.max(GSTART, Math.min(startMin, GEND - 15));
+    const cDur = Math.min(durationMin, GEND - cStart);
+    const topPx = cStart - GSTART;
+    const heightPx = Math.max(18, cDur);
+    const color = typeColor(stop.type);
+    const locked = isLocked(stop);
+
+    const block = document.createElement('div');
+    block.className = 'timeline-block' + (locked ? ' tb-locked' : '');
+    block.style.top = topPx + 'px';
+    block.style.height = heightPx + 'px';
+    block.style.background = color;
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'tb-name';
+    nameEl.textContent = stop.name;
+    block.appendChild(nameEl);
+
+    if (heightPx >= 28) {
+      const timeEl = document.createElement('div');
+      timeEl.className = 'tb-time';
+      const dispDur = (durationOverrides[sectionKey] && durationOverrides[sectionKey][day.id] && durationOverrides[sectionKey][day.id][stop.num]) || parseDurationToMinutes(stop.duration) || durationMin;
+      timeEl.textContent = (stop.time ? stop.time + ' · ' : '') + formatDuration(dispDur);
+      block.appendChild(timeEl);
+    }
+
+    if (!locked) {
+      block.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showDurationPopover(block, stop, sectionKey, day.id);
+      });
+    }
+
+    grid.appendChild(block);
+  });
+
+  listEl.appendChild(grid);
+
+  document.querySelectorAll('#pills-left .day-pill').forEach((p, i) => {
+    p.classList.toggle('active', i === dayIdx);
+  });
+
+  showDayMarkers(day.id);
 }
 
 function isLocked(stop) {
@@ -1376,27 +1704,41 @@ function renderCitySection(sectionKey) {
   const pillsRight = document.createElement('div');
   pillsRight.id = 'pills-right';
 
-  // Edit toggle button
-  const editBtn = document.createElement('button');
-  editBtn.className = 'edit-toggle-btn' + (editMode ? ' active' : '');
-  editBtn.textContent = editMode ? 'Done' : 'Edit order';
-  editBtn.addEventListener('click', () => {
-    editMode = !editMode;
+  // Edit toggle button (list mode only)
+  if (!timelineMode) {
+    const editBtn = document.createElement('button');
+    editBtn.className = 'edit-toggle-btn' + (editMode ? ' active' : '');
+    editBtn.textContent = editMode ? 'Done' : 'Edit order';
+    editBtn.addEventListener('click', () => {
+      editMode = !editMode;
+      renderCitySection(sectionKey);
+    });
+    pillsRight.appendChild(editBtn);
+
+    // Reset button (only if overrides exist)
+    const overrides = JSON.parse(localStorage.getItem('italy-trip-order') || '{}');
+    if (overrides[sectionKey]) {
+      const resetBtn = document.createElement('button');
+      resetBtn.className = 'reset-btn';
+      resetBtn.textContent = 'Reset';
+      resetBtn.addEventListener('click', () => {
+        if (window.confirm('Reset to original order?')) resetSection(sectionKey);
+      });
+      pillsRight.appendChild(resetBtn);
+    }
+  }
+
+  // Timeline toggle button (always visible)
+  const timelineBtn = document.createElement('button');
+  timelineBtn.className = 'timeline-toggle-btn' + (timelineMode ? ' active' : '');
+  timelineBtn.textContent = timelineMode ? '📋 List' : '📅 Timeline';
+  timelineBtn.addEventListener('click', () => {
+    timelineMode = !timelineMode;
+    editMode = false;
+    closeDurationPopover();
     renderCitySection(sectionKey);
   });
-  pillsRight.appendChild(editBtn);
-
-  // Reset button (only if overrides exist)
-  const overrides = JSON.parse(localStorage.getItem('italy-trip-order') || '{}');
-  if (overrides[sectionKey]) {
-    const resetBtn = document.createElement('button');
-    resetBtn.className = 'reset-btn';
-    resetBtn.textContent = 'Reset';
-    resetBtn.addEventListener('click', () => {
-      if (window.confirm('Reset to original order?')) resetSection(sectionKey);
-    });
-    pillsRight.appendChild(resetBtn);
-  }
+  pillsRight.appendChild(timelineBtn);
 
   // Build pills
   data.days.forEach((day, di) => {
@@ -1404,11 +1746,16 @@ function renderCitySection(sectionKey) {
     pill.className = 'day-pill';
     pill.textContent = `${day.label} · ${day.date.split(' ').slice(0,2).join(' ')}`;
     pill.addEventListener('click', () => {
-      document.querySelectorAll('#pills-left .day-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      showDayMarkers(day.id);
-      const sec = document.getElementById('section-' + day.id);
-      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (timelineMode) {
+        closeDurationPopover();
+        renderTimeline(sectionKey, di);
+      } else {
+        document.querySelectorAll('#pills-left .day-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        showDayMarkers(day.id);
+        const sec = document.getElementById('section-' + day.id);
+        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
     pillsLeft.appendChild(pill);
   });
@@ -1416,6 +1763,12 @@ function renderCitySection(sectionKey) {
   toolbar.appendChild(pillsLeft);
   toolbar.appendChild(pillsRight);
   pillsEl.appendChild(toolbar);
+
+  if (timelineMode) {
+    renderTimeline(sectionKey, 0);
+    setTimeout(() => { if (map) map.invalidateSize(); }, 50);
+    return;
+  }
 
   // Flatten all stops for marker indexing
   let globalStopIdx = 0;
@@ -1644,6 +1997,7 @@ function switchSection(section) {
   // Reset pill active states
   document.querySelectorAll('#pills-left .day-pill').forEach(p => p.classList.remove('active'));
   editMode = false;
+  timelineMode = false;
 
   const isCity = ['siena','florence','rome'].includes(section);
   const fab = document.getElementById('map-fab');
@@ -1669,6 +2023,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 loadOverrides();
+loadDurationOverrides();
 switchSection('overview');
 </script>
 </body>
