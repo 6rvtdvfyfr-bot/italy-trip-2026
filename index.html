@@ -80,19 +80,6 @@
   #content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
 
   /* ─── Florence Banner ─── */
-  #combo-banner {
-    background: linear-gradient(90deg, #7a5c00 0%, #a07800 100%);
-    color: #fff;
-    padding: 7px 20px;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-  #combo-banner .banner-icon { font-size: 1rem; }
-  #combo-banner strong { font-weight: 700; }
-  #combo-banner a { color: #ffe08a; text-decoration: underline; }
 
   /* ─── Two-Pane View ─── */
   #twopane {
@@ -646,9 +633,6 @@
     #map-fab { display: flex; }
     #map-fab.hidden { display: none; }
 
-    /* Combo banner: wrap text nicely */
-    #combo-banner { font-size: 0.76rem; flex-wrap: wrap; padding: 8px 14px; }
-
     /* Full-width view */
     #fullwidth-view { padding: 16px 14px; -webkit-overflow-scrolling: touch; }
 
@@ -805,6 +789,25 @@
   .ess-hotel-name { font-weight: 700; font-size: 0.9rem; color: #1f1510; margin-bottom: 2px; }
   .ess-hotel-addr { font-size: 0.78rem; color: #5a4535; margin-bottom: 6px; }
 
+  /* ─── Weather line ─── */
+  .day-weather { font-size: 0.7rem; color: #7a6355; margin-top: 3px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .day-weather .wx-sunset { color: #c06030; font-weight: 600; }
+
+  /* ─── Phrasebook ─── */
+  .phrase-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 2px; }
+  .phrase-table td { padding: 5px 4px; vertical-align: top; line-height: 1.35; }
+  .phrase-table tr:nth-child(even) td { background: #f7f2ed; }
+  .phrase-it { font-weight: 600; color: #3d2b1f; width: 48%; }
+  .phrase-en { color: #5a4535; }
+  .phrase-note { font-size: 0.68rem; color: #8B3A2F; font-style: italic; padding-left: 4px; }
+
+  /* ─── Currency ─── */
+  .currency-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 4px; margin-bottom: 10px; }
+  .currency-pair { text-align: center; background: #f7f2ed; border-radius: 7px; padding: 6px 4px; }
+  .currency-eur { font-weight: 700; font-size: 0.82rem; color: #3d2b1f; }
+  .currency-usd { color: #7a6355; font-size: 0.7rem; }
+  .currency-tip { font-size: 0.74rem; color: #5a4535; line-height: 1.45; background: #fff8e6; border: 1px solid #f0c040; border-radius: 7px; padding: 8px 10px; }
+
   /* ─── PIN Gate ─── */
   #pin-gate {
     position: fixed; inset: 0; z-index: 99999;
@@ -889,12 +892,6 @@
   <!-- Content -->
   <div id="content">
 
-    <!-- Florence combo banner (hidden unless florence active) -->
-    <div id="combo-banner" style="display:none">
-      <span class="banner-icon">✅</span>
-      <span><strong>Passepartout 5-Day — Booked!</strong> Uffizi + Pitti Palace + Boboli Gardens. PNR: K0F37WWB · Entry Jun 26 at 8:15 AM · Valid 5 days from first use. <a href="Tickets.pdf" target="_blank">View tickets →</a></span>
-    </div>
-
     <!-- Two-pane view (city sections) -->
     <div id="twopane" style="display:none">
       <div id="left-panel">
@@ -966,6 +963,19 @@
           </div>
         </div>
 
+        <div class="logistics-section-title">🎫 Museum Tickets</div>
+        <div class="logistics-grid">
+          <div class="logistics-card">
+            <h3>✅ Uffizi Passepartout 5-Day</h3>
+            <div class="lc-row"><span class="lc-label">PNR</span><span class="lc-val">K0F37WWB</span></div>
+            <div class="lc-row"><span class="lc-label">Entry</span><span class="lc-val">Jun 26 · 8:15 AM · Uffizi</span></div>
+            <div class="lc-row"><span class="lc-label">Covers</span><span class="lc-val">Uffizi · Pitti Palace · Boboli Gardens</span></div>
+            <div class="lc-row"><span class="lc-label">Valid</span><span class="lc-val">5 days from first use · 7 tickets · €240</span></div>
+            <div class="lc-row"><span class="lc-label">Holders</span><span class="lc-val">Gollenbergs (4) · Wachters (3)</span></div>
+            <div class="lc-row"><a class="stop-link" href="Tickets.pdf" target="_blank">🎫 View Tickets PDF</a></div>
+          </div>
+        </div>
+
         <div class="logistics-section-title">🚗 Car Rental</div>
         <div class="logistics-grid">
           <div class="logistics-card">
@@ -981,7 +991,7 @@
         <div class="action-list">
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Uffizi Passepartout — Booked ✓</div><div class="ai-detail">PNR: K0F37WWB · Jun 26, 8:15 AM · Covers Uffizi + Pitti + Boboli · 7 tickets · €240</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Accademia Gallery (David)</div><div class="ai-detail">Jun 26 · 1:30 PM · Jun 27 morning sold out · <a href="https://webshop.b-ticket.com/webshop/webticket/bestseatselectbyblock?eventId=64926&el=true" target="_blank">b-ticket.com</a></div></div></div>
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Brunelleschi Pass / Dome Climb</div><div class="ai-detail">Jun 26 · 4:00 PM · 463 steps, name required per ticket · <a href="https://tickets.duomo.firenze.it" target="_blank">tickets.duomo.firenze.it</a></div></div></div>
+          <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Brunelleschi Pass — Skipped ✓</div><div class="ai-detail">Doing free Duomo Cathedral visit instead</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Vatican Museums + Sistine Chapel</div><div class="ai-detail">Jun 30 · Morning · Skip-the-line required · <a href="https://tickets.museivaticani.va" target="_blank">tickets.museivaticani.va</a></div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Colosseum (Full Combo)</div><div class="ai-detail">Jun 29 · Arena floor, Attic &amp; Underground · Book well ahead</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Reserve L'Officina della Bistecca — Panzano</div><div class="ai-detail">Jun 25 · ~1:00 PM lunch · Via XX Luglio 11 · Reservation strongly recommended</div></div></div>
@@ -1047,11 +1057,50 @@
     </div>
 
     <!-- All hotels -->
-    <div class="ess-section" style="padding-bottom: 24px;">
+    <div class="ess-section">
       <div class="ess-section-title">🏨 All Accommodations</div>
       <div class="ess-row"><span class="ess-row-label">Siena</span><span class="ess-row-val">Hotel Athena &nbsp;·&nbsp; Piazza Mascagni 55 &nbsp;·&nbsp; Jun 23–25</span></div>
       <div class="ess-row"><span class="ess-row-label">Florence</span><span class="ess-row-val">Hotel Horto Convento &nbsp;·&nbsp; Viale Ariosto 13 &nbsp;·&nbsp; Jun 25–28</span></div>
       <div class="ess-row"><span class="ess-row-label">Rome</span><span class="ess-row-val">AirBnB &nbsp;·&nbsp; Via della Fornaci 44 &nbsp;·&nbsp; Jun 28–Jul 2</span></div>
+    </div>
+
+    <!-- Currency -->
+    <div class="ess-section">
+      <div class="ess-section-title">💶 Currency (approx.)</div>
+      <div class="currency-grid">
+        <div class="currency-pair"><div class="currency-eur">€5</div><div class="currency-usd">≈ $5.50</div></div>
+        <div class="currency-pair"><div class="currency-eur">€10</div><div class="currency-usd">≈ $11</div></div>
+        <div class="currency-pair"><div class="currency-eur">€20</div><div class="currency-usd">≈ $22</div></div>
+        <div class="currency-pair"><div class="currency-eur">€50</div><div class="currency-usd">≈ $55</div></div>
+      </div>
+      <div class="currency-tip">⚠️ <strong>Tipping in Italy:</strong> Not expected. Most restaurants add a <em>coperto</em> (cover charge, €1–3/person). If service was exceptional, rounding up or leaving €2–5 is plenty. Do <strong>not</strong> tip 15–20% like in the US.</div>
+    </div>
+
+    <!-- Phrasebook -->
+    <div class="ess-section" style="padding-bottom: 28px;">
+      <div class="ess-section-title">🇮🇹 Phrasebook</div>
+      <table class="phrase-table">
+        <tr><td class="phrase-it">Buongiorno</td><td class="phrase-en">Good morning</td></tr>
+        <tr><td class="phrase-it">Buonasera</td><td class="phrase-en">Good evening</td></tr>
+        <tr><td class="phrase-it">Per favore</td><td class="phrase-en">Please</td></tr>
+        <tr><td class="phrase-it">Grazie mille</td><td class="phrase-en">Thank you very much</td></tr>
+        <tr><td class="phrase-it">Prego</td><td class="phrase-en">You're welcome / Go ahead</td></tr>
+        <tr><td class="phrase-it">Mi scusi</td><td class="phrase-en">Excuse me</td></tr>
+        <tr><td class="phrase-it">Parla inglese?</td><td class="phrase-en">Do you speak English?</td></tr>
+        <tr><td class="phrase-it">Non capisco</td><td class="phrase-en">I don't understand</td></tr>
+        <tr><td class="phrase-it">Il conto, per favore</td><td class="phrase-en">The bill, please</td></tr>
+        <tr><td class="phrase-it">Dov'è il bagno?</td><td class="phrase-en">Where is the bathroom?</td></tr>
+        <tr><td class="phrase-it">Quanto costa?</td><td class="phrase-en">How much does it cost?</td></tr>
+        <tr><td class="phrase-it">Vorrei…</td><td class="phrase-en">I would like…</td></tr>
+        <tr><td class="phrase-it">Acqua naturale</td><td class="phrase-en">Still water</td></tr>
+        <tr><td class="phrase-it">Acqua frizzante</td><td class="phrase-en">Sparkling water</td></tr>
+        <tr><td class="phrase-it">Il coperto</td><td class="phrase-en">Cover charge <span class="phrase-note">(€1–3/person, normal)</span></td></tr>
+        <tr><td class="phrase-it">Servizio incluso?</td><td class="phrase-en">Is service included?</td></tr>
+        <tr><td class="phrase-it">A destra / sinistra</td><td class="phrase-en">Right / Left</td></tr>
+        <tr><td class="phrase-it">Dritto</td><td class="phrase-en">Straight ahead</td></tr>
+        <tr><td class="phrase-it">Sono allergico/a a…</td><td class="phrase-en">I'm allergic to…</td></tr>
+        <tr><td class="phrase-it">Aiuto!</td><td class="phrase-en">Help!</td></tr>
+      </table>
     </div>
   </div>
 
@@ -1567,6 +1616,7 @@ let map = null;
 let currentSection = null;
 let currentSectionKey = null;
 let mapMarkers = [];
+let routePolyline = null;
 let activePill = null;
 let editMode = false;
 let timelineMode = false;
@@ -1605,8 +1655,9 @@ function makeMarkerIcon(color, num) {
 
 function clearMap() {
   if (!map) return;
-  mapMarkers.forEach(m => map.removeLayer(m.marker));
+  mapMarkers.forEach(m => { if (m.marker && map.hasLayer(m.marker)) map.removeLayer(m.marker); });
   mapMarkers = [];
+  if (routePolyline) { routePolyline.remove(); routePolyline = null; }
 }
 
 function highlightCard(cardEl) {
@@ -1919,6 +1970,7 @@ function moveStop(sectionKey, fromDayIdx, fromStopIdx, direction) {
 
 function showDayMarkers(dayId) {
   if (!map) return;
+  if (routePolyline) { routePolyline.remove(); routePolyline = null; }
   mapMarkers.forEach(m => {
     if (!m.marker) return;
     if (m.dayId === dayId) {
@@ -1928,6 +1980,10 @@ function showDayMarkers(dayId) {
     }
   });
   const visible = mapMarkers.filter(m => m.marker && m.dayId === dayId);
+  if (visible.length >= 2) {
+    const coords = visible.map(m => m.marker.getLatLng());
+    routePolyline = L.polyline(coords, { color: '#8B3A2F', weight: 2.5, opacity: 0.55, dashArray: '6, 9' }).addTo(map);
+  }
   if (visible.length > 0) {
     const group = L.featureGroup(visible.map(m => m.marker));
     map.fitBounds(group.getBounds().pad(0.25));
@@ -1956,7 +2012,6 @@ function renderCitySection(sectionKey) {
   // Show/hide elements
   document.getElementById('twopane').style.display = 'flex';
   document.getElementById('fullwidth-view').style.display = 'none';
-  document.getElementById('combo-banner').style.display = (sectionKey === 'florence') ? 'flex' : 'none';
 
   // Init map
   initMap();
@@ -2061,12 +2116,18 @@ function renderCitySection(sectionKey) {
     daySection.id = 'section-' + day.id;
 
     // Day header
+    const iso = getDayISO(sectionKey, di);
+    const wx = iso ? weatherData[iso] : null;
+    const wxHtml = wx
+      ? `<span class="day-weather">${wx.emoji} ${wx.high}°F / ${wx.low}°F &nbsp;·&nbsp; <span class="wx-sunset">🌅 Sunset ${wx.sunset}</span></span>`
+      : '';
     const hdr = document.createElement('div');
     hdr.className = 'day-header';
     hdr.innerHTML = `
       <span class="day-label">${day.label} · ${day.date}</span>
       <div style="display:flex;flex-direction:column;gap:1px">
         <span class="day-title">${day.title}</span>
+        ${wxHtml}
       </div>`;
     daySection.appendChild(hdr);
 
@@ -2219,7 +2280,7 @@ function renderCitySection(sectionKey) {
 // ─────────────────────────────────────────────
 function renderOverview() {
   document.getElementById('twopane').style.display = 'none';
-  document.getElementById('combo-banner').style.display = 'none';
+
   document.getElementById('fullwidth-view').style.display = 'block';
   document.getElementById('overview-content').style.display = 'block';
   document.getElementById('logistics-content').style.display = 'none';
@@ -2243,7 +2304,7 @@ function renderOverview() {
 // ─────────────────────────────────────────────
 function renderLogistics() {
   document.getElementById('twopane').style.display = 'none';
-  document.getElementById('combo-banner').style.display = 'none';
+
   document.getElementById('fullwidth-view').style.display = 'block';
   document.getElementById('overview-content').style.display = 'none';
   document.getElementById('logistics-content').style.display = 'block';
@@ -2447,6 +2508,80 @@ function closeEssentials() {
 }
 
 // ─────────────────────────────────────────────
+// WEATHER
+// ─────────────────────────────────────────────
+const WX_CACHE_KEY = 'italy-weather-v1';
+const WX_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
+const WX_CITIES = [
+  { lat: 43.318, lon: 11.330, start: '2026-06-23', end: '2026-06-24' },
+  { lat: 43.769, lon: 11.256, start: '2026-06-25', end: '2026-06-27' },
+  { lat: 41.902, lon: 12.496, start: '2026-06-28', end: '2026-07-02' },
+];
+let weatherData = {};
+
+function wxEmoji(code) {
+  if (code === 0) return '☀️';
+  if (code <= 3)  return '⛅';
+  if (code <= 48) return '🌫️';
+  if (code <= 55) return '🌦️';
+  if (code <= 67) return '🌧️';
+  if (code <= 82) return '🌦️';
+  return '⛈️';
+}
+
+function wxSunset(isoStr) {
+  if (!isoStr) return '';
+  const t = isoStr.split('T')[1];
+  if (!t) return '';
+  let [h, m] = t.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return `${h}:${String(m).padStart(2, '0')} ${ampm}`;
+}
+
+function loadWeatherCache() {
+  try {
+    const raw = localStorage.getItem(WX_CACHE_KEY);
+    if (!raw) return;
+    const { ts, data } = JSON.parse(raw);
+    if (Date.now() - ts < WX_CACHE_TTL) weatherData = data;
+  } catch (e) {}
+}
+
+async function fetchWeather() {
+  try {
+    const results = await Promise.all(WX_CITIES.map(c =>
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode,sunset&temperature_unit=fahrenheit&timezone=Europe%2FRome&start_date=${c.start}&end_date=${c.end}`)
+        .then(r => r.json())
+    ));
+    const newData = {};
+    results.forEach(r => {
+      if (!r.daily?.time) return;
+      r.daily.time.forEach((date, i) => {
+        newData[date] = {
+          high: Math.round(r.daily.temperature_2m_max[i]),
+          low:  Math.round(r.daily.temperature_2m_min[i]),
+          emoji: wxEmoji(r.daily.weathercode[i]),
+          sunset: wxSunset(r.daily.sunset[i]),
+        };
+      });
+    });
+    if (Object.keys(newData).length > 0) {
+      weatherData = newData;
+      localStorage.setItem(WX_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: newData }));
+      if (currentSectionKey && ['siena','florence','rome'].includes(currentSectionKey)) {
+        renderCitySection(currentSectionKey);
+      }
+    }
+  } catch (e) {}
+}
+
+function getDayISO(sectionKey, dayIdx) {
+  const entry = Object.entries(TRIP_DAY_MAP).find(([, v]) => v.section === sectionKey && v.dayIdx === dayIdx);
+  return entry ? entry[0] : null;
+}
+
+// ─────────────────────────────────────────────
 // PIN GATE
 // ─────────────────────────────────────────────
 const PIN = '4143';
@@ -2500,6 +2635,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 loadOverrides();
 loadDurationOverrides();
+loadWeatherCache();
+fetchWeather();
 updateTodayBanner();
 
 // Auto-navigate to today's city + day, fall back to overview
