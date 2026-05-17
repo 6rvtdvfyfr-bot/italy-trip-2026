@@ -804,9 +804,61 @@
   #ess-tonight { padding: 10px 18px 12px; background: #f7f2ed; border-radius: 0; }
   .ess-hotel-name { font-weight: 700; font-size: 0.9rem; color: #1f1510; margin-bottom: 2px; }
   .ess-hotel-addr { font-size: 0.78rem; color: #5a4535; margin-bottom: 6px; }
+
+  /* ─── PIN Gate ─── */
+  #pin-gate {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #3d2b1f;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #pin-gate.hidden { display: none; }
+  #pin-card { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 24px; max-width: 320px; width: 100%; }
+  #pin-logo { font-size: 3rem; }
+  #pin-title { color: #fff; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.02em; }
+  #pin-subtitle { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
+  #pin-dots { display: flex; gap: 18px; margin: 6px 0; }
+  .pin-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.35); background: transparent; transition: background 0.12s, border-color 0.12s; }
+  .pin-dot.filled { background: #e0a020; border-color: #e0a020; }
+  #pin-error { color: #e07070; font-size: 0.78rem; min-height: 1rem; text-align: center; }
+  #pin-keypad { display: grid; grid-template-columns: repeat(3, 72px); gap: 10px; margin-top: 6px; }
+  .pin-key { height: 72px; border-radius: 14px; border: none; background: rgba(255,255,255,0.1); color: #fff; font-size: 1.5rem; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .pin-key:active { background: rgba(255,255,255,0.28); transform: scale(0.95); }
+  .pin-key.del { font-size: 1.1rem; background: rgba(255,255,255,0.06); }
+  .pin-key.blank { background: transparent; pointer-events: none; }
+  @keyframes pinShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-7px)} 80%{transform:translateX(7px)} }
 </style>
 </head>
 <body>
+<!-- PIN Gate -->
+<div id="pin-gate">
+  <div id="pin-card">
+    <div id="pin-logo">🇮🇹</div>
+    <div id="pin-title">Italy 2026</div>
+    <div id="pin-subtitle">Enter PIN to continue</div>
+    <div id="pin-dots">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div id="pin-error"></div>
+    <div id="pin-keypad">
+      <button class="pin-key" onclick="pinKey('1')">1</button>
+      <button class="pin-key" onclick="pinKey('2')">2</button>
+      <button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button>
+      <button class="pin-key" onclick="pinKey('5')">5</button>
+      <button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button>
+      <button class="pin-key" onclick="pinKey('8')">8</button>
+      <button class="pin-key" onclick="pinKey('9')">9</button>
+      <div class="pin-key blank"></div>
+      <button class="pin-key" onclick="pinKey('0')">0</button>
+      <button class="pin-key del" onclick="pinBack()">⌫</button>
+    </div>
+  </div>
+</div>
+
 <div id="app">
 
   <!-- Top Nav -->
@@ -839,8 +891,8 @@
 
     <!-- Florence combo banner (hidden unless florence active) -->
     <div id="combo-banner" style="display:none">
-      <span class="banner-icon">🎟️</span>
-      <span><strong>Combo Tip:</strong> Uffizi + Pitti Palace + Boboli Gardens combo saves ~$126 total per adult. Under 18 free. <a href="https://tickets.uffizi.it" target="_blank">Book on uffizi.it →</a></span>
+      <span class="banner-icon">✅</span>
+      <span><strong>Passepartout 5-Day — Booked!</strong> Uffizi + Pitti Palace + Boboli Gardens. PNR: K0F37WWB · Entry Jun 26 at 8:15 AM · Valid 5 days from first use. <a href="Tickets.pdf" target="_blank">View tickets →</a></span>
     </div>
 
     <!-- Two-pane view (city sections) -->
@@ -927,11 +979,9 @@
 
         <div class="logistics-section-title">✅ Action Items</div>
         <div class="action-list">
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Uffizi Gallery</div><div class="ai-detail">Jun 26 · 8:30 AM · Combo option saves $126 · <a href="https://tickets.uffizi.it/event/D43F5443-D676-F857-0904-0199CA8D9B74?lang=en" target="_blank">tickets.uffizi.it</a></div></div></div>
+          <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Uffizi Passepartout — Booked ✓</div><div class="ai-detail">PNR: K0F37WWB · Jun 26, 8:15 AM · Covers Uffizi + Pitti + Boboli · 7 tickets · €240</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Accademia Gallery (David)</div><div class="ai-detail">Jun 26 · 1:30 PM · Jun 27 morning sold out · <a href="https://webshop.b-ticket.com/webshop/webticket/bestseatselectbyblock?eventId=64926&el=true" target="_blank">b-ticket.com</a></div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Brunelleschi Pass / Dome Climb</div><div class="ai-detail">Jun 26 · 4:00 PM · 463 steps, name required per ticket · <a href="https://tickets.duomo.firenze.it" target="_blank">tickets.duomo.firenze.it</a></div></div></div>
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Pitti Palace</div><div class="ai-detail">Jun 27 · 2:00 PM · Good availability · <a href="https://tickets.uffizi.it/event/FB969BC9-CEEC-EE42-487E-0199CA9FB3EA?lang=en" target="_blank">tickets.uffizi.it</a></div></div></div>
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Boboli Gardens</div><div class="ai-detail">Jun 27 · 4:00 PM · Adjacent to Pitti · <a href="https://tickets.uffizi.it/event/DF9CC5DA-656A-1623-4E42-0199CAA4663C?lang=en" target="_blank">tickets.uffizi.it</a></div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Vatican Museums + Sistine Chapel</div><div class="ai-detail">Jun 30 · Morning · Skip-the-line required · <a href="https://tickets.museivaticani.va" target="_blank">tickets.museivaticani.va</a></div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Colosseum (Full Combo)</div><div class="ai-detail">Jun 29 · Arena floor, Attic &amp; Underground · Book well ahead</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Reserve L'Officina della Bistecca — Panzano</div><div class="ai-detail">Jun 25 · ~1:00 PM lunch · Via XX Luglio 11 · Reservation strongly recommended</div></div></div>
@@ -960,6 +1010,19 @@
 
     <!-- Tonight's hotel (filled by JS) -->
     <div id="ess-tonight"></div>
+
+    <!-- Tickets -->
+    <div class="ess-section">
+      <div class="ess-section-title">🎫 Tickets</div>
+      <div class="ess-row">
+        <span class="ess-row-label">Uffizi Pass</span>
+        <span class="ess-row-val">PNR: <strong>K0F37WWB</strong> · Jun 26, 8:15 AM · 7 tickets · <a href="Tickets.pdf" target="_blank">Open PDF →</a></span>
+      </div>
+      <div class="ess-row">
+        <span class="ess-row-label">Covers</span>
+        <span class="ess-row-val">Uffizi · Pitti Palace · Boboli Gardens (valid 5 days from first use)</span>
+      </div>
+    </div>
 
     <!-- Emergency numbers -->
     <div class="ess-section">
@@ -1145,9 +1208,9 @@ const SECTIONS = {
           {
             num: 1, type: 'high', time: '8:30 AM',
             name: 'Uffizi Gallery', tags: ['museum', 'art'],
-            duration: '~2.5 hrs', cost: '$29 / $40 combo',
-            notes: 'Botticelli, da Vinci, Raphael. Under 18 free. Combo w/ Pitti & Boboli saves $126 total.',
-            link: 'https://tickets.uffizi.it/event/D43F5443-D676-F857-0904-0199CA8D9B74?lang=en', linkText: 'Buy Tickets',
+            duration: '~2.5 hrs', cost: '✓ Paid (Passepartout)',
+            notes: 'Botticelli, da Vinci, Raphael. Entry slot: Jun 26 at 8:15 AM. PNR: K0F37WWB. Under 18 free.',
+            link: 'Tickets.pdf', linkText: '🎫 View Ticket',
             coords: [43.7685, 11.2558]
           },
           {
@@ -1186,17 +1249,17 @@ const SECTIONS = {
           {
             num: 3, type: 'high', time: '2:00 PM',
             name: 'Pitti Palace', tags: ['museum', 'art'],
-            duration: '~1.5 hrs', cost: '$19 / $40 combo',
-            notes: 'Under 18 free. Good availability. Buy individually or as part of combo.',
-            link: 'https://tickets.uffizi.it/event/FB969BC9-CEEC-EE42-487E-0199CA9FB3EA?lang=en', linkText: 'Buy Tickets',
+            duration: '~1.5 hrs', cost: '✓ Paid (Passepartout)',
+            notes: 'Under 18 free. Covered by Passepartout 5-Day (PNR: K0F37WWB).',
+            link: 'Tickets.pdf', linkText: '🎫 View Ticket',
             coords: [43.7651, 11.2499]
           },
           {
             num: 4, type: 'high', time: '4:00 PM',
             name: 'Boboli Gardens', tags: ['garden'],
-            duration: '~2 hrs', cost: '$13 / $40 combo',
-            notes: 'Under 18 free. Adjacent to Pitti Palace. Good availability.',
-            link: 'https://tickets.uffizi.it/event/DF9CC5DA-656A-1623-4E42-0199CAA4663C?lang=en', linkText: 'Buy Tickets',
+            duration: '~2 hrs', cost: '✓ Paid (Passepartout)',
+            notes: 'Under 18 free. Adjacent to Pitti Palace. Covered by Passepartout 5-Day (PNR: K0F37WWB).',
+            link: 'Tickets.pdf', linkText: '🎫 View Ticket',
             coords: [43.7624, 11.2513]
           }
         ],
@@ -2381,6 +2444,51 @@ function closeEssentials() {
   document.getElementById('essentials-overlay').classList.remove('open');
   document.getElementById('essentials-drawer').classList.remove('open');
   document.body.style.overflow = '';
+}
+
+// ─────────────────────────────────────────────
+// PIN GATE
+// ─────────────────────────────────────────────
+const PIN = '4143';
+let pinEntry = '';
+
+function pinKey(digit) {
+  if (pinEntry.length >= 4) return;
+  pinEntry += digit;
+  updatePinDots();
+  if (pinEntry.length === 4) setTimeout(checkPin, 120);
+}
+
+function pinBack() {
+  pinEntry = pinEntry.slice(0, -1);
+  updatePinDots();
+  document.getElementById('pin-error').textContent = '';
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++)
+    document.getElementById('pd' + i).classList.toggle('filled', i < pinEntry.length);
+}
+
+function checkPin() {
+  if (pinEntry === PIN) {
+    localStorage.setItem('italy-unlocked', '1');
+    const gate = document.getElementById('pin-gate');
+    gate.style.transition = 'opacity 0.35s';
+    gate.style.opacity = '0';
+    setTimeout(() => gate.classList.add('hidden'), 350);
+  } else {
+    document.getElementById('pin-error').textContent = 'Incorrect PIN';
+    document.getElementById('pin-card').style.animation = 'pinShake 0.4s';
+    setTimeout(() => { document.getElementById('pin-card').style.animation = ''; }, 400);
+    pinEntry = '';
+    updatePinDots();
+  }
+}
+
+// Unlock immediately if already authenticated
+if (localStorage.getItem('italy-unlocked') === '1') {
+  document.getElementById('pin-gate').classList.add('hidden');
 }
 
 // ─────────────────────────────────────────────
