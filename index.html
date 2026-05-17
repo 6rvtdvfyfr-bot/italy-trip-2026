@@ -237,6 +237,49 @@
   .maps-link { background: #1a6bbf; }
   .maps-link:hover { background: #1558a0; }
 
+  /* ─── Edit Mode ─── */
+  #pills-toolbar { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 8px; }
+  #pills-left { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+  #pills-right { display: flex; gap: 6px; flex-shrink: 0; }
+  .edit-toggle-btn, .reset-btn {
+    background: none;
+    border: 1.5px solid #8B3A2F;
+    color: #8B3A2F;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 32px;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .edit-toggle-btn.active { background: #8B3A2F; color: #fff; }
+  .edit-toggle-btn:hover { background: #8B3A2F; color: #fff; }
+  .reset-btn { border-color: #b87d00; color: #b87d00; }
+  .reset-btn:hover { background: #b87d00; color: #fff; }
+  .stop-move-btns { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; margin-left: 6px; }
+  .move-btn {
+    background: #ede7df;
+    border: 1px solid #c8bdb5;
+    border-radius: 5px;
+    width: 28px;
+    height: 26px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.12s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .move-btn:hover:not(:disabled) { background: #d4c8be; }
+  .move-btn:disabled { opacity: 0.25; cursor: default; }
+  .stop-lock-icon { margin-left: 6px; font-size: 0.85rem; opacity: 0.4; flex-shrink: 0; align-self: center; }
+  .stop-card.locked-stop { opacity: 0.75; }
+
   /* ─── Map ─── */
   #map-pane {
     flex: 1;
@@ -1139,8 +1182,13 @@ const CALENDAR_DATA = [
 // ─────────────────────────────────────────────
 let map = null;
 let currentSection = null;
-let mapMarkers = []; // [{marker, cardEl}]
+let currentSectionKey = null;
+let mapMarkers = [];
 let activePill = null;
+let editMode = false;
+
+// Deep-copy of original SECTIONS data for reset
+const ORIGINAL_SECTIONS = JSON.parse(JSON.stringify(SECTIONS));
 
 const TYPE_COLORS = {
   high: '#2d8a4e',
@@ -1181,6 +1229,90 @@ function highlightCard(cardEl) {
     cardEl.classList.add('highlighted');
     cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+}
+
+function isLocked(stop) {
+  if (stop.type === 'transport' || stop.type === 'hotel') return true;
+  if (stop.time && /^\d+:\d+/.test(stop.time)) return true;
+  return false;
+}
+
+function loadOverrides() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('italy-trip-order') || '{}');
+    Object.keys(saved).forEach(key => {
+      if (SECTIONS[key]) SECTIONS[key].days = saved[key].days;
+    });
+  } catch(e) {}
+}
+
+function saveOverrides(sectionKey) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('italy-trip-order') || '{}');
+    saved[sectionKey] = { days: SECTIONS[sectionKey].days };
+    localStorage.setItem('italy-trip-order', JSON.stringify(saved));
+  } catch(e) {}
+}
+
+function resetSection(sectionKey) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('italy-trip-order') || '{}');
+    delete saved[sectionKey];
+    localStorage.setItem('italy-trip-order', JSON.stringify(saved));
+  } catch(e) {}
+  SECTIONS[sectionKey].days = JSON.parse(JSON.stringify(ORIGINAL_SECTIONS[sectionKey].days));
+  editMode = false;
+  renderCitySection(sectionKey);
+}
+
+function moveStop(sectionKey, fromDayIdx, fromStopIdx, direction) {
+  const days = SECTIONS[sectionKey].days;
+
+  // Build flat list: each entry holds the day-slot (di) and the stop occupying it
+  const flat = [];
+  days.forEach((day, di) => {
+    day.stops.forEach((stop, si) => flat.push({ di, si, stop }));
+  });
+
+  const flatIdx = flat.findIndex(f => f.di === fromDayIdx && f.si === fromStopIdx);
+  if (flatIdx < 0) return;
+
+  // Find nearest non-locked target in the requested direction
+  let targetFlatIdx = flatIdx + direction;
+  while (targetFlatIdx >= 0 && targetFlatIdx < flat.length && isLocked(flat[targetFlatIdx].stop)) {
+    targetFlatIdx += direction;
+  }
+  if (targetFlatIdx < 0 || targetFlatIdx >= flat.length) return;
+
+  // Swap only the stop objects — the di/si metadata (day-slot positions) stays put
+  const tmpStop = flat[flatIdx].stop;
+  flat[flatIdx] = { ...flat[flatIdx], stop: flat[targetFlatIdx].stop };
+  flat[targetFlatIdx] = { ...flat[targetFlatIdx], stop: tmpStop };
+
+  // The moved stop now occupies the slot that was at targetFlatIdx
+  const landedDayIdx = flat[targetFlatIdx].di;
+  const changedDays = new Set([fromDayIdx, landedDayIdx]);
+
+  // Reconstruct days from updated flat list
+  const newDays = days.map((day, di) => {
+    const newStops = flat.filter(f => f.di === di).map(f => f.stop);
+    newStops.forEach((s, i) => { s.num = i + 1; });
+    return {
+      ...day,
+      stops: newStops,
+      walkTimes: changedDays.has(di) ? newStops.map(() => null) : day.walkTimes
+    };
+  });
+
+  SECTIONS[sectionKey].days = newDays;
+  saveOverrides(sectionKey);
+
+  renderCitySection(sectionKey);
+  setTimeout(() => {
+    const pill = document.querySelector(`#pills-left .day-pill:nth-child(${landedDayIdx + 1})`);
+    if (pill) pill.click();
+    else showDayMarkers(newDays[landedDayIdx].id);
+  }, 60);
 }
 
 function showDayMarkers(dayId) {
@@ -1228,11 +1360,43 @@ function renderCitySection(sectionKey) {
   initMap();
   clearMap();
 
+  currentSectionKey = sectionKey;
+
   // Render left panel
   const pillsEl = document.getElementById('day-pills');
   const listEl = document.getElementById('stops-list');
   pillsEl.innerHTML = '';
   listEl.innerHTML = '';
+
+  // Toolbar wrapper
+  const toolbar = document.createElement('div');
+  toolbar.id = 'pills-toolbar';
+  const pillsLeft = document.createElement('div');
+  pillsLeft.id = 'pills-left';
+  const pillsRight = document.createElement('div');
+  pillsRight.id = 'pills-right';
+
+  // Edit toggle button
+  const editBtn = document.createElement('button');
+  editBtn.className = 'edit-toggle-btn' + (editMode ? ' active' : '');
+  editBtn.textContent = editMode ? 'Done' : 'Edit order';
+  editBtn.addEventListener('click', () => {
+    editMode = !editMode;
+    renderCitySection(sectionKey);
+  });
+  pillsRight.appendChild(editBtn);
+
+  // Reset button (only if overrides exist)
+  const overrides = JSON.parse(localStorage.getItem('italy-trip-order') || '{}');
+  if (overrides[sectionKey]) {
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'reset-btn';
+    resetBtn.textContent = 'Reset';
+    resetBtn.addEventListener('click', () => {
+      if (window.confirm('Reset to original order?')) resetSection(sectionKey);
+    });
+    pillsRight.appendChild(resetBtn);
+  }
 
   // Build pills
   data.days.forEach((day, di) => {
@@ -1240,14 +1404,18 @@ function renderCitySection(sectionKey) {
     pill.className = 'day-pill';
     pill.textContent = `${day.label} · ${day.date.split(' ').slice(0,2).join(' ')}`;
     pill.addEventListener('click', () => {
-      document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('#pills-left .day-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       showDayMarkers(day.id);
       const sec = document.getElementById('section-' + day.id);
       if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    pillsEl.appendChild(pill);
+    pillsLeft.appendChild(pill);
   });
+
+  toolbar.appendChild(pillsLeft);
+  toolbar.appendChild(pillsRight);
+  pillsEl.appendChild(toolbar);
 
   // Flatten all stops for marker indexing
   let globalStopIdx = 0;
@@ -1287,8 +1455,9 @@ function renderCitySection(sectionKey) {
       }
 
       // Card
+      const locked = isLocked(stop);
       const card = document.createElement('div');
-      card.className = 'stop-card';
+      card.className = 'stop-card' + (locked ? ' locked-stop' : '');
       card.dataset.idx = cardIdx;
 
       const color = typeColor(stop.type);
@@ -1330,11 +1499,36 @@ function renderCitySection(sectionKey) {
           </div>
         </div>`;
 
+      // Edit mode controls
+      if (editMode) {
+        if (locked) {
+          const lockIcon = document.createElement('span');
+          lockIcon.className = 'stop-lock-icon';
+          lockIcon.textContent = '🔒';
+          card.querySelector('.stop-card-inner').appendChild(lockIcon);
+        } else {
+          const btns = document.createElement('div');
+          btns.className = 'stop-move-btns';
+          const upBtn = document.createElement('button');
+          upBtn.className = 'move-btn';
+          upBtn.textContent = '↑';
+          upBtn.addEventListener('click', (e) => { e.stopPropagation(); moveStop(sectionKey, di, si, -1); });
+          const downBtn = document.createElement('button');
+          downBtn.className = 'move-btn';
+          downBtn.textContent = '↓';
+          downBtn.addEventListener('click', (e) => { e.stopPropagation(); moveStop(sectionKey, di, si, 1); });
+          btns.appendChild(upBtn);
+          btns.appendChild(downBtn);
+          card.querySelector('.stop-card-inner').appendChild(btns);
+        }
+      }
+
       // Click card → fly map
       card.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A') return;
+        if (e.target.tagName === 'A' || e.target.classList.contains('move-btn')) return;
         highlightCard(card);
-        document.querySelectorAll('.day-pill').forEach((p, i) => p.classList.toggle('active', i === di));
+        const pills = document.querySelectorAll('#pills-left .day-pill');
+        pills.forEach((p, i) => p.classList.toggle('active', i === di));
         showDayMarkers(day.id);
         const entry = mapMarkers[cardIdx];
         if (entry && entry.marker) {
@@ -1448,7 +1642,8 @@ function switchSection(section) {
   });
 
   // Reset pill active states
-  document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#pills-left .day-pill').forEach(p => p.classList.remove('active'));
+  editMode = false;
 
   const isCity = ['siena','florence','rome'].includes(section);
   const fab = document.getElementById('map-fab');
@@ -1473,7 +1668,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => switchSection(btn.dataset.section));
 });
 
-// Start on Overview
+loadOverrides();
 switchSection('overview');
 </script>
 </body>
