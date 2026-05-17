@@ -731,6 +731,29 @@
   }
   #essentials-fab:active { background: #111; transform: scale(0.97); }
 
+  /* ─── Boarding Pass FAB ─── */
+  #bp-fab {
+    position: fixed;
+    bottom: 80px;
+    left: 18px;
+    z-index: 1000;
+    background: #1a1208;
+    color: #e0a020;
+    border: none;
+    border-radius: 28px;
+    padding: 11px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  #bp-fab:active { background: #0a0804; transform: scale(0.97); }
+
   /* ─── Essentials Drawer ─── */
   #essentials-overlay {
     display: none;
@@ -1032,6 +1055,7 @@
   <button id="map-fab" class="hidden" onclick="showMap()">🗺 View Map</button>
 
   <!-- Essentials FAB (always visible) -->
+  <button id="bp-fab" onclick="openBoardingPass()">⚡</button>
   <button id="essentials-fab" onclick="openEssentials()">🆘 Essentials</button>
 
   <!-- Essentials Drawer -->
@@ -2543,7 +2567,22 @@ function openBoardingPass() {
 
   let html = `<div class="bp-clock">${nowStr} · Italy</div>`;
   if (!entry) {
-    html += `<div class="bp-stop" style="font-size:1.4rem;opacity:0.6">Not a trip day yet</div>`;
+    // Pre-trip or post-trip teaser
+    const today = new Date();
+    const departure = new Date('2026-06-22T22:20:00-04:00'); // UA 126 departs 10:20 PM EDT
+    const daysLeft = Math.ceil((departure - today) / 86400000);
+    if (daysLeft > 0) {
+      html += `
+        <div class="bp-label">Days until Italy</div>
+        <div class="bp-stop" style="font-size:4rem;font-weight:900;line-height:1">${daysLeft}</div>
+        <div class="bp-time" style="font-size:0.85rem;margin-top:4px">✈️ &nbsp;Jun 22 · UA 126 · 10:20 PM</div>
+        <div class="bp-divider"></div>
+        <div class="bp-label">First Stop</div>
+        <div class="bp-stop bp-dim">Siena 🇮🇹</div>
+        <div class="bp-time">Jun 23</div>`;
+    } else {
+      html += `<div class="bp-stop" style="font-size:1.4rem;opacity:0.6">Trip is over — great memories! 🍷</div>`;
+    }
   } else if (cur) {
     html += `<div class="bp-label">Now</div><div class="bp-stop">${cur.stop.name}</div><div class="bp-time">until ~${fmtMin(cur.startMin + cur.durationMin)}</div>`;
     if (nxt) html += `<div class="bp-divider"></div><div class="bp-label">Next</div><div class="bp-stop bp-dim">${nxt.stop.name}</div><div class="bp-time">${fmtMin(nxt.startMin)}</div>`;
