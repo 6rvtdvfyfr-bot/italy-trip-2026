@@ -501,8 +501,14 @@
   .leaflet-popup-content-wrapper {
     border-radius: 10px !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+    max-width: min(240px, calc(100vw - 56px)) !important;
   }
-  .map-popup { min-width: 160px; }
+  .leaflet-popup-content {
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 10px 14px !important;
+  }
+  .map-popup { max-width: 100%; word-break: break-word; }
   .map-popup .mp-name { font-weight: 700; font-size: 0.9rem; color: #1f1510; margin-bottom: 3px; }
   .map-popup .mp-time { font-size: 0.72rem; color: #8B3A2F; font-weight: 600; text-transform: uppercase; }
   .map-popup .mp-notes { font-size: 0.75rem; color: #5a4535; margin-top: 4px; line-height: 1.35; }
