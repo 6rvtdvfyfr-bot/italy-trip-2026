@@ -233,6 +233,9 @@
     transition: background 0.15s;
   }
   .stop-link:hover { background: #a04535; }
+  .stop-links { display: flex; gap: 6px; flex-wrap: wrap; }
+  .maps-link { background: #1a6bbf; }
+  .maps-link:hover { background: #1558a0; }
 
   /* ─── Map ─── */
   #map-pane {
@@ -1180,6 +1183,23 @@ function highlightCard(cardEl) {
   }
 }
 
+function showDayMarkers(dayId) {
+  if (!map) return;
+  mapMarkers.forEach(m => {
+    if (!m.marker) return;
+    if (m.dayId === dayId) {
+      if (!map.hasLayer(m.marker)) m.marker.addTo(map);
+    } else {
+      if (map.hasLayer(m.marker)) map.removeLayer(m.marker);
+    }
+  });
+  const visible = mapMarkers.filter(m => m.marker && m.dayId === dayId);
+  if (visible.length > 0) {
+    const group = L.featureGroup(visible.map(m => m.marker));
+    map.fitBounds(group.getBounds().pad(0.25));
+  }
+}
+
 // ─────────────────────────────────────────────
 // MAP INIT
 // ─────────────────────────────────────────────
@@ -1222,6 +1242,7 @@ function renderCitySection(sectionKey) {
     pill.addEventListener('click', () => {
       document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
+      showDayMarkers(day.id);
       const sec = document.getElementById('section-' + day.id);
       if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -1288,6 +1309,14 @@ function renderCitySection(sectionKey) {
         ? `<a class="stop-link" href="${stop.link}" target="_blank">${stop.linkText || 'More Info'}</a>`
         : '';
 
+      let mapsHtml = stop.coords
+        ? `<a class="stop-link maps-link" href="https://maps.apple.com/?daddr=${stop.coords[0]},${stop.coords[1]}&dirflg=w" target="_blank">🚶 Directions</a>`
+        : '';
+
+      let linksHtml = (linkHtml || mapsHtml)
+        ? `<div class="stop-links">${linkHtml}${mapsHtml}</div>`
+        : '';
+
       card.innerHTML = `
         <div class="stop-card-inner">
           <div class="stop-num" style="background:${color}">${stop.num}</div>
@@ -1297,7 +1326,7 @@ function renderCitySection(sectionKey) {
             ${tagsHtml}
             ${detailsHtml}
             ${stop.notes ? `<div class="stop-notes">${stop.notes}</div>` : ''}
-            ${linkHtml}
+            ${linksHtml}
           </div>
         </div>`;
 
@@ -1305,8 +1334,10 @@ function renderCitySection(sectionKey) {
       card.addEventListener('click', (e) => {
         if (e.target.tagName === 'A') return;
         highlightCard(card);
+        document.querySelectorAll('.day-pill').forEach((p, i) => p.classList.toggle('active', i === di));
+        showDayMarkers(day.id);
         const entry = mapMarkers[cardIdx];
-        if (entry) {
+        if (entry && entry.marker) {
           map.flyTo(stop.coords, 17, { animate: true, duration: 0.8 });
           setTimeout(() => entry.marker.openPopup(), 500);
         }
@@ -1325,7 +1356,7 @@ function renderCitySection(sectionKey) {
 
         const marker = L.marker(stop.coords, {
           icon: makeMarkerIcon(color, stop.num)
-        }).addTo(map);
+        });
         marker.bindPopup(popupContent, { maxWidth: 220 });
 
         const capturedCard = card;
@@ -1333,7 +1364,7 @@ function renderCitySection(sectionKey) {
           highlightCard(capturedCard);
         });
 
-        mapMarkers.push({ marker, cardEl: capturedCard });
+        mapMarkers.push({ marker, cardEl: capturedCard, dayId: day.id });
       } else {
         mapMarkers.push({ marker: null, cardEl: card });
       }
@@ -1344,11 +1375,16 @@ function renderCitySection(sectionKey) {
     listEl.appendChild(daySection);
   });
 
-  // Set map view
-  map.setView(data.center, data.zoom);
+  // Activate first pill and show its markers
+  const firstPill = pillsEl.querySelector('.day-pill');
+  if (firstPill) firstPill.classList.add('active');
 
-  // Ensure map renders properly after display change
-  setTimeout(() => { if (map) map.invalidateSize(); }, 50);
+  setTimeout(() => {
+    if (map) {
+      map.invalidateSize();
+      showDayMarkers(data.days[0].id);
+    }
+  }, 50);
 }
 
 // ─────────────────────────────────────────────
