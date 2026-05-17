@@ -1135,19 +1135,19 @@ const SECTIONS = {
         stops: [
           {
             num: 1, type: 'medium', time: '8:15 AM',
-            name: 'Duomo — Dome Climb', tags: ['viewpoint', 'religious'],
-            duration: '~45 min', cost: '€30/person',
-            notes: 'Arrive early to beat crowds. 463 steps, no lift. Arrive within 5 min of timed slot. Cathedral free anytime.',
-            link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
+            name: 'Duomo Cathedral', tags: ['religious', 'free'],
+            duration: '~45 min', cost: 'Free',
+            notes: 'Free entry, no ticket needed. Arrive early to avoid lines. Dress code: covered shoulders & knees.',
+            link: null, linkText: null,
             coords: [43.7731, 11.2564]
           },
           {
-            num: 2, type: 'medium', time: 'Morning (opt.)',
-            name: "Giotto's Bell Tower", tags: ['viewpoint', 'historic'],
-            duration: '~45 min', cost: 'Brunelleschi Pass',
-            notes: '414 steps, no lift. Right next to the Dome.',
-            link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
-            coords: [43.7731, 11.2568]
+            num: 2, type: 'medium', time: '~10:00 AM',
+            name: 'Piazzale Michelangelo', tags: ['viewpoint', 'free'],
+            duration: '~1 hr', cost: 'Free',
+            notes: 'Panoramic hilltop viewpoint. ~30 min walk uphill from Duomo, or taxi.',
+            link: null, linkText: null,
+            coords: [43.7629, 11.2651]
           },
           {
             num: 3, type: 'high', time: '2:00 PM',
@@ -1164,17 +1164,9 @@ const SECTIONS = {
             notes: 'Under 18 free. Adjacent to Pitti Palace. Good availability.',
             link: 'https://tickets.uffizi.it/event/DF9CC5DA-656A-1623-4E42-0199CAA4663C?lang=en', linkText: 'Buy Tickets',
             coords: [43.7624, 11.2513]
-          },
-          {
-            num: 5, type: 'medium', time: '8:00 PM',
-            name: 'Piazzale Michelangelo', tags: ['viewpoint', 'free'],
-            duration: '~1 hr+', cost: 'Free',
-            notes: 'Panoramic hilltop viewpoint. 25-min uphill walk from Boboli, or bus #13 / taxi.',
-            link: null, linkText: null,
-            coords: [43.7629, 11.2651]
           }
         ],
-        walkTimes: [null, '1 min walk', '~20 min walk', '2 min walk', '25 min walk or bus #13']
+        walkTimes: [null, '~30 min walk or taxi', '~25 min walk downhill', '2 min walk']
       },
       {
         id: 'day-extras',
@@ -1221,9 +1213,17 @@ const SECTIONS = {
             notes: 'Historic bridge with jewelry shops.',
             link: null, linkText: null,
             coords: [43.7681, 11.2531]
+          },
+          {
+            num: 6, type: 'medium', time: null,
+            name: "Giotto's Bell Tower", tags: ['viewpoint', 'historic'],
+            duration: '~45 min', cost: 'Brunelleschi Pass',
+            notes: '414 steps, no lift. Next to the Duomo.',
+            link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
+            coords: [43.7731, 11.2568]
           }
         ],
-        walkTimes: [null, null, null, null, null]
+        walkTimes: [null, null, null, null, null, null]
       }
     ]
   },
