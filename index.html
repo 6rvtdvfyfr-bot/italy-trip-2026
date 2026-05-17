@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wear Amazing Helmets — Italy 2026</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8B3A2F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Italy 2026">
 <style>
   /* ─── Reset & Base ─── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -279,6 +285,34 @@
   .move-btn:disabled { opacity: 0.25; cursor: default; }
   .stop-lock-icon { margin-left: 6px; font-size: 0.85rem; opacity: 0.4; flex-shrink: 0; align-self: center; }
   .stop-card.locked-stop { opacity: 0.75; }
+
+  /* ─── Open/closed status dot ─── */
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .status-dot.open    { background: #27ae60; }
+  .status-dot.closing { background: #e67e22; }
+  .status-dot.closed  { background: #c0392b; }
+
+  /* ─── Dress-code / warning banner ─── */
+  .stop-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    background: #fff8e6;
+    border: 1px solid #f0c040;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 0.71rem;
+    color: #7a5500;
+    margin-bottom: 5px;
+    line-height: 1.35;
+  }
 
   /* ─── Timeline View ─── */
   .timeline-toggle-btn {
@@ -2016,12 +2050,18 @@ function renderCitySection(sectionKey) {
         ? `<div class="stop-links">${linkHtml}${mapsHtml}</div>`
         : '';
 
+      const status = getStopStatus(stop);
+      const dotHtml = status ? `<span class="status-dot ${status}" title="${status === 'closing' ? 'Closing soon' : status === 'open' ? 'Open now' : 'Closed now'}"></span>` : '';
+      const meta = STOP_META[stop.name];
+      const warningHtml = meta && meta.warning ? `<div class="stop-warning">⚠️ ${meta.warning}</div>` : '';
+
       card.innerHTML = `
         <div class="stop-card-inner">
           <div class="stop-num" style="background:${color}">${stop.num}</div>
           <div class="stop-body">
-            ${stop.time ? `<div class="stop-time">${stop.time}</div>` : ''}
+            ${stop.time ? `<div class="stop-time">${stop.time}${dotHtml}</div>` : ''}
             <div class="stop-name">${stop.name}</div>
+            ${warningHtml}
             ${tagsHtml}
             ${detailsHtml}
             ${stop.notes ? `<div class="stop-notes">${stop.notes}</div>` : ''}
@@ -2193,6 +2233,41 @@ function switchSection(section) {
 }
 
 // ─────────────────────────────────────────────
+// STOP METADATA — hours & warnings (keyed by stop name)
+// ─────────────────────────────────────────────
+// hours: { open, close } in minutes since midnight; closedDays: [0=Sun…6=Sat]
+const STOP_META = {
+  'Uffizi Gallery':                     { hours: { open: 495, close: 1110, closedDays: [1] } },
+  'Accademia Gallery':                  { hours: { open: 495, close: 1130, closedDays: [1] } },
+  'Pitti Palace':                       { hours: { open: 495, close: 1110, closedDays: [1] } },
+  'Boboli Gardens':                     { hours: { open: 495, close: 1170 } },
+  'Medici Chapels':                     { hours: { open: 495, close: 830,  closedDays: [0, 1] } },
+  'Baptistery of San Giovanni':         { hours: { open: 495, close: 1155 }, warning: 'Dress code: no bare legs, shoulders, sandals, or hats.' },
+  'Duomo Cathedral':                    { hours: { open: 600, close: 990  }, warning: 'Dress code: covered shoulders & knees required.' },
+  "Giotto's Bell Tower":               { hours: { open: 495, close: 1155 } },
+  'Siena Duomo':                        { hours: { open: 630, close: 1080 } },
+  'Colosseum':                          { hours: { open: 540, close: 1140 } },
+  'Roman Forum & Palatine Hill':        { hours: { open: 540, close: 1140 } },
+  'Pantheon':                           { hours: { open: 540, close: 1140 } },
+  'Vatican Museums & Sistine Chapel':   { hours: { open: 540, close: 1080, closedDays: [0] }, warning: 'Dress code: covered shoulders & knees required.' },
+  "St. Peter's Basilica":              { hours: { open: 420, close: 1140 }, warning: 'Dress code: covered shoulders & knees required.' },
+  'San Luigi dei Francesi':             { warning: 'Dress code: covered shoulders & knees recommended.' },
+};
+
+function getStopStatus(stop) {
+  const meta = STOP_META[stop.name];
+  if (!meta || !meta.hours) return null;
+  const { open, close, closedDays = [] } = meta.hours;
+  const italyDate = new Date().toLocaleDateString('en-US', { timeZone: 'Europe/Rome', weekday: 'short' });
+  const dayIdx = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(italyDate);
+  if (closedDays.includes(dayIdx)) return 'closed';
+  const nowMin = getItalyNowMin();
+  if (nowMin < open || nowMin >= close) return 'closed';
+  if (nowMin >= close - 30) return 'closing';
+  return 'open';
+}
+
+// ─────────────────────────────────────────────
 // TODAY / NOW BANNER + ESSENTIALS
 // ─────────────────────────────────────────────
 
@@ -2330,6 +2405,10 @@ updateTodayBanner();
     if (pill) pill.click();
   }, 60);
 })();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 </script>
 </body>
 </html>
