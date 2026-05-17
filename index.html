@@ -1117,39 +1117,15 @@ const SECTIONS = {
             coords: [43.7685, 11.2558]
           },
           {
-            num: 2, type: 'suggested', time: '~11:30 AM',
-            name: 'San Lorenzo Leather Market', tags: ['market'],
-            duration: '~45 min', cost: 'Free to browse',
-            notes: 'Browse leather goods & souvenirs.',
-            link: null, linkText: null,
-            coords: [43.7748, 11.2530]
-          },
-          {
-            num: 3, type: 'suggested', time: '~12:15 PM',
-            name: 'Medici Chapels', tags: ['museum', 'historic'],
-            duration: '~1 hr', cost: 'TBD',
-            notes: 'Michelangelo sculptures. Adjacent to San Lorenzo market.',
-            link: null, linkText: null,
-            coords: [43.7749, 11.2524]
-          },
-          {
-            num: 4, type: 'high', time: '1:30 PM',
+            num: 2, type: 'high', time: '1:30 PM',
             name: 'Accademia Gallery', tags: ['museum', 'art'],
             duration: '~1.5 hrs', cost: '$24/person',
             notes: "Michelangelo's David. Jun 27 morning sold out. Under 18 free.",
             link: 'https://webshop.b-ticket.com/webshop/webticket/bestseatselectbyblock?eventId=64926&el=true', linkText: 'Buy Tickets',
             coords: [43.7769, 11.2591]
-          },
-          {
-            num: 5, type: 'medium', time: '4:00 PM',
-            name: 'Duomo — Dome Climb', tags: ['viewpoint', 'religious'],
-            duration: '~45 min', cost: '€30/person',
-            notes: '463 steps, no lift. Arrive within 5 min. Name required per ticket. Cathedral free anytime.',
-            link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
-            coords: [43.7731, 11.2564]
           }
         ],
-        walkTimes: [null, '15 min walk', '2 min walk', '7 min walk', '10 min walk']
+        walkTimes: [null, '~15 min walk']
       },
       {
         id: 'day5',
@@ -1158,20 +1134,20 @@ const SECTIONS = {
         title: 'Florence — Oltrarno & viewpoints',
         stops: [
           {
-            num: 1, type: 'medium', time: 'Morning (opt.)',
-            name: "Giotto's Bell Tower", tags: ['viewpoint', 'historic'],
-            duration: '~45 min', cost: 'Brunelleschi Pass',
-            notes: '414 steps, no lift. Cross Ponte Vecchio to Duomo area.',
+            num: 1, type: 'medium', time: '8:15 AM',
+            name: 'Duomo — Dome Climb', tags: ['viewpoint', 'religious'],
+            duration: '~45 min', cost: '€30/person',
+            notes: 'Arrive early to beat crowds. 463 steps, no lift. Arrive within 5 min of timed slot. Cathedral free anytime.',
             link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
-            coords: [43.7731, 11.2568]
+            coords: [43.7731, 11.2564]
           },
           {
-            num: 2, type: 'suggested', time: '~10:00 AM',
-            name: 'Ponte Vecchio', tags: ['historic', 'free'],
-            duration: '~20 min', cost: 'Free',
-            notes: 'Historic bridge with jewelry shops. Natural crossing point back to Oltrarno.',
-            link: null, linkText: null,
-            coords: [43.7681, 11.2531]
+            num: 2, type: 'medium', time: 'Morning (opt.)',
+            name: "Giotto's Bell Tower", tags: ['viewpoint', 'historic'],
+            duration: '~45 min', cost: 'Brunelleschi Pass',
+            notes: '414 steps, no lift. Right next to the Dome.',
+            link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
+            coords: [43.7731, 11.2568]
           },
           {
             num: 3, type: 'high', time: '2:00 PM',
@@ -1198,7 +1174,7 @@ const SECTIONS = {
             coords: [43.7629, 11.2651]
           }
         ],
-        walkTimes: [null, '15 min walk', '10 min walk', '2 min walk', '25 min walk or bus #13']
+        walkTimes: [null, '1 min walk', '~20 min walk', '2 min walk', '25 min walk or bus #13']
       },
       {
         id: 'day-extras',
@@ -1221,9 +1197,33 @@ const SECTIONS = {
             notes: 'Dress code: no bare legs/shoulders/sandals/hats. Vault mosaics under restoration.',
             link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
             coords: [43.7732, 11.2548]
+          },
+          {
+            num: 3, type: 'suggested', time: null,
+            name: 'San Lorenzo Leather Market', tags: ['market'],
+            duration: '~45 min', cost: 'Free to browse',
+            notes: 'Browse leather goods & souvenirs.',
+            link: null, linkText: null,
+            coords: [43.7748, 11.2530]
+          },
+          {
+            num: 4, type: 'suggested', time: null,
+            name: 'Medici Chapels', tags: ['museum', 'historic'],
+            duration: '~1 hr', cost: 'TBD',
+            notes: 'Michelangelo sculptures. Adjacent to San Lorenzo market.',
+            link: null, linkText: null,
+            coords: [43.7749, 11.2524]
+          },
+          {
+            num: 5, type: 'suggested', time: null,
+            name: 'Ponte Vecchio', tags: ['historic', 'free'],
+            duration: '~20 min', cost: 'Free',
+            notes: 'Historic bridge with jewelry shops.',
+            link: null, linkText: null,
+            coords: [43.7681, 11.2531]
           }
         ],
-        walkTimes: [null, '2 min walk']
+        walkTimes: [null, null, null, null, null]
       }
     ]
   },
