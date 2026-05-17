@@ -789,6 +789,31 @@
   .ess-hotel-name { font-weight: 700; font-size: 0.9rem; color: #1f1510; margin-bottom: 2px; }
   .ess-hotel-addr { font-size: 0.78rem; color: #5a4535; margin-bottom: 6px; }
 
+  /* ─── Calendar deep link ─── */
+  .cal-cell.clickable { cursor: pointer; transition: box-shadow 0.15s, transform 0.15s; }
+  .cal-cell.clickable:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.13); transform: translateY(-1px); }
+  .cal-cell.clickable:active { transform: scale(0.98); }
+
+  /* ─── Boarding pass ─── */
+  #boarding-pass {
+    position: fixed; inset: 0; z-index: 9998;
+    background: #100c06;
+    color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 28px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #boarding-pass.hidden { display: none; }
+  .bp-clock { position: absolute; top: 24px; font-size: 0.85rem; opacity: 0.4; letter-spacing: 0.05em; }
+  .bp-label { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #e0a020; margin-bottom: 6px; }
+  .bp-stop { font-size: 2.1rem; font-weight: 800; text-align: center; line-height: 1.15; margin-bottom: 8px; max-width: 340px; }
+  .bp-stop.bp-dim { font-size: 1.5rem; opacity: 0.55; }
+  .bp-time { font-size: 1rem; opacity: 0.55; margin-bottom: 0; }
+  .bp-divider { width: 48px; height: 1px; background: rgba(255,255,255,0.12); margin: 24px 0; }
+  .bp-dismiss { position: absolute; bottom: 36px; font-size: 0.72rem; opacity: 0.3; letter-spacing: 0.03em; }
+  .tb-bp-btn { background: rgba(255,255,255,0.18); color: #fff; border: none; border-radius: 8px; padding: 5px 10px; font-size: 0.82rem; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .tb-bp-btn:active { background: rgba(255,255,255,0.35); }
+
   /* ─── Weather line ─── */
   .day-weather { font-size: 0.7rem; color: #7a6355; margin-top: 3px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
   .day-weather .wx-sunset { color: #c06030; font-weight: 600; }
@@ -1104,6 +1129,9 @@
     </div>
   </div>
 
+<!-- Boarding Pass overlay -->
+<div id="boarding-pass" class="hidden"></div>
+
 </div><!-- /app -->
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -1255,7 +1283,7 @@ const SECTIONS = {
         title: 'Florence — museums day',
         stops: [
           {
-            num: 1, type: 'high', time: '8:30 AM',
+            num: 1, type: 'high', time: '8:15 AM',
             name: 'Uffizi Gallery', tags: ['museum', 'art'],
             duration: '~2.5 hrs', cost: '✓ Paid (Passepartout)',
             notes: 'Botticelli, da Vinci, Raphael. Entry slot: Jun 26 at 8:15 AM. PNR: K0F37WWB. Under 18 free.',
@@ -1596,17 +1624,17 @@ const SECTIONS = {
 };
 
 const CALENDAR_DATA = [
-  { date: 'Jun 22', dayNum: 0,  type: 'travel',   city: 'Travel', desc: 'Fly IAD→FCO (UA 126, 10:20 PM)' },
-  { date: 'Jun 23', dayNum: 1,  type: 'siena',    city: 'Siena',   desc: 'Arrive FCO · Drive to Siena · Hotel Athena' },
-  { date: 'Jun 24', dayNum: 2,  type: 'siena',    city: 'Siena',   desc: 'Siena Duomo · Torre del Mangia · Wine country?' },
-  { date: 'Jun 25', dayNum: 3,  type: 'florence', city: 'Florence',desc: 'Drive to Florence · Lunch: Panzano · Hotel Horto Convento' },
-  { date: 'Jun 26', dayNum: 4,  type: 'florence', city: 'Florence',desc: 'Uffizi 8:30 AM · Accademia 1:30 PM · Dome 4:00 PM' },
-  { date: 'Jun 27', dayNum: 5,  type: 'florence', city: 'Florence',desc: 'Pitti 2:00 PM · Boboli 4:00 PM · Piazzale 8:00 PM' },
-  { date: 'Jun 28', dayNum: 6,  type: 'rome',     city: 'Rome',    desc: 'Drive→Rome · Trevi Fountain · Spanish Steps' },
-  { date: 'Jun 29', dayNum: 7,  type: 'rome',     city: 'Rome',    desc: 'Colosseum · Roman Forum · Pantheon' },
-  { date: 'Jun 30', dayNum: 8,  type: 'rome',     city: 'Rome',    desc: 'Vatican + Sistine · St. Peter\'s · Trastevere' },
-  { date: 'Jul 1',  dayNum: 9,  type: 'rome',     city: 'Rome',    desc: 'Pompeii / Tivoli / Rome TBD' },
-  { date: 'Jul 2',  dayNum: 10, type: 'travel',   city: 'Travel',  desc: 'Farewell · UA 127 departs 3:20 PM' }
+  { date: 'Jun 22', dayNum: 0,  type: 'travel',   city: 'Travel',   desc: 'Fly IAD→FCO (UA 126, 10:20 PM)',                              section: null,       dayIdx: null },
+  { date: 'Jun 23', dayNum: 1,  type: 'siena',    city: 'Siena',    desc: 'Arrive FCO · Drive to Siena · Hotel Athena',                  section: 'siena',    dayIdx: 0 },
+  { date: 'Jun 24', dayNum: 2,  type: 'siena',    city: 'Siena',    desc: 'Siena Duomo · Torre del Mangia · Wine country?',              section: 'siena',    dayIdx: 1 },
+  { date: 'Jun 25', dayNum: 3,  type: 'florence', city: 'Florence', desc: 'Drive to Florence · Lunch: Panzano · Hotel Horto Convento',   section: 'florence', dayIdx: 0 },
+  { date: 'Jun 26', dayNum: 4,  type: 'florence', city: 'Florence', desc: 'Uffizi 8:15 AM · Accademia 1:30 PM',                         section: 'florence', dayIdx: 1 },
+  { date: 'Jun 27', dayNum: 5,  type: 'florence', city: 'Florence', desc: 'Duomo 8:15 AM · Piazzale 10:00 AM · Pitti 2:00 PM · Boboli 4:00 PM', section: 'florence', dayIdx: 2 },
+  { date: 'Jun 28', dayNum: 6,  type: 'rome',     city: 'Rome',     desc: 'Drive→Rome · Trevi Fountain · Spanish Steps',                 section: 'rome',     dayIdx: 0 },
+  { date: 'Jun 29', dayNum: 7,  type: 'rome',     city: 'Rome',     desc: 'Colosseum · Roman Forum · Pantheon',                         section: 'rome',     dayIdx: 1 },
+  { date: 'Jun 30', dayNum: 8,  type: 'rome',     city: 'Rome',     desc: 'Vatican + Sistine · St. Peter\'s · Trastevere',               section: 'rome',     dayIdx: 2 },
+  { date: 'Jul 1',  dayNum: 9,  type: 'rome',     city: 'Rome',     desc: 'Pompeii / Tivoli / Rome TBD',                                section: 'rome',     dayIdx: 3 },
+  { date: 'Jul 2',  dayNum: 10, type: 'travel',   city: 'Travel',   desc: 'Farewell · UA 127 departs 3:20 PM',                          section: null,       dayIdx: null },
 ];
 
 // ─────────────────────────────────────────────
@@ -2073,6 +2101,7 @@ function renderCitySection(sectionKey) {
   data.days.forEach((day, di) => {
     const pill = document.createElement('button');
     pill.className = 'day-pill';
+    pill.dataset.day = day.id;
     pill.textContent = `${day.label} · ${day.date.split(' ').slice(0,2).join(' ')}`;
     pill.addEventListener('click', () => {
       if (timelineMode) {
@@ -2289,12 +2318,22 @@ function renderOverview() {
   grid.innerHTML = '';
   CALENDAR_DATA.forEach(d => {
     const cell = document.createElement('div');
-    cell.className = `cal-cell ${d.type}`;
+    cell.className = `cal-cell ${d.type}${d.section ? ' clickable' : ''}`;
     cell.innerHTML = `
       <div class="cal-date">${d.date}</div>
       <div class="cal-day-num">Day ${d.dayNum}</div>
       <span class="cal-city-badge ${d.type}">${d.city}</span>
       <div class="cal-desc">${d.desc}</div>`;
+    if (d.section !== null) {
+      cell.addEventListener('click', () => {
+        switchSection(d.section);
+        setTimeout(() => {
+          const dayId = SECTIONS[d.section].days[d.dayIdx]?.id;
+          const pill = dayId ? document.querySelector(`.day-pill[data-day="${dayId}"]`) : null;
+          if (pill) pill.click();
+        }, 80);
+      });
+    }
     grid.appendChild(cell);
   });
 }
@@ -2476,8 +2515,53 @@ function updateTodayBanner() {
 
   textEl.innerHTML = html;
   banner.innerHTML = `<div class="tb-main">${html}</div>` +
-    (mapsHref ? `<a class="tb-maps-btn" href="${mapsHref}" target="_blank">🗺 Go</a>` : '');
+    (mapsHref ? `<a class="tb-maps-btn" href="${mapsHref}" target="_blank">🗺 Go</a>` : '') +
+    `<button class="tb-bp-btn" onclick="openBoardingPass()" title="Big text view">⚡</button>`;
   banner.style.display = 'flex';
+}
+
+function openBoardingPass() {
+  const bp = document.getElementById('boarding-pass');
+  const dateStr = getItalyDateStr();
+  const entry = TRIP_DAY_MAP[dateStr];
+  const nowMin = getItalyNowMin();
+  const nowStr = fmtMin(nowMin);
+
+  let cur = null, nxt = null, nxt2 = null;
+  if (entry) {
+    const day = SECTIONS[entry.section].days[entry.dayIdx];
+    const schedule = getStopSchedule(day, entry.section)
+      .filter(s => s.stop.type !== 'transport' && s.stop.type !== 'hotel');
+    for (let i = 0; i < schedule.length; i++) {
+      const { startMin, durationMin } = schedule[i];
+      if (nowMin >= startMin && nowMin < startMin + durationMin) {
+        cur = schedule[i]; nxt = schedule[i + 1] || null; break;
+      }
+      if (startMin > nowMin) { nxt = schedule[i]; nxt2 = schedule[i + 1] || null; break; }
+    }
+  }
+
+  let html = `<div class="bp-clock">${nowStr} · Italy</div>`;
+  if (!entry) {
+    html += `<div class="bp-stop" style="font-size:1.4rem;opacity:0.6">Not a trip day yet</div>`;
+  } else if (cur) {
+    html += `<div class="bp-label">Now</div><div class="bp-stop">${cur.stop.name}</div><div class="bp-time">until ~${fmtMin(cur.startMin + cur.durationMin)}</div>`;
+    if (nxt) html += `<div class="bp-divider"></div><div class="bp-label">Next</div><div class="bp-stop bp-dim">${nxt.stop.name}</div><div class="bp-time">${fmtMin(nxt.startMin)}</div>`;
+  } else if (nxt) {
+    html += `<div class="bp-label">Up Next</div><div class="bp-stop">${nxt.stop.name}</div><div class="bp-time">${fmtMin(nxt.startMin)}</div>`;
+    if (nxt2) html += `<div class="bp-divider"></div><div class="bp-label">Then</div><div class="bp-stop bp-dim">${nxt2.stop.name}</div><div class="bp-time">${fmtMin(nxt2.startMin)}</div>`;
+  } else {
+    html += `<div class="bp-stop" style="font-size:1.5rem">All done today!</div><div class="bp-time" style="margin-top:8px;opacity:0.5">Enjoy the evening 🍷</div>`;
+  }
+  html += `<div class="bp-dismiss">Tap anywhere to close</div>`;
+
+  bp.innerHTML = html;
+  bp.onclick = closeBoardingPass;
+  bp.classList.remove('hidden');
+}
+
+function closeBoardingPass() {
+  document.getElementById('boarding-pass').classList.add('hidden');
 }
 
 function openEssentials() {
