@@ -1022,6 +1022,15 @@
             <div class="lc-row"><span class="lc-label">Holders</span><span class="lc-val">Gollenbergs (4) · Wachters (3)</span></div>
             <div class="lc-row"><a class="stop-link" href="Tickets.pdf" target="_blank">🎫 View Tickets PDF</a></div>
           </div>
+          <div class="logistics-card">
+            <h3>✅ Accademia + Bargello 48h Pass</h3>
+            <div class="lc-row"><span class="lc-label">Order</span><span class="lc-val">22773014</span></div>
+            <div class="lc-row"><span class="lc-label">Entry</span><span class="lc-val">Jun 26 · 1:30 PM · Accademia</span></div>
+            <div class="lc-row"><span class="lc-label">Covers</span><span class="lc-val">Galleria dell'Accademia · Museo del Bargello</span></div>
+            <div class="lc-row"><span class="lc-label">Valid</span><span class="lc-val">48h from first use · 7 tickets · €184</span></div>
+            <div class="lc-row"><span class="lc-label">Holders</span><span class="lc-val">Gollenbergs (3) · Wachters (4)</span></div>
+            <div class="lc-row"><a class="stop-link" href="Accademia Tickets.pdf" target="_blank">🎫 View Tickets PDF</a></div>
+          </div>
         </div>
 
         <div class="logistics-section-title">🚗 Car Rental</div>
@@ -1038,7 +1047,7 @@
         <div class="logistics-section-title">✅ Action Items</div>
         <div class="action-list">
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Uffizi Passepartout — Booked ✓</div><div class="ai-detail">PNR: K0F37WWB · Jun 26, 8:15 AM · Covers Uffizi + Pitti + Boboli · 7 tickets · €240</div></div></div>
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Accademia Gallery (David)</div><div class="ai-detail">Jun 26 · 1:30 PM · Jun 27 morning sold out · <a href="https://webshop.b-ticket.com/webshop/webticket/bestseatselectbyblock?eventId=64926&el=true" target="_blank">b-ticket.com</a></div></div></div>
+          <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Accademia + Bargello 48h Pass — Booked ✓</div><div class="ai-detail">Order: 22773014 · Jun 26, 1:30 PM · Covers Accademia + Bargello · 7 tickets · €184</div></div></div>
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Brunelleschi Pass — Skipped ✓</div><div class="ai-detail">Doing free Duomo Cathedral visit instead</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Vatican Museums + Sistine Chapel</div><div class="ai-detail">Jun 30 · Morning · Skip-the-line required · <a href="https://tickets.museivaticani.va" target="_blank">tickets.museivaticani.va</a></div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Colosseum (Full Combo)</div><div class="ai-detail">Jun 29 · Arena floor, Attic &amp; Underground · Book well ahead</div></div></div>
@@ -1080,6 +1089,14 @@
       <div class="ess-row">
         <span class="ess-row-label">Covers</span>
         <span class="ess-row-val">Uffizi · Pitti Palace · Boboli Gardens (valid 5 days from first use)</span>
+      </div>
+      <div class="ess-row">
+        <span class="ess-row-label">Accademia Pass</span>
+        <span class="ess-row-val">Order: <strong>22773014</strong> · Jun 26, 1:30 PM · 7 tickets · <a href="Accademia Tickets.pdf" target="_blank">Open PDF →</a></span>
+      </div>
+      <div class="ess-row">
+        <span class="ess-row-label">Covers</span>
+        <span class="ess-row-val">Galleria dell'Accademia · Museo del Bargello (valid 48h from first use)</span>
       </div>
     </div>
 
@@ -1317,9 +1334,9 @@ const SECTIONS = {
           {
             num: 2, type: 'high', time: '1:30 PM',
             name: 'Accademia Gallery', tags: ['museum', 'art'],
-            duration: '~1.5 hrs', cost: '$24/person',
-            notes: "Michelangelo's David. Jun 27 morning sold out. Under 18 free.",
-            link: 'https://webshop.b-ticket.com/webshop/webticket/bestseatselectbyblock?eventId=64926&el=true', linkText: 'Buy Tickets',
+            duration: '~1.5 hrs', cost: '✓ Paid (48h Pass)',
+            notes: "Michelangelo's David. Entry slot: Jun 26 at 1:30 PM. Order: 22773014. Under 18 free.",
+            link: 'Accademia Tickets.pdf', linkText: '🎫 View Ticket',
             coords: [43.7769, 11.2591]
           }
         ],
@@ -1419,9 +1436,17 @@ const SECTIONS = {
             notes: '414 steps, no lift. Next to the Duomo.',
             link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
             coords: [43.7731, 11.2568]
+          },
+          {
+            num: 7, type: 'high', time: null,
+            name: 'Museo del Bargello', tags: ['museum', 'art'],
+            duration: '~1 hr', cost: '✓ Paid (48h Pass)',
+            notes: "Covered by Accademia 48h Pass (Order: 22773014). Donatello's David, Michelangelo's Bacchus. Use within 48h of Accademia entry.",
+            link: 'Accademia Tickets.pdf', linkText: '🎫 View Ticket',
+            coords: [43.7697, 11.2574]
           }
         ],
-        walkTimes: [null, null, null, null, null, null]
+        walkTimes: [null, null, null, null, null, null, null]
       }
     ]
   },
