@@ -1338,9 +1338,17 @@ const SECTIONS = {
             notes: "Michelangelo's David. Entry slot: Jun 26 at 1:30 PM. Order: 22773014. Under 18 free.",
             link: 'Accademia Tickets.pdf', linkText: '🎫 View Ticket',
             coords: [43.7769, 11.2591]
+          },
+          {
+            num: 3, type: 'food', time: '8:00 PM',
+            name: 'Ristorante Benedicta', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: 'Reservation confirmed · 7 people · Via Benedetta 12/r · +39 055 264 5429 · Booked by Priscilla.',
+            link: 'https://maps.apple.com/?q=Via+Benedetta+12+Firenze', linkText: '🗺 Directions',
+            coords: [43.7681, 11.2498]
           }
         ],
-        walkTimes: [null, '~15 min walk']
+        walkTimes: [null, '~15 min walk', null]
       },
       {
         id: 'day5',
@@ -1677,7 +1685,7 @@ const CALENDAR_DATA = [
   { date: 'Jun 23', dayNum: 1,  type: 'siena',    city: 'Siena',    desc: 'Arrive FCO · Drive to Siena · Hotel Athena',                  section: 'siena',    dayIdx: 0 },
   { date: 'Jun 24', dayNum: 2,  type: 'siena',    city: 'Siena',    desc: 'Siena Duomo · Torre del Mangia · Wine country?',              section: 'siena',    dayIdx: 1 },
   { date: 'Jun 25', dayNum: 3,  type: 'florence', city: 'Florence', desc: 'Drive to Florence · Lunch: Panzano · Hotel Horto Convento',   section: 'florence', dayIdx: 0 },
-  { date: 'Jun 26', dayNum: 4,  type: 'florence', city: 'Florence', desc: 'Uffizi 8:15 AM · Accademia 1:30 PM',                         section: 'florence', dayIdx: 1 },
+  { date: 'Jun 26', dayNum: 4,  type: 'florence', city: 'Florence', desc: 'Uffizi 8:15 AM · Accademia 1:30 PM · Dinner 8:00 PM',                         section: 'florence', dayIdx: 1 },
   { date: 'Jun 27', dayNum: 5,  type: 'florence', city: 'Florence', desc: 'Duomo 8:15 AM · Piazzale 10:00 AM · Pitti 2:00 PM · Boboli 4:00 PM', section: 'florence', dayIdx: 2 },
   { date: 'Jun 28', dayNum: 6,  type: 'rome',     city: 'Rome',     desc: 'Drive→Rome · Trevi Fountain · Spanish Steps',                 section: 'rome',     dayIdx: 0 },
   { date: 'Jun 29', dayNum: 7,  type: 'rome',     city: 'Rome',     desc: 'Colosseum · Roman Forum · Pantheon',                         section: 'rome',     dayIdx: 1 },
