@@ -1662,15 +1662,31 @@ const SECTIONS = {
             coords: [41.8815, 12.4794]
           },
           {
-            num: 4, type: 'food', time: 'Evening',
-            name: 'Flavio al Velavevodetto — Testaccio', tags: ['dinner', 'restaurant'],
+            num: 4, type: 'optional', time: 'Evening',
+            name: 'Option A — Checchino dal 1887', tags: ['dinner', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation required · Penciled in. Best cacio e pepe in Rome, best tiramisu. Testaccio neighborhood, ~15 min taxi from AirBnB. Head straight from the day trip rather than going home first.',
+            notes: '📋 Reservation required · The origin of Rome\'s quinto quarto tradition — slaughterhouse workers brought their offal pay here in 1887. Fifth-generation family, built into Monte Testaccio. Claims to have invented coda alla vaccinara. Most historically significant restaurant in Testaccio. More formal and expensive than the others. ~15 min taxi from AirBnB.',
+            link: null, linkText: null,
+            coords: [41.8765, 12.4769]
+          },
+          {
+            num: 5, type: 'optional', time: 'Evening',
+            name: 'Option B — Trattoria Perilli (est. 1911)', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · Oldest continuously operating trattoria in Testaccio, still run by the founding family. Rachel Roddy\'s neighborhood institution. Elizabeth Minchilli\'s favorite carbonara in Rome. The Infatuation specifically recommends it for groups. More casual and affordable than Checchino, equally embedded in the neighborhood.',
+            link: null, linkText: null,
+            coords: [41.8771, 12.4756]
+          },
+          {
+            num: 6, type: 'optional', time: 'Evening',
+            name: 'Option C — Flavio al Velavevodetto', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · The cacio e pepe and tiramisu choice. Opened 2009 by Flavio De Maio (trained at Felice). Praised by Katie Parla and Slow Food\'s Carlo Petrini. Set inside Monte dei Cocci, a hill made of ancient Roman amphorae. Best pasta execution of the three, but less historical depth than Checchino or Perilli.',
             link: null, linkText: null,
             coords: [41.8773, 12.4768]
           }
         ],
-        walkTimes: [null, null, null, null]
+        walkTimes: [null, null, null, null, null, null]
       },
       {
         id: 'day10',
@@ -1715,7 +1731,7 @@ const SECTIONS = {
             num: 1, type: 'food', time: null,
             name: 'Ristorante La Tavernetta 48', tags: ['dinner', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation required · Steps from Piazza Navona & Pantheon. Charming outdoor dining in centuries-old vine-covered courtyard.',
+            notes: '📋 Reservation required · Steps from Piazza Navona & Pantheon. Charming outdoor dining in centuries-old vine-covered courtyard. · TripAdvisor: #476 of 13,193 · ★4.5',
             link: null, linkText: null,
             coords: [41.8994, 12.4723]
           },
@@ -1723,7 +1739,7 @@ const SECTIONS = {
             num: 2, type: 'food', time: null,
             name: 'Armando al Pantheon', tags: ['dinner', 'lunch', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation required · Family-run institution steps from the Pantheon. Excellent food, historic setting.',
+            notes: '📋 Reservation required · Family-run institution steps from the Pantheon. Excellent food, historic setting. · TripAdvisor: #1,053 of 13,193 · ★4.2',
             link: null, linkText: null,
             coords: [41.8986, 12.4769]
           },
@@ -1731,7 +1747,7 @@ const SECTIONS = {
             num: 3, type: 'food', time: null,
             name: 'Flavio al Velavevodetto', tags: ['dinner', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation required · Testaccio neighborhood. Top cacio e pepe in Rome, plus the best tiramisu.',
+            notes: '📋 Reservation required · Testaccio neighborhood. Top cacio e pepe in Rome, plus the best tiramisu. · TripAdvisor: #1,974 of 13,193 · ★3.8',
             link: null, linkText: null,
             coords: [41.8773, 12.4768]
           },
@@ -1739,7 +1755,7 @@ const SECTIONS = {
             num: 4, type: 'food', time: null,
             name: 'Salumeria Roscioli', tags: ['dinner', 'lunch', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation required · Best carbonara in Rome. Open lunch then gap then dinner. Near Campo de\' Fiori.',
+            notes: '📋 Reservation required · Best carbonara in Rome. Open lunch then gap then dinner. Near Campo de\' Fiori. · TripAdvisor: #1,047 of 13,193 · ★4.2',
             link: null, linkText: null,
             coords: [41.8954, 12.4726]
           },
@@ -1747,7 +1763,7 @@ const SECTIONS = {
             num: 5, type: 'food', time: null,
             name: 'Roscioli — Campo de\' Fiori area', tags: ['dinner', 'lunch', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation recommended · Short stroll from Campo de\' Fiori. Local, organic, fresh. Pizza dough by Pierluigi Roscioli. Open 12:30–3 PM & 7–11:30 PM.',
+            notes: '📋 Reservation recommended · Short stroll from Campo de\' Fiori. Local, organic, fresh. Pizza dough by Pierluigi Roscioli. Open 12:30–3 PM & 7–11:30 PM. · TripAdvisor: #10 of 378 Bakeries · ★4.4',
             link: null, linkText: null,
             coords: [41.8960, 12.4720]
           },
@@ -1755,7 +1771,7 @@ const SECTIONS = {
             num: 6, type: 'food', time: null,
             name: 'La Prosciutteria Cantina dei Papi', tags: ['lunch', 'restaurant'],
             duration: null, cost: null,
-            notes: '🚶 Walk-in · Trastevere. Great lighter mid-day option. Order the giant shareable charcuterie & cheese board — meats, vegetables, cheeses, fruits.',
+            notes: '🚶 Walk-in · Trastevere. Great lighter mid-day option. Order the giant shareable charcuterie & cheese board — meats, vegetables, cheeses, fruits. · TripAdvisor: #421 of 13,193 · ★4.6',
             link: null, linkText: null,
             coords: [41.8893, 12.4695]
           },
@@ -1763,7 +1779,7 @@ const SECTIONS = {
             num: 7, type: 'food', time: null,
             name: 'Il Botticelli', tags: ['dinner', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation required · Small, cozy, traditional Roman restaurant. Beloved by locals and tourists.',
+            notes: '📋 Reservation required · Small, cozy, traditional Roman restaurant. Beloved by locals and tourists. · TripAdvisor: #1,905 of 13,193 · ★4.7 (new listing, few reviews)',
             link: null, linkText: null,
             coords: [41.8997, 12.4760]
           },
@@ -1771,7 +1787,7 @@ const SECTIONS = {
             num: 8, type: 'food', time: null,
             name: 'Ai Tre Scalini', tags: ['lunch', 'restaurant'],
             duration: null, cost: null,
-            notes: '🚶 Walk-in · Monti neighborhood — lovely area to explore near the Colosseum. Italian gastropub, packed with locals, well-priced. All fresh ingredients.',
+            notes: '🚶 Walk-in · Monti neighborhood — lovely area to explore near the Colosseum. Italian gastropub, packed with locals, well-priced. All fresh ingredients. · TripAdvisor: #688 of 13,193 · ★4.4',
             link: null, linkText: null,
             coords: [41.8939, 12.4968]
           },
@@ -1779,7 +1795,7 @@ const SECTIONS = {
             num: 9, type: 'food', time: null,
             name: 'Osteria Barberini', tags: ['dinner', 'restaurant'],
             duration: null, cost: null,
-            notes: '⚠️ Tourist trap — skip. Reports of prices covered with higher handwritten prices, truffle dishes with no real truffle.',
+            notes: '⚠️ Tourist trap — skip. Reports of prices covered with higher handwritten prices, truffle dishes with no real truffle. · TripAdvisor: #1,052 of 13,193 · ★4.5',
             link: null, linkText: null,
             coords: [41.9026, 12.4857]
           },
@@ -1787,7 +1803,7 @@ const SECTIONS = {
             num: 10, type: 'suggested', time: null,
             name: 'Giolitti', tags: ['gelato', 'free'],
             duration: null, cost: null,
-            notes: '🚶 Walk-in · Historic gelateria near the Pantheon. Decent but overhyped — dei Gracchi is better.',
+            notes: '🚶 Walk-in · Historic gelateria near the Pantheon. Decent but overhyped — dei Gracchi is better. · TripAdvisor: #100 of 1,047 Dessert Spots · ★4.3',
             link: null, linkText: null,
             coords: [41.8993, 12.4763]
           },
@@ -1795,7 +1811,7 @@ const SECTIONS = {
             num: 11, type: 'suggested', time: null,
             name: 'Gelateria dei Gracchi', tags: ['gelato'],
             duration: null, cost: null,
-            notes: '🚶 Walk-in · Made fresh daily. Cited by Bourdain. Bronte pistachio is exceptional. Best gelato in Rome.',
+            notes: '🚶 Walk-in · Made fresh daily. Cited by Bourdain. Bronte pistachio is exceptional. Best gelato in Rome. · TripAdvisor: #59 of 1,047 Dessert Spots · ★4.3',
             link: null, linkText: null,
             coords: [41.9055, 12.4629]
           }
@@ -1828,6 +1844,7 @@ let currentSection = null;
 let currentSectionKey = null;
 let mapMarkers = [];
 let routePolyline = null;
+let homeMarker = null;
 let activePill = null;
 let editMode = false;
 let timelineMode = false;
@@ -1851,6 +1868,28 @@ const TYPE_COLORS = {
 // ─────────────────────────────────────────────
 function typeColor(t) { return TYPE_COLORS[t] || '#888'; }
 
+const HOME_COORDS = {
+  siena:    [43.3168, 11.3356],
+  florence: [43.7660, 11.2428],
+  rome:     [41.8936, 12.4547]
+};
+
+const HOME_LABELS = {
+  siena:    'Hotel Athena',
+  florence: 'Hotel Horto Convento',
+  rome:     'AirBnB — Via dell Fornaci 44'
+};
+
+function makeHomeIcon() {
+  return L.divIcon({
+    className: '',
+    html: `<div style="background:#1a6bbf;border:2px solid rgba(0,0,0,0.25);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,0.3)">🏠</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -18]
+  });
+}
+
 function makeMarkerIcon(color, num) {
   return L.divIcon({
     className: '',
@@ -1869,6 +1908,7 @@ function clearMap() {
   mapMarkers.forEach(m => { if (m.marker && map.hasLayer(m.marker)) map.removeLayer(m.marker); });
   mapMarkers = [];
   if (routePolyline) { routePolyline.remove(); routePolyline = null; }
+  if (homeMarker) { homeMarker.remove(); homeMarker = null; }
 }
 
 function highlightCard(cardEl) {
@@ -2227,6 +2267,13 @@ function renderCitySection(sectionKey) {
   // Init map
   initMap();
   clearMap();
+
+  // Home pin
+  if (HOME_COORDS[sectionKey]) {
+    homeMarker = L.marker(HOME_COORDS[sectionKey], { icon: makeHomeIcon(), zIndexOffset: 1000 });
+    homeMarker.bindPopup(`<div class="map-popup"><div class="mp-name">🏠 ${HOME_LABELS[sectionKey]}</div></div>`, { maxWidth: 220 });
+    homeMarker.addTo(map);
+  }
 
   currentSectionKey = sectionKey;
 
