@@ -1556,7 +1556,15 @@ const SECTIONS = {
             coords: [41.8925, 12.4853]
           },
           {
-            num: 3, type: 'high', time: 'Afternoon',
+            num: 3, type: 'food', time: 'Afternoon',
+            name: 'Ai Tre Scalini — Monti', tags: ['lunch', 'restaurant'],
+            duration: null, cost: null,
+            notes: '🚶 Walk-in · Italian gastropub, locals only, great prices. Been here since 1895. Lovely neighborhood to stroll before heading to the Pantheon.',
+            link: null, linkText: null,
+            coords: [41.8939, 12.4968]
+          },
+          {
+            num: 4, type: 'high', time: 'Afternoon',
             name: 'Pantheon', tags: ['historic', 'religious', 'free'],
             duration: '~45 min', cost: 'Free',
             notes: 'Best-preserved ancient building in the world.',
@@ -1564,7 +1572,7 @@ const SECTIONS = {
             coords: [41.8986, 12.4769]
           },
           {
-            num: 4, type: 'suggested', time: '~3:30 PM',
+            num: 5, type: 'suggested', time: '~3:30 PM',
             name: 'Piazza Navona', tags: ['square', 'free'],
             duration: '~45 min', cost: 'Free',
             notes: 'Baroque fountains & street artists.',
@@ -1572,7 +1580,7 @@ const SECTIONS = {
             coords: [41.8992, 12.4731]
           },
           {
-            num: 5, type: 'suggested', time: 'Evening',
+            num: 6, type: 'suggested', time: 'Evening',
             name: 'Dinner', tags: ['restaurant'],
             duration: null, cost: null,
             notes: "Trastevere or Campo de' Fiori.",
@@ -1580,7 +1588,7 @@ const SECTIONS = {
             coords: [41.8880, 12.4678]
           }
         ],
-        walkTimes: [null, '5 min walk', '20 min walk', '5 min walk', null]
+        walkTimes: [null, '5 min walk', '~5 min walk', '20 min walk', '5 min walk', null]
       },
       {
         id: 'day8',
@@ -1605,7 +1613,15 @@ const SECTIONS = {
             coords: [41.9060, 12.4623]
           },
           {
-            num: 3, type: 'suggested', time: 'Evening',
+            num: 3, type: 'suggested', time: 'Afternoon',
+            name: 'Gelateria dei Gracchi', tags: ['gelato'],
+            duration: null, cost: null,
+            notes: 'One of the best gelaterias in Rome — cited by Bourdain. Bronte pistachio is exceptional. ~10 min walk from AirBnB. No rush on timing.',
+            link: null, linkText: null,
+            coords: [41.9055, 12.4629]
+          },
+          {
+            num: 4, type: 'suggested', time: 'Evening',
             name: 'Trastevere dinner', tags: ['restaurant'],
             duration: null, cost: null,
             notes: 'Charming neighborhood, itinerary highlight.',
@@ -1613,7 +1629,7 @@ const SECTIONS = {
             coords: [41.8880, 12.4678]
           }
         ],
-        walkTimes: [null, '5 min walk', '20 min walk']
+        walkTimes: [null, '5 min walk', '~5 min walk', '20 min walk']
       },
       {
         id: 'day9',
@@ -1644,9 +1660,17 @@ const SECTIONS = {
             notes: 'Aventine Keyhole, Jewish Ghetto & Roman-Jewish cuisine.',
             link: null, linkText: null,
             coords: [41.8815, 12.4794]
+          },
+          {
+            num: 4, type: 'food', time: 'Evening',
+            name: 'Flavio al Velavevodetto — Testaccio', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · Penciled in. Best cacio e pepe in Rome, best tiramisu. Testaccio neighborhood, ~15 min taxi from AirBnB. Head straight from the day trip rather than going home first.',
+            link: null, linkText: null,
+            coords: [41.8773, 12.4768]
           }
         ],
-        walkTimes: [null, null]
+        walkTimes: [null, null, null, null]
       },
       {
         id: 'day10',
@@ -1680,6 +1704,103 @@ const SECTIONS = {
           }
         ],
         walkTimes: [null, null]
+      },
+      {
+        id: 'rome-extras',
+        label: 'Extras',
+        date: '',
+        title: 'Rome — restaurants & gelato',
+        stops: [
+          {
+            num: 1, type: 'food', time: null,
+            name: 'Ristorante La Tavernetta 48', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · Steps from Piazza Navona & Pantheon. Charming outdoor dining in centuries-old vine-covered courtyard.',
+            link: null, linkText: null,
+            coords: [41.8994, 12.4723]
+          },
+          {
+            num: 2, type: 'food', time: null,
+            name: 'Armando al Pantheon', tags: ['dinner', 'lunch', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · Family-run institution steps from the Pantheon. Excellent food, historic setting.',
+            link: null, linkText: null,
+            coords: [41.8986, 12.4769]
+          },
+          {
+            num: 3, type: 'food', time: null,
+            name: 'Flavio al Velavevodetto', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · Testaccio neighborhood. Top cacio e pepe in Rome, plus the best tiramisu.',
+            link: null, linkText: null,
+            coords: [41.8773, 12.4768]
+          },
+          {
+            num: 4, type: 'food', time: null,
+            name: 'Salumeria Roscioli', tags: ['dinner', 'lunch', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · Best carbonara in Rome. Open lunch then gap then dinner. Near Campo de\' Fiori.',
+            link: null, linkText: null,
+            coords: [41.8954, 12.4726]
+          },
+          {
+            num: 5, type: 'food', time: null,
+            name: 'Roscioli — Campo de\' Fiori area', tags: ['dinner', 'lunch', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation recommended · Short stroll from Campo de\' Fiori. Local, organic, fresh. Pizza dough by Pierluigi Roscioli. Open 12:30–3 PM & 7–11:30 PM.',
+            link: null, linkText: null,
+            coords: [41.8960, 12.4720]
+          },
+          {
+            num: 6, type: 'food', time: null,
+            name: 'La Prosciutteria Cantina dei Papi', tags: ['lunch', 'restaurant'],
+            duration: null, cost: null,
+            notes: '🚶 Walk-in · Trastevere. Great lighter mid-day option. Order the giant shareable charcuterie & cheese board — meats, vegetables, cheeses, fruits.',
+            link: null, linkText: null,
+            coords: [41.8893, 12.4695]
+          },
+          {
+            num: 7, type: 'food', time: null,
+            name: 'Il Botticelli', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: '📋 Reservation required · Small, cozy, traditional Roman restaurant. Beloved by locals and tourists.',
+            link: null, linkText: null,
+            coords: [41.8997, 12.4760]
+          },
+          {
+            num: 8, type: 'food', time: null,
+            name: 'Ai Tre Scalini', tags: ['lunch', 'restaurant'],
+            duration: null, cost: null,
+            notes: '🚶 Walk-in · Monti neighborhood — lovely area to explore near the Colosseum. Italian gastropub, packed with locals, well-priced. All fresh ingredients.',
+            link: null, linkText: null,
+            coords: [41.8939, 12.4968]
+          },
+          {
+            num: 9, type: 'food', time: null,
+            name: 'Osteria Barberini', tags: ['dinner', 'restaurant'],
+            duration: null, cost: null,
+            notes: '⚠️ Tourist trap — skip. Reports of prices covered with higher handwritten prices, truffle dishes with no real truffle.',
+            link: null, linkText: null,
+            coords: [41.9026, 12.4857]
+          },
+          {
+            num: 10, type: 'suggested', time: null,
+            name: 'Giolitti', tags: ['gelato', 'free'],
+            duration: null, cost: null,
+            notes: '🚶 Walk-in · Historic gelateria near the Pantheon. Decent but overhyped — dei Gracchi is better.',
+            link: null, linkText: null,
+            coords: [41.8993, 12.4763]
+          },
+          {
+            num: 11, type: 'suggested', time: null,
+            name: 'Gelateria dei Gracchi', tags: ['gelato'],
+            duration: null, cost: null,
+            notes: '🚶 Walk-in · Made fresh daily. Cited by Bourdain. Bronte pistachio is exceptional. Best gelato in Rome.',
+            link: null, linkText: null,
+            coords: [41.9055, 12.4629]
+          }
+        ],
+        walkTimes: [null, null, null, null, null, null, null, null, null, null, null]
       }
     ]
   }
