@@ -1068,7 +1068,7 @@
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Accademia + Bargello 48h Pass — Booked ✓</div><div class="ai-detail">Order: 22773014 · Jun 26, 1:30 PM · Covers Accademia + Bargello · 7 tickets · €184</div></div></div>
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Brunelleschi Pass — Skipped ✓</div><div class="ai-detail">Doing free Duomo Cathedral visit instead</div></div></div>
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Vatican Museums + Sistine Chapel — Booked ✓</div><div class="ai-detail">Booking #1128309 · Jun 30, 7:45 AM · The Tour Guy · 6 adults + 1 youth</div></div></div>
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Decide: Testaccio dinner for Day 9 (Jul 1)</div><div class="ai-detail">Choose one: Checchino dal 1887 (most historic, formal) · Trattoria Perilli (est. 1911, great for groups) · Flavio al Velavevodetto (best pasta). All require reservations.</div></div></div>
+          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Roma Sparita — reservations open Jun 16</div><div class="ai-detail">Piazza di Santa Cecilia 24, Trastevere · +39 06 5800757 · romasparita.com · Dinner Jul 1 · 7 people</div></div></div>
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Colosseum Guided Tour — Booked ✓</div><div class="ai-detail">Voucher #1401192341 · Jun 29, 9:00 AM · City Walkers Tours · 6 adults + 1 child · Priority entry</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Reserve L'Officina della Bistecca — Panzano</div><div class="ai-detail">Jun 25 · ~1:00 PM lunch · Via XX Luglio 11 · Reservation strongly recommended</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Decide: Pompeii vs. Tivoli vs. More Rome</div><div class="ai-detail">Jul 1 (Day 9) — all-day activity, coordinate with group</div></div></div>
@@ -1675,36 +1675,20 @@ const SECTIONS = {
             num: 3, type: 'optional', time: '10 AM – 3 PM',
             name: 'Option C — Rome Food Tour', tags: ['food', 'walking'],
             duration: '~5 hrs', cost: '~€30/person',
-            notes: 'Self-guided walk: Campo de\' Fiori → Jewish Ghetto → Trastevere. 10 stops — coffee granita, pizza bianca, Roman-Jewish pastries, carciofo alla giudia, supplì, gelato, maritozzi, aperitivo. See "Food Tour" tab for the full stop-by-stop route.',
+            notes: 'Self-guided walk: Campo de\' Fiori → Jewish Ghetto → Trastevere. 8 stops — coffee granita, pizza bianca, Roman-Jewish pastries, carciofo alla giudia, gelato, maritozzi. See "Food Tour" tab for the full stop-by-stop route.',
             link: null, linkText: null,
             coords: [41.8958, 12.4723]
           },
           {
-            num: 4, type: 'optional', time: 'Evening',
-            name: 'Option A — Checchino dal 1887', tags: ['dinner', 'restaurant'],
+            num: 4, type: 'food', time: 'Evening',
+            name: 'Roma Sparita', tags: ['dinner', 'restaurant'],
             duration: null, cost: null,
-            notes: '📋 Reservation required · The origin of Rome\'s quinto quarto tradition — slaughterhouse workers brought their offal pay here in 1887. Fifth-generation family, built into Monte Testaccio. Claims to have invented coda alla vaccinara. Most historically significant restaurant in Testaccio. More formal and expensive than the others. ~15 min taxi from AirBnB.',
-            link: null, linkText: null,
-            coords: [41.8765, 12.4769]
-          },
-          {
-            num: 5, type: 'optional', time: 'Evening',
-            name: 'Option B — Trattoria Perilli (est. 1911)', tags: ['dinner', 'restaurant'],
-            duration: null, cost: null,
-            notes: '📋 Reservation required · Oldest continuously operating trattoria in Testaccio, still run by the founding family. Rachel Roddy\'s neighborhood institution. Elizabeth Minchilli\'s favorite carbonara in Rome. The Infatuation specifically recommends it for groups. More casual and affordable than Checchino, equally embedded in the neighborhood.',
-            link: null, linkText: null,
-            coords: [41.8771, 12.4756]
-          },
-          {
-            num: 6, type: 'optional', time: 'Evening',
-            name: 'Option C — Flavio al Velavevodetto', tags: ['dinner', 'restaurant'],
-            duration: null, cost: null,
-            notes: '📋 Reservation required · The cacio e pepe and tiramisu choice. Opened 2009 by Flavio De Maio (trained at Felice). Praised by Katie Parla and Slow Food\'s Carlo Petrini. Set inside Monte dei Cocci, a hill made of ancient Roman amphorae. Best pasta execution of the three, but less historical depth than Checchino or Perilli.',
-            link: null, linkText: null,
-            coords: [41.8773, 12.4768]
+            notes: '📋 Reservation required — opens Jun 16 (15 days ahead) · Piazza di Santa Cecilia 24, Trastevere · +39 06 5800757 · Famous for cacio e pepe served in a crispy fried parmesan basket — one of the most iconic plates in Rome. Outdoor seating on a quiet piazza. Natural endpoint after the food tour.',
+            link: 'https://www.romasparita.com/index.html', linkText: '🌐 Website',
+            coords: [41.8878, 12.4712]
           }
         ],
-        walkTimes: [null, null, null, null, null, null]
+        walkTimes: [null, null, null, null]
       },
       {
         id: 'day10',
