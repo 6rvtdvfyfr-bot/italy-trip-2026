@@ -1655,12 +1655,12 @@ const SECTIONS = {
             coords: [41.9633, 12.7955]
           },
           {
-            num: 3, type: 'optional', time: 'All day',
-            name: 'Option C — More Rome', tags: ['historic'],
-            duration: null, cost: null,
-            notes: 'Aventine Keyhole, Jewish Ghetto & Roman-Jewish cuisine.',
+            num: 3, type: 'optional', time: '10 AM – 3 PM',
+            name: 'Option C — Rome Food Tour', tags: ['food', 'walking'],
+            duration: '~5 hrs', cost: '~€30/person',
+            notes: 'Self-guided walk: Campo de\' Fiori → Jewish Ghetto → Trastevere. 9 stops — espresso, pizza bianca, Roman-Jewish pastries, carciofo alla giudia, supplì, gelato, maritozzi, aperitivo. See "Food Tour" tab for the full stop-by-stop route.',
             link: null, linkText: null,
-            coords: [41.8815, 12.4794]
+            coords: [41.8958, 12.4723]
           },
           {
             num: 4, type: 'optional', time: 'Evening',
@@ -1721,6 +1721,103 @@ const SECTIONS = {
           }
         ],
         walkTimes: [null, null]
+      },
+      {
+        id: 'rome-food-tour',
+        label: 'Food Tour',
+        date: 'Jul 1 (if staying)',
+        title: 'Rome Food Walk — Campo → Ghetto → Trastevere',
+        stops: [
+          {
+            num: 1, type: 'food', time: '10:00 AM',
+            name: 'Sant\'Eustachio il Caffè', tags: ['coffee'],
+            duration: '~20 min', cost: '~€3/person',
+            notes: 'Start here. One of Rome\'s greatest espresso institutions since 1938. Order the Gran Caffè — whipped with sugar in a secret preparation. Ask amaro if you don\'t want it sweet. Get a cornetto to go with it. Stand at the bar (sitting costs extra).',
+            link: null, linkText: null,
+            coords: [41.8987, 12.4726]
+          },
+          {
+            num: 2, type: 'food', time: '10:20 AM',
+            name: 'Tazza d\'Oro', tags: ['coffee'],
+            duration: '~15 min', cost: '~€3/person',
+            notes: '3-min walk from Sant\'Eustachio, just around the corner from the Pantheon. In July, order the granita di caffè con panna — coffee granita topped with whipped cream. One of the most Roman summer drinks there is. Non-coffee drinkers: get the granita al limone.',
+            link: null, linkText: null,
+            coords: [41.8993, 12.4769]
+          },
+          {
+            num: 3, type: 'food', time: '10:45 AM',
+            name: 'Campo de\' Fiori + Forno Campo de\' Fiori', tags: ['market', 'bakery'],
+            duration: '~30 min', cost: '~€4/person',
+            notes: 'Market runs Mon–Sat until 2 PM. Browse the produce, spice, and pasta stalls. Then go to the Forno (Piazza Campo de\' Fiori 22) for pizza bianca — a Roman flatbread baked with olive oil and sea salt, stuffed with mortadella. One of the most iconic Roman food experiences and virtually unknown outside Italy. Share a few slices between the group.',
+            link: null, linkText: null,
+            coords: [41.8958, 12.4723]
+          },
+          {
+            num: 4, type: 'food', time: '11:20 AM',
+            name: 'Antico Forno Roscioli', tags: ['bakery'],
+            duration: '~15 min', cost: '~€4/person',
+            notes: '5-min walk. Via dei Chiavari 34. The Roscioli family bakery — a different spot from the famous salumeria restaurant. Order pizza rossa (plain tomato, no cheese — extraordinary) and a supplì. This is where Romans actually grab lunch. #10 of 378 Bakeries on TripAdvisor · ★4.4',
+            link: null, linkText: null,
+            coords: [41.8951, 12.4724]
+          },
+          {
+            num: 5, type: 'food', time: '11:45 AM',
+            name: 'Pasticceria Boccione', tags: ['bakery', 'pastry'],
+            duration: '~15 min', cost: '~€5/person',
+            notes: '5-min walk into the Jewish Ghetto. Via del Portico d\'Ottavia 1. An unmarked storefront open since 1815. NYT called their crostata di ricotta e visciole (ricotta & sour cherry tart) the best in Rome. Also try pizza ebraica — a dense, pine nut and candied fruit sweet bread unique to Roman Jewish baking (reportedly a favorite of Pope Benedict XVI). Sells out daily — don\'t arrive later than noon.',
+            link: null, linkText: null,
+            coords: [41.8920, 12.4769]
+          },
+          {
+            num: 6, type: 'food', time: '12:05 PM',
+            name: 'Nonna Betta — Carciofo alla Giudia', tags: ['lunch', 'restaurant'],
+            duration: '~40 min', cost: '~€12/person',
+            notes: '2-min walk. Via del Portico d\'Ottavia 16. Opens at noon. This is the food the Jewish Ghetto is famous for: carciofo alla giudia — whole artichokes fried bronze and crispy, a technique dating to the 16th century. Order one per person plus a plate of fiori di zucca fritti (fried zucchini blossoms) to share. The walk to this spot passes through the ancient Portico d\'Ottavia ruins. Call ahead for a group of 7: +39 06 6880 6263.',
+            link: null, linkText: null,
+            coords: [41.8921, 12.4768]
+          },
+          {
+            num: 7, type: 'food', time: '12:50 PM',
+            name: 'Supplizio', tags: ['street food'],
+            duration: '~15 min', cost: '~€6/person',
+            notes: '10-min walk. Via dei Banchi Vecchi 143. Cited by Gambero Rosso and The Infatuation as the best supplì in Rome. Order the cacio e pepe supplì (a fried rice ball with all the flavors of the iconic pasta) and the classic tomato-mozzarella. Each ~€3. Takeaway — eat on the street.',
+            link: null, linkText: null,
+            coords: [41.8951, 12.4683]
+          },
+          {
+            num: 8, type: 'suggested', time: '1:10 PM',
+            name: 'Tiber Island crossing', tags: ['scenic'],
+            duration: '~15 min', cost: 'Free',
+            notes: '10-min walk to Ponte Fabricio — the oldest bridge in Rome (62 BC). Cross it, walk across Isola Tiberina, and cross Ponte Cestio into Trastevere. One of the most atmospheric walks in the city. No food stop — just the visual anchor of the whole route.',
+            link: null, linkText: null,
+            coords: [41.8896, 12.4769]
+          },
+          {
+            num: 9, type: 'food', time: '1:30 PM',
+            name: 'Otaleg', tags: ['gelato'],
+            duration: '~20 min', cost: '~€4/person',
+            notes: 'Via di San Cosimato 14a, Trastevere. Best gelato in Trastevere per The Infatuation and Eating Europe. In July: look for fresh fruit sorbets (raspberry, apricot, peach) and rich cream flavors (pistachio, stracciatella). Generous portions.',
+            link: null, linkText: null,
+            coords: [41.8883, 12.4694]
+          },
+          {
+            num: 10, type: 'food', time: '2:00 PM',
+            name: 'Il Maritozzaro', tags: ['pastry'],
+            duration: '~20 min', cost: '~€4/person',
+            notes: 'Via Ettore Rolli 50, Trastevere. Rome\'s most famous dedicated maritozzo bar since the 1960s. A maritozzo is a soft brioche bun split and filled almost comically full of fresh whipped cream — one of Rome\'s defining pastries, far less known outside the city than the cornetto. Order one each. This is on the Trastevere edge toward Testaccio — natural stopping point before dinner.',
+            link: null, linkText: null,
+            coords: [41.8855, 12.4661]
+          },
+          {
+            num: 11, type: 'food', time: '2:30 PM',
+            name: 'L\'Angolo Divino', tags: ['wine', 'aperitivo'],
+            duration: '~30 min', cost: '~€8/person',
+            notes: '🚶 Walk-in · Via dei Balestrari 12–14, near Campo de\' Fiori. Wine bar/enoteca that started as a bulk wine shop in 1946. Now known for natural and biodynamic wines. Order a glass of local Frascati white or a natural orange wine from Umbria, with a small salumi plate. Low-key, non-touristy wind-down before heading to Testaccio for dinner (~20-min walk south or 5-min taxi).',
+            link: null, linkText: null,
+            coords: [41.8957, 12.4712]
+          }
+        ],
+        walkTimes: [null, '~3 min', '~10 min', '~5 min', '~5 min', '~2 min', '~10 min', '~10 min', '~5 min', '~10 min', '~15 min']
       },
       {
         id: 'rome-extras',
