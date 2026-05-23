@@ -1023,6 +1023,15 @@
             <div class="lc-row"><a class="stop-link" href="Tickets.pdf" target="_blank">🎫 View Tickets PDF</a></div>
           </div>
           <div class="logistics-card">
+            <h3>✅ Vatican Museums — The Tour Guy</h3>
+            <div class="lc-row"><span class="lc-label">Booking</span><span class="lc-val">#1128309</span></div>
+            <div class="lc-row"><span class="lc-label">Entry</span><span class="lc-val">Jun 30 · Arrive 7:45 AM · Tour 8:00 AM</span></div>
+            <div class="lc-row"><span class="lc-label">Covers</span><span class="lc-val">Vatican Museums · Sistine Chapel · St. Peter's Basilica</span></div>
+            <div class="lc-row"><span class="lc-label">Meet</span><span class="lc-val">Viale Vaticano 100 · top of staircase · red sign</span></div>
+            <div class="lc-row"><span class="lc-label">Guests</span><span class="lc-val">6 adults · 1 youth · bring photo ID</span></div>
+            <div class="lc-row"><a class="stop-link" href="Vatican Tickets.pdf" target="_blank">🎫 View Voucher PDF</a></div>
+          </div>
+          <div class="logistics-card">
             <h3>✅ Accademia + Bargello 48h Pass</h3>
             <div class="lc-row"><span class="lc-label">Order</span><span class="lc-val">22773014</span></div>
             <div class="lc-row"><span class="lc-label">Entry</span><span class="lc-val">Jun 26 · 1:30 PM · Accademia</span></div>
@@ -1049,7 +1058,7 @@
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Uffizi Passepartout — Booked ✓</div><div class="ai-detail">PNR: K0F37WWB · Jun 26, 8:15 AM · Covers Uffizi + Pitti + Boboli · 7 tickets · €240</div></div></div>
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Accademia + Bargello 48h Pass — Booked ✓</div><div class="ai-detail">Order: 22773014 · Jun 26, 1:30 PM · Covers Accademia + Bargello · 7 tickets · €184</div></div></div>
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Brunelleschi Pass — Skipped ✓</div><div class="ai-detail">Doing free Duomo Cathedral visit instead</div></div></div>
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Vatican Museums + Sistine Chapel</div><div class="ai-detail">Jun 30 · Morning · Skip-the-line required · <a href="https://tickets.museivaticani.va" target="_blank">tickets.museivaticani.va</a></div></div></div>
+          <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Vatican Museums + Sistine Chapel — Booked ✓</div><div class="ai-detail">Booking #1128309 · Jun 30, 7:45 AM · The Tour Guy · 6 adults + 1 youth</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Book Colosseum (Full Combo)</div><div class="ai-detail">Jun 29 · Arena floor, Attic &amp; Underground · Book well ahead</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Reserve L'Officina della Bistecca — Panzano</div><div class="ai-detail">Jun 25 · ~1:00 PM lunch · Via XX Luglio 11 · Reservation strongly recommended</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Decide: Pompeii vs. Tivoli vs. More Rome</div><div class="ai-detail">Jul 1 (Day 9) — all-day activity, coordinate with group</div></div></div>
@@ -1089,6 +1098,10 @@
       <div class="ess-row">
         <span class="ess-row-label">Covers</span>
         <span class="ess-row-val">Uffizi · Pitti Palace · Boboli Gardens (valid 5 days from first use)</span>
+      </div>
+      <div class="ess-row">
+        <span class="ess-row-label">Vatican Tour</span>
+        <span class="ess-row-val">Booking: <strong>#1128309</strong> · Jun 30, 7:45 AM · The Tour Guy · <a href="Vatican Tickets.pdf" target="_blank">Open PDF →</a></span>
       </div>
       <div class="ess-row">
         <span class="ess-row-label">Accademia Pass</span>
@@ -1576,23 +1589,15 @@ const SECTIONS = {
         title: 'Rome — Vatican Day',
         stops: [
           {
-            num: 1, type: 'high', time: 'Morning',
-            name: 'Vatican Museums & Sistine Chapel', tags: ['museum', 'art', 'religious'],
-            duration: '~3 hrs', cost: 'TBD (skip-the-line)',
-            notes: 'Book skip-the-line in advance.',
-            link: 'https://tickets.museivaticani.va', linkText: 'Book Tickets',
+            num: 1, type: 'high', time: '7:45 AM',
+            name: 'Vatican Museums, Sistine Chapel & St. Peter\'s', tags: ['museum', 'art', 'religious'],
+            duration: '~3 hrs (concludes at St. Peter\'s)', cost: '✓ Paid (The Tour Guy)',
+            notes: 'Arrive by 7:45 AM · Tour starts 8:00 AM · Booking #1128309 · Meet at Viale Vaticano 100, top of staircase between Hotel Tmark and Caffè Vaticano — look for red Tour Guy sign. Bring photo ID. Covered shoulders & knees required. Tour concludes with entry into St. Peter\'s Basilica ~11:00 AM.',
+            link: 'Vatican Tickets.pdf', linkText: '🎫 View Voucher',
             coords: [41.9065, 12.4534]
           },
           {
-            num: 2, type: 'high', time: '~12:30 PM',
-            name: "St. Peter's Basilica", tags: ['religious', 'viewpoint'],
-            duration: '~1.5 hrs', cost: 'Free (dome extra)',
-            notes: 'Free entry. Dome climb available. Dress code required.',
-            link: null, linkText: null,
-            coords: [41.9022, 12.4539]
-          },
-          {
-            num: 3, type: 'suggested', time: '~2:30 PM',
+            num: 2, type: 'suggested', time: '~11:30 AM',
             name: 'Lunch — Prati', tags: ['restaurant'],
             duration: '~1 hr', cost: null,
             notes: 'Local neighborhood near Vatican, away from crowds.',
@@ -1600,7 +1605,7 @@ const SECTIONS = {
             coords: [41.9060, 12.4623]
           },
           {
-            num: 4, type: 'suggested', time: 'Evening',
+            num: 3, type: 'suggested', time: 'Evening',
             name: 'Trastevere dinner', tags: ['restaurant'],
             duration: null, cost: null,
             notes: 'Charming neighborhood, itinerary highlight.',
@@ -1608,7 +1613,7 @@ const SECTIONS = {
             coords: [41.8880, 12.4678]
           }
         ],
-        walkTimes: [null, '5 min walk', '10 min walk', '20 min walk']
+        walkTimes: [null, '5 min walk', '20 min walk']
       },
       {
         id: 'day9',
