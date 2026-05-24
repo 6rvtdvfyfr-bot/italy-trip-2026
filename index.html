@@ -650,14 +650,25 @@
     .logistics-grid { grid-template-columns: 1fr; gap: 10px; }
     .logistics-card .lc-row { font-size: 0.8rem; }
 
-    /* Day pills: larger touch targets */
-    #day-pills { padding: 10px 12px; gap: 8px; }
+    /* Day pills: single scrollable row on mobile */
+    #day-pills {
+      padding: 8px 12px;
+      gap: 6px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #day-pills::-webkit-scrollbar { display: none; }
+    #pills-left { flex-wrap: nowrap; flex-shrink: 0; }
+    #pills-right { flex-shrink: 0; }
     .day-pill {
-      padding: 7px 14px;
-      font-size: 0.78rem;
-      min-height: 36px;
+      padding: 6px 13px;
+      font-size: 0.76rem;
+      min-height: 34px;
       display: flex;
       align-items: center;
+      flex-shrink: 0;
     }
 
     /* Stop cards: larger, more readable */
