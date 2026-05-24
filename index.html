@@ -1073,7 +1073,7 @@
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Colosseum Guided Tour — Booked ✓</div><div class="ai-detail">Voucher #1401192341 · Jun 29, 9:00 AM · City Walkers Tours · 6 adults + 1 child · Priority entry</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Message AirBnB host about early luggage drop (Jun 28)</div><div class="ai-detail">Check-in is 4 PM but rental car returns to FCO by 5 PM — ask if bags can be left before check-in</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Reserve L'Officina della Bistecca — Panzano</div><div class="ai-detail">Jun 25 · ~1:00 PM lunch · Via XX Luglio 11 · Reservation strongly recommended</div></div></div>
-          <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Decide: Pompeii vs. Tivoli vs. More Rome</div><div class="ai-detail">Jul 1 (Day 9) — all-day activity, coordinate with group</div></div></div>
+          <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Decide: Pompeii vs. Tivoli vs. More Rome — Decided ✓</div><div class="ai-detail">Doing the Rome Food Walk — Campo de' Fiori → Jewish Ghetto → Trastevere</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Decide: Borghese Gallery in/out</div><div class="ai-detail">Reserve if going — timed entry required</div></div></div>
           <div class="action-item"><div class="action-dot"></div><div><div class="ai-label">Get Type L plug adapters</div><div class="ai-detail">Italy uses Type L (3-pin) and Type C (2-pin) sockets</div></div></div>
         </div>
@@ -1655,34 +1655,18 @@ const SECTIONS = {
         id: 'day9',
         label: 'Day 9',
         date: 'Wed Jul 1',
-        title: 'Day trip or more Rome (TBD)',
+        title: 'Rome Food Walk — Campo → Ghetto → Trastevere',
         stops: [
           {
-            num: 1, type: 'optional', time: 'All day',
-            name: 'Option A — Pompeii', tags: ['historic'],
-            duration: 'Full day', cost: null,
-            notes: 'Full day trip south by train. Ancient ruins.',
-            link: null, linkText: null,
-            coords: [40.7489, 14.5003]
-          },
-          {
-            num: 2, type: 'optional', time: 'All day',
-            name: 'Option B — Tivoli', tags: ['historic', 'garden'],
-            duration: 'Full day', cost: null,
-            notes: "Hadrian's Villa + Villa d'Este. Two UNESCO sites ~1 hr from Rome.",
-            link: null, linkText: null,
-            coords: [41.9633, 12.7955]
-          },
-          {
-            num: 3, type: 'optional', time: '10 AM – 3 PM',
-            name: 'Option C — Rome Food Tour', tags: ['food', 'walking'],
-            duration: '~5 hrs', cost: '~€30/person',
-            notes: 'Self-guided walk: Campo de\' Fiori → Jewish Ghetto → Trastevere. 8 stops — coffee granita, pizza bianca, Roman-Jewish pastries, carciofo alla giudia, gelato, maritozzi. See "Food Tour" tab for the full stop-by-stop route.',
+            num: 1, type: 'food', time: '10:00 AM – 2:30 PM',
+            name: 'Rome Food Tour', tags: ['food', 'walking'],
+            duration: '~4.5 hrs', cost: '~€35/person',
+            notes: 'Self-guided walk: 9 stops — coffee granita at Tazza d\'Oro, pizza bianca at Campo de\' Fiori, pizza rossa at Roscioli, cannoli at Nonna Vincenza, ricotta tart at Boccione (arrive by noon!), carciofo alla giudia at Nonna Betta, Tiber Island crossing, gelato at Otaleg, maritozzi at Il Maritozzaro. See the "Food Tour" tab for the full stop-by-stop route.',
             link: null, linkText: null,
             coords: [41.8958, 12.4723]
           },
           {
-            num: 4, type: 'food', time: 'Evening',
+            num: 2, type: 'food', time: 'Evening',
             name: 'Roma Sparita', tags: ['dinner', 'restaurant'],
             duration: null, cost: null,
             notes: '📋 Reservation required — opens Jun 16 (15 days ahead) · Piazza di Santa Cecilia 24, Trastevere · +39 06 5800757 · Famous for cacio e pepe served in a crispy fried parmesan basket — one of the most iconic plates in Rome. Outdoor seating on a quiet piazza. Natural endpoint after the food tour.',
@@ -1690,7 +1674,7 @@ const SECTIONS = {
             coords: [41.8878, 12.4712]
           }
         ],
-        walkTimes: [null, null, null, null]
+        walkTimes: [null, null]
       },
       {
         id: 'day10',
