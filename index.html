@@ -653,7 +653,10 @@
 
     /* Day pills: single scrollable row on mobile */
     #day-pills {
-      padding: 8px 12px;
+      height: 40px;
+      box-sizing: border-box;
+      align-items: center;
+      padding: 0 12px;
       gap: 6px;
       flex-wrap: nowrap;
       overflow-x: auto;
@@ -664,9 +667,9 @@
     #pills-left { flex-wrap: nowrap; flex-shrink: 0; }
     #pills-right { flex-shrink: 0; }
     .day-pill {
-      padding: 6px 13px;
+      padding: 5px 13px;
       font-size: 0.76rem;
-      min-height: 34px;
+      min-height: 30px;
       display: flex;
       align-items: center;
       flex-shrink: 0;
