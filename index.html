@@ -211,6 +211,11 @@
     border-radius: 10px;
     text-transform: lowercase;
   }
+  .tag-chip.dress-code {
+    background: #fbe3c2;
+    color: #8a4b00;
+    border: 1px solid #e8b877;
+  }
   .stop-details { font-size: 0.75rem; color: #6e5a4a; margin-bottom: 4px; display: flex; gap: 10px; flex-wrap: wrap; }
   .stop-details span { display: flex; align-items: center; gap: 3px; }
   .stop-notes { font-size: 0.74rem; color: #7a6155; line-height: 1.4; margin-bottom: 5px; }
@@ -1287,7 +1292,7 @@ const SECTIONS = {
         stops: [
           {
             num: 1, type: 'medium', time: 'Morning',
-            name: 'Siena Duomo', tags: ['religious', 'historic'],
+            name: 'Siena Duomo', tags: ['religious', 'historic', '👖 covered knees'],
             duration: '~1.5 hrs', cost: 'TBD',
             notes: 'Stunning marble floor & Piccolomini Library.',
             link: null, linkText: null,
@@ -1409,7 +1414,7 @@ const SECTIONS = {
         stops: [
           {
             num: 1, type: 'medium', time: '8:15 AM',
-            name: 'Duomo Cathedral', tags: ['religious', 'free'],
+            name: 'Duomo Cathedral', tags: ['religious', 'free', '👖 covered knees'],
             duration: '~45 min', cost: 'Free',
             notes: 'Free entry, no ticket needed. Arrive early to avoid lines. Dress code: covered shoulders & knees.',
             link: null, linkText: null,
@@ -1466,7 +1471,7 @@ const SECTIONS = {
           },
           {
             num: 3, type: 'medium', time: null,
-            name: 'Baptistery of San Giovanni', tags: ['religious', 'historic'],
+            name: 'Baptistery of San Giovanni', tags: ['religious', 'historic', '👖 covered knees'],
             duration: '~30 min', cost: 'Brunelleschi Pass',
             notes: 'Dress code: no bare legs/shoulders/sandals/hats. Vault mosaics under restoration.',
             link: 'https://tickets.duomo.firenze.it/en/store#/en/buy?skugroup_id=3006', linkText: 'Brunelleschi Pass',
@@ -1562,7 +1567,7 @@ const SECTIONS = {
           },
           {
             num: 5, type: 'suggested', time: '~7:30 PM',
-            name: 'San Luigi dei Francesi', tags: ['religious', 'art'],
+            name: 'San Luigi dei Francesi', tags: ['religious', 'art', '👖 knees recommended'],
             duration: '~30 min', cost: 'Free',
             notes: 'Caravaggio masterpieces (The Calling of Saint Matthew). Check closing times.',
             link: null, linkText: null,
@@ -1644,7 +1649,7 @@ const SECTIONS = {
         stops: [
           {
             num: 1, type: 'high', time: '7:45 AM',
-            name: 'Vatican Museums, Sistine Chapel & St. Peter\'s', tags: ['museum', 'art', 'religious'],
+            name: 'Vatican Museums, Sistine Chapel & St. Peter\'s', tags: ['museum', 'art', 'religious', '👖 covered knees'],
             duration: '~3 hrs (concludes at St. Peter\'s)', cost: '✓ Paid (The Tour Guy)',
             notes: 'Arrive by 7:45 AM · Tour starts 8:00 AM · Booking #1128309 · Meet at Viale Vaticano 100, top of staircase between Hotel Tmark and Caffè Vaticano — look for red Tour Guy sign. Bring photo ID. Covered shoulders & knees required. Tour concludes with entry into St. Peter\'s Basilica ~11:00 AM.',
             link: 'Vatican Tickets.pdf', linkText: '🎫 View Voucher',
@@ -2520,7 +2525,7 @@ function renderCitySection(sectionKey) {
       const color = typeColor(stop.type);
 
       let tagsHtml = stop.tags.length
-        ? `<div class="stop-tags">${stop.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')}</div>`
+        ? `<div class="stop-tags">${stop.tags.map(t => `<span class="tag-chip${t.includes('👖') ? ' dress-code' : ''}">${t}</span>`).join('')}</div>`
         : '';
 
       let detailsHtml = '';
