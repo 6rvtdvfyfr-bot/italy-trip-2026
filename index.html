@@ -897,6 +897,48 @@
   .pin-key.del { font-size: 1.1rem; background: rgba(255,255,255,0.06); }
   .pin-key.blank { background: transparent; pointer-events: none; }
   @keyframes pinShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-7px)} 80%{transform:translateX(7px)} }
+
+  /* ── Gelato & Espresso Passport ── */
+  .pp-hero { text-align:center; margin-bottom:18px; }
+  .pp-hero h2 { margin:0 0 3px; font-size:1.5rem; color:#8B3A2F; font-weight:800; }
+  .pp-hero p { margin:0; font-size:0.82rem; color:#7a6155; }
+  .pp-stats { display:flex; gap:10px; justify-content:center; margin:14px 0 18px; flex-wrap:wrap; }
+  .pp-stat { background:#faf7f4; border:1px solid #e0d5cc; border-radius:12px; padding:10px 16px; min-width:78px; text-align:center; }
+  .pp-stat .n { font-size:1.5rem; font-weight:800; color:#8B3A2F; line-height:1; }
+  .pp-stat .l { font-size:0.66rem; text-transform:uppercase; letter-spacing:0.6px; color:#7a6155; margin-top:4px; font-weight:700; }
+  .pp-actions { display:flex; gap:10px; margin-bottom:16px; }
+  .pp-add { flex:1; border:none; border-radius:14px; padding:14px 10px; font-size:0.92rem; font-weight:700; cursor:pointer; color:#fff; -webkit-tap-highlight-color:transparent; box-shadow:0 2px 8px rgba(139,58,47,0.15); }
+  .pp-add.cone { background:linear-gradient(135deg,#c97a3f,#a85a2a); }
+  .pp-add.coffee { background:linear-gradient(135deg,#6e4a32,#4a2f1e); }
+  .pp-add:active { transform:scale(0.97); }
+  .pp-form { background:#fff8ef; border:1.5px solid #e0a020; border-radius:16px; padding:16px; margin-bottom:18px; }
+  .pp-form h3 { margin:0 0 12px; font-size:1rem; color:#8B3A2F; }
+  .pp-field { margin-bottom:11px; }
+  .pp-field label { display:block; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.5px; color:#7a6155; font-weight:700; margin-bottom:4px; }
+  .pp-field input, .pp-field select, .pp-field textarea { width:100%; box-sizing:border-box; border:1px solid #d4c4bc; border-radius:9px; padding:9px 11px; font-size:0.9rem; font-family:inherit; background:#fff; color:#2a1f17; }
+  .pp-field textarea { resize:vertical; min-height:42px; }
+  .pp-stars { display:flex; gap:6px; }
+  .pp-star { font-size:1.7rem; cursor:pointer; filter:grayscale(1) opacity(0.35); -webkit-tap-highlight-color:transparent; user-select:none; transition:filter 0.12s; }
+  .pp-star.on { filter:none; }
+  .pp-form-btns { display:flex; gap:9px; margin-top:14px; }
+  .pp-save { flex:1; background:#8B3A2F; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; font-size:0.9rem; cursor:pointer; }
+  .pp-cancel { background:#ede7df; color:#5a4535; border:none; border-radius:10px; padding:11px 18px; font-weight:600; font-size:0.9rem; cursor:pointer; }
+  .pp-badges { display:flex; flex-wrap:wrap; gap:9px; margin-bottom:20px; }
+  .pp-badge { display:flex; align-items:center; gap:8px; background:#faf7f4; border:1px solid #e0d5cc; border-radius:999px; padding:6px 13px 6px 9px; font-size:0.78rem; font-weight:600; color:#7a6155; opacity:0.45; }
+  .pp-badge.earned { opacity:1; background:#fff8e6; border-color:#e0a020; color:#8B3A2F; }
+  .pp-badge .be { font-size:1.15rem; }
+  .pp-section-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:#8B3A2F; font-weight:800; margin:0 0 11px; padding-bottom:6px; border-bottom:1.5px solid #e0d5cc; }
+  .pp-entry { display:flex; align-items:flex-start; gap:11px; background:#faf7f4; border:1px solid #e0d5cc; border-radius:13px; padding:12px 13px; margin-bottom:9px; }
+  .pp-entry.top { border-color:#e0a020; background:#fff8ef; }
+  .pp-entry .pe-ic { font-size:1.5rem; line-height:1; margin-top:1px; }
+  .pp-entry .pe-body { flex:1; min-width:0; }
+  .pp-entry .pe-flavor { font-weight:700; color:#3d2b1f; font-size:0.92rem; }
+  .pp-entry .pe-shop { font-size:0.78rem; color:#7a6155; margin-top:1px; }
+  .pp-entry .pe-stars { color:#e0a020; font-size:0.82rem; margin-top:3px; letter-spacing:1px; }
+  .pp-entry .pe-note { font-size:0.78rem; color:#5a4535; margin-top:4px; font-style:italic; }
+  .pp-entry .pe-del { background:none; border:none; color:#c0a89c; font-size:1.1rem; cursor:pointer; padding:2px 4px; line-height:1; }
+  .pp-entry .pe-del:active { color:#c0392b; }
+  .pp-empty { text-align:center; color:#9a8575; font-size:0.85rem; padding:24px 12px; }
 </style>
 </head>
 <body>
@@ -950,6 +992,7 @@
     <button class="tab-btn" data-section="florence">Florence</button>
     <button class="tab-btn" data-section="rome">Rome</button>
     <button class="tab-btn" data-section="logistics">Logistics</button>
+    <button class="tab-btn" data-section="passport">🍦 Passport</button>
   </nav>
 
   <!-- Today / Now banner -->
@@ -1101,6 +1144,9 @@
           <div class="action-item" style="opacity:0.5;text-decoration:line-through"><div class="action-dot" style="background:#27ae60"></div><div><div class="ai-label">Get Type L plug adapters ✓</div><div class="ai-detail">Italy uses Type L (3-pin) and Type C (2-pin) sockets</div></div></div>
         </div>
       </div>
+
+      <!-- Passport content (Gelato & Espresso) -->
+      <div id="passport-content" style="display:none"></div>
     </div><!-- /fullwidth-view -->
 
   </div><!-- /content -->
@@ -2658,6 +2704,7 @@ function renderOverview() {
   document.getElementById('fullwidth-view').style.display = 'block';
   document.getElementById('overview-content').style.display = 'block';
   document.getElementById('logistics-content').style.display = 'none';
+  document.getElementById('passport-content').style.display = 'none';
 
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
@@ -2692,6 +2739,191 @@ function renderLogistics() {
   document.getElementById('fullwidth-view').style.display = 'block';
   document.getElementById('overview-content').style.display = 'none';
   document.getElementById('logistics-content').style.display = 'block';
+  document.getElementById('passport-content').style.display = 'none';
+}
+
+// ─────────────────────────────────────────────
+// RENDER PASSPORT (Gelato & Espresso)
+// ─────────────────────────────────────────────
+const PP_CITY_LABELS = { siena: 'Siena', florence: 'Florence', rome: 'Rome', other: 'Elsewhere' };
+let gelatoLog = [];
+let ppFormKind = null;   // 'gelato' | 'coffee' | null
+let ppRating = 0;
+
+function loadGelatoLog() {
+  try { gelatoLog = JSON.parse(localStorage.getItem('italy-gelato-log') || '[]'); }
+  catch (e) { gelatoLog = []; }
+}
+function saveGelatoLog() {
+  try { localStorage.setItem('italy-gelato-log', JSON.stringify(gelatoLog)); } catch (e) {}
+}
+
+function ppCurrentCity() {
+  if (['siena','florence','rome'].includes(currentSectionKey)) return currentSectionKey;
+  const entry = TRIP_DAY_MAP[getItalyDateStr()];
+  if (entry && ['siena','florence','rome'].includes(entry.section)) return entry.section;
+  return 'florence';
+}
+
+function ppBadges() {
+  const cones = gelatoLog.filter(e => e.kind === 'gelato');
+  const coffees = gelatoLog.filter(e => e.kind === 'coffee');
+  const cities = new Set(gelatoLog.map(e => e.city));
+  const flavorCounts = {};
+  cones.forEach(e => {
+    const f = (e.flavor || '').trim().toLowerCase();
+    if (f) flavorCounts[f] = (flavorCounts[f] || 0) + 1;
+  });
+  const maxFlavor = Object.values(flavorCounts).reduce((m, n) => Math.max(m, n), 0);
+  return [
+    { icon:'🥄', name:'First Scoop',           desc:'Log a gelato',            earned: cones.length >= 1 },
+    { icon:'🔟', name:'10-Cone Club',          desc:'10 gelati logged',        earned: cones.length >= 10 },
+    { icon:'🎓', name:'Stracciatella Scholar', desc:'3+ of one flavor',        earned: maxFlavor >= 3 },
+    { icon:'☕', name:'Espresso al Banco',     desc:'Log a coffee',            earned: coffees.length >= 1 },
+    { icon:'⚡', name:'Caffeine Circuit',      desc:'10 coffees logged',       earned: coffees.length >= 10 },
+    { icon:'🇮🇹', name:'Tre Città',            desc:'A treat in all 3 cities', earned: ['siena','florence','rome'].every(c => cities.has(c)) },
+  ];
+}
+
+function renderPassport() {
+  document.getElementById('twopane').style.display = 'none';
+  document.getElementById('fullwidth-view').style.display = 'block';
+  document.getElementById('overview-content').style.display = 'none';
+  document.getElementById('logistics-content').style.display = 'none';
+  const el = document.getElementById('passport-content');
+  el.style.display = 'block';
+
+  const cones = gelatoLog.filter(e => e.kind === 'gelato').length;
+  const coffees = gelatoLog.filter(e => e.kind === 'coffee').length;
+  const badges = ppBadges();
+  const earnedCount = badges.filter(b => b.earned).length;
+
+  let html = `
+    <div class="pp-hero">
+      <h2>🍦 Treat Passport</h2>
+      <p>Every cone &amp; coffee, rated and remembered.</p>
+    </div>
+    <div class="pp-stats">
+      <div class="pp-stat"><div class="n">${cones}</div><div class="l">Gelati</div></div>
+      <div class="pp-stat"><div class="n">${coffees}</div><div class="l">Coffees</div></div>
+      <div class="pp-stat"><div class="n">${earnedCount}/${badges.length}</div><div class="l">Badges</div></div>
+    </div>`;
+
+  if (ppFormKind) {
+    const isCone = ppFormKind === 'gelato';
+    const city = ppCurrentCity();
+    html += `
+      <div class="pp-form">
+        <h3>${isCone ? '🍦 Log a cone' : '☕ Log a coffee'}</h3>
+        <div class="pp-field">
+          <label>${isCone ? 'Flavor(s)' : 'Drink'}</label>
+          <input id="pp-flavor" type="text" placeholder="${isCone ? 'e.g. Stracciatella + Pistachio' : 'e.g. Cappuccino'}" autocomplete="off">
+        </div>
+        <div class="pp-field">
+          <label>Shop / café</label>
+          <input id="pp-shop" type="text" placeholder="e.g. Gelateria dei Neri" autocomplete="off">
+        </div>
+        <div class="pp-field">
+          <label>City</label>
+          <select id="pp-city">
+            ${['siena','florence','rome','other'].map(c => `<option value="${c}"${c === city ? ' selected' : ''}>${PP_CITY_LABELS[c]}</option>`).join('')}
+          </select>
+        </div>
+        <div class="pp-field">
+          <label>Rating</label>
+          <div class="pp-stars" id="pp-stars">
+            ${[1,2,3,4,5].map(n => `<span class="pp-star" data-v="${n}">⭐</span>`).join('')}
+          </div>
+        </div>
+        <div class="pp-field">
+          <label>Note (optional)</label>
+          <textarea id="pp-note" placeholder="Best of the trip? Worth a detour?"></textarea>
+        </div>
+        <div class="pp-form-btns">
+          <button class="pp-save" onclick="savePassportEntry()">Save to passport</button>
+          <button class="pp-cancel" onclick="cancelPassportForm()">Cancel</button>
+        </div>
+      </div>`;
+  } else {
+    html += `
+      <div class="pp-actions">
+        <button class="pp-add cone" onclick="openPassportForm('gelato')">＋ Log a cone</button>
+        <button class="pp-add coffee" onclick="openPassportForm('coffee')">＋ Log a coffee</button>
+      </div>`;
+  }
+
+  // Badges
+  html += `<div class="pp-badges">` + badges.map(b =>
+    `<div class="pp-badge${b.earned ? ' earned' : ''}" title="${b.desc}"><span class="be">${b.icon}</span>${b.name}</div>`
+  ).join('') + `</div>`;
+
+  // Entries — sorted by rating desc, then most recent
+  html += `<div class="pp-section-title">Your tastings</div>`;
+  if (gelatoLog.length === 0) {
+    html += `<div class="pp-empty">No treats logged yet — Italy awaits. 🇮🇹</div>`;
+  } else {
+    const sorted = [...gelatoLog].sort((a, b) => (b.rating - a.rating) || (b.ts - a.ts));
+    const topRating = sorted[0].rating;
+    html += sorted.map(e => {
+      const stars = '★'.repeat(e.rating) + '☆'.repeat(5 - e.rating);
+      const isTop = e.rating === topRating && e.rating >= 4;
+      return `
+        <div class="pp-entry${isTop ? ' top' : ''}">
+          <div class="pe-ic">${e.kind === 'gelato' ? '🍦' : '☕'}</div>
+          <div class="pe-body">
+            <div class="pe-flavor">${escapeHtml(e.flavor) || (e.kind === 'gelato' ? 'Gelato' : 'Coffee')}</div>
+            <div class="pe-shop">${escapeHtml(e.shop) || '—'} · ${PP_CITY_LABELS[e.city] || e.city}</div>
+            <div class="pe-stars">${stars}</div>
+            ${e.note ? `<div class="pe-note">“${escapeHtml(e.note)}”</div>` : ''}
+          </div>
+          <button class="pe-del" onclick="deletePassportEntry('${e.id}')" title="Delete">✕</button>
+        </div>`;
+    }).join('');
+  }
+
+  el.innerHTML = html;
+
+  // Wire star rating (no re-render, preserves typed text)
+  if (ppFormKind) {
+    const starsWrap = document.getElementById('pp-stars');
+    const paint = () => starsWrap.querySelectorAll('.pp-star').forEach(s =>
+      s.classList.toggle('on', Number(s.dataset.v) <= ppRating));
+    starsWrap.querySelectorAll('.pp-star').forEach(s => {
+      s.addEventListener('click', () => { ppRating = Number(s.dataset.v); paint(); });
+    });
+    paint();
+    const f = document.getElementById('pp-flavor');
+    if (f) f.focus();
+  }
+}
+
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function openPassportForm(kind) { ppFormKind = kind; ppRating = 0; renderPassport(); }
+function cancelPassportForm() { ppFormKind = null; ppRating = 0; renderPassport(); }
+
+function savePassportEntry() {
+  const flavor = document.getElementById('pp-flavor').value.trim();
+  const shop = document.getElementById('pp-shop').value.trim();
+  const city = document.getElementById('pp-city').value;
+  const note = document.getElementById('pp-note').value.trim();
+  if (!flavor && !shop) { alert('Add a flavor or a shop name first 🙂'); return; }
+  gelatoLog.push({
+    id: 'g' + Date.now() + Math.random().toString(36).slice(2, 6),
+    kind: ppFormKind, flavor, shop, city,
+    rating: ppRating || 3, note, ts: Date.now(),
+  });
+  saveGelatoLog();
+  ppFormKind = null; ppRating = 0;
+  renderPassport();
+}
+
+function deletePassportEntry(id) {
+  gelatoLog = gelatoLog.filter(e => e.id !== id);
+  saveGelatoLog();
+  renderPassport();
 }
 
 // ─────────────────────────────────────────────
@@ -2732,6 +2964,7 @@ function switchSection(section) {
   switch (section) {
     case 'overview':  renderOverview(); break;
     case 'logistics': renderLogistics(); break;
+    case 'passport':  renderPassport(); break;
     case 'siena':
     case 'florence':
     case 'rome':
@@ -3079,6 +3312,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 loadOverrides();
 loadDurationOverrides();
+loadGelatoLog();
 loadWeatherCache();
 fetchWeather();
 updateTodayBanner();
