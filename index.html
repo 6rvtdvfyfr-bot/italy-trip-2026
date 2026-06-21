@@ -1033,6 +1033,12 @@
   .bk-row:first-of-type { border-top:none; }
   .bk-row span:last-child { font-weight:700; color:#8B3A2F; font-variant-numeric:tabular-nums; }
 
+  /* "I'm here" check-in */
+  .checkin-btn { margin-top:10px; display:inline-flex; align-items:center; gap:5px; background:#f4faf6; border:1.5px solid #bfe6cd; color:#1d7a40; border-radius:9px; padding:7px 13px; font-size:0.78rem; font-weight:700; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .checkin-btn:active { transform:scale(0.97); }
+  .checkin-btn.done { background:#27ae60; border-color:#27ae60; color:#fff; }
+  .stop-card.checked-in { box-shadow: inset 3px 0 0 #27ae60; }
+
   /* collapsible walk-meter day list */
   .wm-days { margin-top:10px; }
   .wm-days > summary { cursor:pointer; list-style:none; font-size:0.78rem; font-weight:700; color:#8B3A2F; padding:6px 0 2px; -webkit-tap-highlight-color:transparent; }
@@ -2722,6 +2728,33 @@ function renderCitySection(sectionKey) {
           </div>
         </div>`;
 
+      // "I'm here" check-in (skip pure transport legs)
+      if (stop.type !== 'transport') {
+        const sk = stopKey(sectionKey, day.id, stop.num);
+        const ciBtn = document.createElement('button');
+        ciBtn.className = 'checkin-btn';
+        const paintCheckin = () => {
+          if (checkins[sk]) {
+            const t = new Date(checkins[sk].ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+            ciBtn.innerHTML = `✓ Checked in · ${t}`;
+            ciBtn.classList.add('done');
+            card.classList.add('checked-in');
+          } else {
+            ciBtn.textContent = "✓ I'm here";
+            ciBtn.classList.remove('done');
+            card.classList.remove('checked-in');
+          }
+        };
+        paintCheckin();
+        ciBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleCheckin(sk);
+          paintCheckin();
+          updateTodayBanner();
+        });
+        card.querySelector('.stop-body').appendChild(ciBtn);
+      }
+
       // Edit mode controls
       if (editMode) {
         if (locked) {
@@ -2868,6 +2901,24 @@ function saveWalkDay(iso) {
 function clearWalkDay(iso) {
   delete walkOverrides[iso]; saveWalkOverrides();
   wmEditDay = null; renderWalkMeter();
+}
+
+// ─────────────────────────────────────────────
+// "I'M HERE" CHECK-INS
+// ─────────────────────────────────────────────
+let checkins = {};   // stopKey -> { ts }
+function loadCheckins() {
+  try { checkins = JSON.parse(localStorage.getItem('italy-checkins') || '{}'); }
+  catch (e) { checkins = {}; }
+}
+function saveCheckins() {
+  try { localStorage.setItem('italy-checkins', JSON.stringify(checkins)); } catch (e) {}
+}
+function stopKey(sectionKey, dayId, num) { return sectionKey + '|' + dayId + '|' + num; }
+function toggleCheckin(sk) {
+  if (checkins[sk]) delete checkins[sk];
+  else checkins[sk] = { ts: Date.now() };
+  saveCheckins();
 }
 
 function walkRows() {
@@ -3318,6 +3369,7 @@ function renderBackup() {
   const expCount = expenseData.items.length;
   const gelCount = gelatoLog.length;
   const walkCount = Object.keys(walkOverrides).length;
+  const ciCount = Object.keys(checkins).length;
   el.innerHTML = `
     <div class="pp-hero">
       <h2>💾 Backup &amp; Restore</h2>
@@ -3338,11 +3390,12 @@ function renderBackup() {
       <div class="bk-row"><span>💶 Expenses</span><span>${expCount} item${expCount === 1 ? '' : 's'}</span></div>
       <div class="bk-row"><span>🍦 Gelato passport</span><span>${gelCount} treat${gelCount === 1 ? '' : 's'}</span></div>
       <div class="bk-row"><span>🥾 Walk actuals</span><span>${walkCount} day${walkCount === 1 ? '' : 's'}</span></div>
+      <div class="bk-row"><span>✅ Check-ins</span><span>${ciCount} stop${ciCount === 1 ? '' : 's'}</span></div>
     </div>`;
 }
 
 function backupPayload() {
-  return JSON.stringify({ v: 1, savedAt: new Date().toISOString(), expenses: expenseData, gelato: gelatoLog, walk: walkOverrides });
+  return JSON.stringify({ v: 1, savedAt: new Date().toISOString(), expenses: expenseData, gelato: gelatoLog, walk: walkOverrides, checkins: checkins });
 }
 function mnBackupStatus(msg, ok) {
   const s = document.getElementById('mn-backup-status');
@@ -3394,6 +3447,7 @@ function restoreBackup() {
   }
   if (Array.isArray(d.gelato)) { gelatoLog = d.gelato; saveGelatoLog(); restored.push('gelato passport'); }
   if (d.walk && typeof d.walk === 'object') { walkOverrides = d.walk; saveWalkOverrides(); restored.push('walk actuals'); }
+  if (d.checkins && typeof d.checkins === 'object') { checkins = d.checkins; saveCheckins(); restored.push('check-ins'); }
   if (restored.length === 0) { mnBackupStatus('No recognizable data in that code.', false); return; }
   alert('Restored ' + restored.join(' + ') + ' ✓');
   renderBackup();
@@ -3578,7 +3632,10 @@ function updateTodayBanner() {
 
   const nowMin = getItalyNowMin();
   const day = SECTIONS[entry.section].days[entry.dayIdx];
-  const schedule = getStopSchedule(day, entry.section).filter(s => s.stop.type !== 'transport' && s.stop.type !== 'hotel');
+  const fullSchedule = getStopSchedule(day, entry.section).filter(s => s.stop.type !== 'transport' && s.stop.type !== 'hotel');
+  // Checked-in stops are "done" — drop them so Now/Next advances to where you actually are
+  const schedule = fullSchedule.filter(s => !checkins[stopKey(entry.section, day.id, s.stop.num)]);
+  const allCheckedIn = fullSchedule.length > 0 && schedule.length === 0;
 
   let cur = null, nxt = null;
   for (let i = 0; i < schedule.length; i++) {
@@ -3600,6 +3657,8 @@ function updateTodayBanner() {
     const startStr = fmtMin(nxt.startMin);
     html = `<strong>Up next:</strong> ${nxt.stop.name} <span class="tb-until">at ${startStr}</span>`;
     mapsStop = nxt.stop;
+  } else if (allCheckedIn) {
+    html = `<strong>All checked in! 🎉</strong> Every stop done — enjoy the evening. 🍷`;
   } else {
     html = `<strong>That's a wrap!</strong> Great day — enjoy the evening. 🍷`;
   }
@@ -3626,7 +3685,8 @@ function openBoardingPass() {
   if (entry) {
     const day = SECTIONS[entry.section].days[entry.dayIdx];
     const schedule = getStopSchedule(day, entry.section)
-      .filter(s => s.stop.type !== 'transport' && s.stop.type !== 'hotel');
+      .filter(s => s.stop.type !== 'transport' && s.stop.type !== 'hotel')
+      .filter(s => !checkins[stopKey(entry.section, day.id, s.stop.num)]);
     for (let i = 0; i < schedule.length; i++) {
       const { startMin, durationMin } = schedule[i];
       if (nowMin >= startMin && nowMin < startMin + durationMin) {
@@ -3832,6 +3892,7 @@ loadDurationOverrides();
 loadGelatoLog();
 loadExpenses();
 loadWalkOverrides();
+loadCheckins();
 loadWeatherCache();
 fetchWeather();
 updateTodayBanner();
