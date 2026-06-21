@@ -1025,6 +1025,13 @@
   .mn-backup-btns button { flex:1; min-width:96px; background:#ede7df; color:#5a4535; border:none; border-radius:9px; padding:10px; font-weight:600; font-size:0.82rem; cursor:pointer; }
   .mn-backup-btns button:active { transform:scale(0.97); }
   .mn-backup-status { font-size:0.78rem; font-weight:600; margin-top:9px; min-height:1rem; }
+  /* Backup tab */
+  .bk-card { background:#faf7f4; border:1px solid #e0d5cc; border-radius:14px; padding:16px; margin-bottom:16px; }
+  .bk-info { background:#fff8ef; border:1px solid #ece0a8; border-radius:14px; padding:14px 16px; }
+  .bk-info-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:#8B3A2F; font-weight:800; margin-bottom:8px; }
+  .bk-row { display:flex; justify-content:space-between; font-size:0.86rem; color:#5a4535; padding:5px 0; border-top:1px solid #f0e6d2; }
+  .bk-row:first-of-type { border-top:none; }
+  .bk-row span:last-child { font-weight:700; color:#8B3A2F; font-variant-numeric:tabular-nums; }
 
   /* collapsible walk-meter day list */
   .wm-days { margin-top:10px; }
@@ -1087,6 +1094,7 @@
     <button class="tab-btn" data-section="logistics">Logistics</button>
     <button class="tab-btn" data-section="passport">🍦 Passport</button>
     <button class="tab-btn" data-section="money">💶 Money</button>
+    <button class="tab-btn" data-section="backup">💾 Backup</button>
   </nav>
 
   <!-- Today / Now banner -->
@@ -1245,6 +1253,9 @@
 
       <!-- Money content (expense splitter) -->
       <div id="money-content" style="display:none"></div>
+
+      <!-- Backup content (cross-feature save/restore) -->
+      <div id="backup-content" style="display:none"></div>
     </div><!-- /fullwidth-view -->
 
   </div><!-- /content -->
@@ -2796,14 +2807,15 @@ function renderCitySection(sectionKey) {
 // ─────────────────────────────────────────────
 // RENDER OVERVIEW
 // ─────────────────────────────────────────────
-function renderOverview() {
+const FULLWIDTH_PANES = ['overview-content', 'logistics-content', 'passport-content', 'money-content', 'backup-content'];
+function showFullwidthPane(id) {
   document.getElementById('twopane').style.display = 'none';
-
   document.getElementById('fullwidth-view').style.display = 'block';
-  document.getElementById('overview-content').style.display = 'block';
-  document.getElementById('logistics-content').style.display = 'none';
-  document.getElementById('passport-content').style.display = 'none';
-  document.getElementById('money-content').style.display = 'none';
+  FULLWIDTH_PANES.forEach(p => { document.getElementById(p).style.display = (p === id ? 'block' : 'none'); });
+}
+
+function renderOverview() {
+  showFullwidthPane('overview-content');
 
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
@@ -2949,13 +2961,7 @@ function renderWalkMeter() {
 // RENDER LOGISTICS
 // ─────────────────────────────────────────────
 function renderLogistics() {
-  document.getElementById('twopane').style.display = 'none';
-
-  document.getElementById('fullwidth-view').style.display = 'block';
-  document.getElementById('overview-content').style.display = 'none';
-  document.getElementById('logistics-content').style.display = 'block';
-  document.getElementById('passport-content').style.display = 'none';
-  document.getElementById('money-content').style.display = 'none';
+  showFullwidthPane('logistics-content');
 }
 
 // ─────────────────────────────────────────────
@@ -3002,13 +3008,8 @@ function ppBadges() {
 }
 
 function renderPassport() {
-  document.getElementById('twopane').style.display = 'none';
-  document.getElementById('fullwidth-view').style.display = 'block';
-  document.getElementById('overview-content').style.display = 'none';
-  document.getElementById('logistics-content').style.display = 'none';
-  document.getElementById('money-content').style.display = 'none';
+  showFullwidthPane('passport-content');
   const el = document.getElementById('passport-content');
-  el.style.display = 'block';
 
   const cones = gelatoLog.filter(e => e.kind === 'gelato').length;
   const coffees = gelatoLog.filter(e => e.kind === 'coffee').length;
@@ -3207,13 +3208,8 @@ function settleUp(net) {
 }
 
 function renderMoney() {
-  document.getElementById('twopane').style.display = 'none';
-  document.getElementById('fullwidth-view').style.display = 'block';
-  document.getElementById('overview-content').style.display = 'none';
-  document.getElementById('logistics-content').style.display = 'none';
-  document.getElementById('passport-content').style.display = 'none';
+  showFullwidthPane('money-content');
   const el = document.getElementById('money-content');
-  el.style.display = 'block';
 
   const totalEUR = expenseData.items.reduce((s, it) => s + expenseEUR(it), 0);
   const net = computeBalances();
@@ -3224,7 +3220,7 @@ function renderMoney() {
       <h2>💶 Trip Money</h2>
       <p>Gollenbergs &amp; Wachters — who paid, who owes.</p>
     </div>
-    <div class="mn-note">📱 Lives on <b>this phone only</b> — keep it on one "trip wallet" device, and <b>back it up</b> below so clearing Safari can't wipe it.</div>
+    <div class="mn-note">📱 Lives on <b>this phone only</b> — keep it on one "trip wallet" device, and <b>back it up</b> from the 💾 Backup tab so clearing Safari can't wipe it.</div>
     <div class="mn-bar">
       <span class="mn-rate">€1 = $<input id="mn-rate" type="number" step="0.01" min="0.5" max="2" value="${expenseData.rate}" onchange="updateRate(this.value)"></span>
       <span class="mn-total">Total: €${totalEUR.toFixed(2)}</span>
@@ -3310,23 +3306,39 @@ function renderMoney() {
     }).join('');
   }
 
-  // Backup & restore (collapsed)
-  html += `
-    <details class="mn-backup">
-      <summary>🔐 Backup &amp; restore</summary>
-      <div class="mn-backup-inner">
-        <p class="mn-backup-hint">Copy this code into Notes or a text to yourself. Clearing Safari wipes the app's saved data — this is your safety net. To restore (here or on another phone), paste a code in and tap Restore. Covers expenses + gelato passport.</p>
-        <textarea id="mn-backup-code" class="mn-backup-ta" spellcheck="false" autocapitalize="off" autocomplete="off">${escapeHtml(backupPayload())}</textarea>
-        <div class="mn-backup-btns">
-          <button type="button" onclick="copyBackup()">📋 Copy code</button>
-          <button type="button" onclick="downloadBackup()">⬇️ Save file</button>
-          <button type="button" onclick="restoreBackup()">♻️ Restore</button>
-        </div>
-        <div id="mn-backup-status" class="mn-backup-status"></div>
-      </div>
-    </details>`;
-
   el.innerHTML = html;
+}
+
+// ─────────────────────────────────────────────
+// RENDER BACKUP (cross-feature save / restore)
+// ─────────────────────────────────────────────
+function renderBackup() {
+  showFullwidthPane('backup-content');
+  const el = document.getElementById('backup-content');
+  const expCount = expenseData.items.length;
+  const gelCount = gelatoLog.length;
+  const walkCount = Object.keys(walkOverrides).length;
+  el.innerHTML = `
+    <div class="pp-hero">
+      <h2>💾 Backup &amp; Restore</h2>
+      <p>Save everything off this phone — and bring it back anywhere.</p>
+    </div>
+    <div class="bk-card">
+      <p class="mn-backup-hint">Your data is saved only on <b>this phone</b>. Clearing Safari history/site data would wipe it — so copy this backup code somewhere safe (Notes, or text it to yourself). To restore here or on another phone, paste a code below and tap Restore.</p>
+      <textarea id="mn-backup-code" class="mn-backup-ta" spellcheck="false" autocapitalize="off" autocomplete="off">${escapeHtml(backupPayload())}</textarea>
+      <div class="mn-backup-btns">
+        <button type="button" onclick="copyBackup()">📋 Copy code</button>
+        <button type="button" onclick="downloadBackup()">⬇️ Save file</button>
+        <button type="button" onclick="restoreBackup()">♻️ Restore</button>
+      </div>
+      <div id="mn-backup-status" class="mn-backup-status"></div>
+    </div>
+    <div class="bk-info">
+      <div class="bk-info-title">What's in this backup</div>
+      <div class="bk-row"><span>💶 Expenses</span><span>${expCount} item${expCount === 1 ? '' : 's'}</span></div>
+      <div class="bk-row"><span>🍦 Gelato passport</span><span>${gelCount} treat${gelCount === 1 ? '' : 's'}</span></div>
+      <div class="bk-row"><span>🥾 Walk actuals</span><span>${walkCount} day${walkCount === 1 ? '' : 's'}</span></div>
+    </div>`;
 }
 
 function backupPayload() {
@@ -3384,7 +3396,7 @@ function restoreBackup() {
   if (d.walk && typeof d.walk === 'object') { walkOverrides = d.walk; saveWalkOverrides(); restored.push('walk actuals'); }
   if (restored.length === 0) { mnBackupStatus('No recognizable data in that code.', false); return; }
   alert('Restored ' + restored.join(' + ') + ' ✓');
-  renderMoney();
+  renderBackup();
 }
 
 function updateRate(v) {
@@ -3469,6 +3481,7 @@ function switchSection(section) {
     case 'logistics': renderLogistics(); break;
     case 'passport':  renderPassport(); break;
     case 'money':     renderMoney(); break;
+    case 'backup':    renderBackup(); break;
     case 'siena':
     case 'florence':
     case 'rome':

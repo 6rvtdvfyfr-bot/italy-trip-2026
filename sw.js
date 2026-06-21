@@ -1,4 +1,4 @@
-const CACHE = 'italy-2026-v5';
+const CACHE = 'italy-2026-v6';
 const OFFLINE_URLS = [
   './',
   './index.html',
