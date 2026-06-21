@@ -939,6 +939,23 @@
   .pp-entry .pe-del { background:none; border:none; color:#c0a89c; font-size:1.1rem; cursor:pointer; padding:2px 4px; line-height:1; }
   .pp-entry .pe-del:active { color:#c0392b; }
   .pp-empty { text-align:center; color:#9a8575; font-size:0.85rem; padding:24px 12px; }
+
+  /* ── Walked Across Italy meter ── */
+  .walk-meter { background:linear-gradient(135deg,#fff8ef,#faf3ea); border:1px solid #e0d5cc; border-radius:16px; padding:18px 20px; margin-bottom:20px; }
+  .wm-head { display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  .wm-head h3 { margin:0; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; color:#8B3A2F; font-weight:800; }
+  .wm-head .wm-of { font-size:0.74rem; color:#9a8575; font-weight:600; }
+  .wm-big { font-size:2.3rem; font-weight:800; color:#8B3A2F; line-height:1; margin-top:8px; }
+  .wm-big span { font-size:1rem; font-weight:700; color:#a8856a; }
+  .wm-bar { height:10px; background:#ede7df; border-radius:6px; overflow:hidden; margin:12px 0 8px; }
+  .wm-bar-fill { height:100%; background:linear-gradient(90deg,#e0a020,#8B3A2F); border-radius:6px; transition:width 0.5s ease; }
+  .wm-equiv { font-size:0.85rem; color:#7a6155; font-style:italic; }
+  .wm-days { margin-top:14px; display:flex; flex-direction:column; gap:2px; }
+  .wm-day { display:flex; justify-content:space-between; font-size:0.8rem; color:#b3a496; padding:3px 0; border-top:1px solid #ede7df; }
+  .wm-day:first-child { border-top:none; }
+  .wm-day.done { color:#3d2b1f; }
+  .wm-day .wd-km { color:#8B3A2F; font-variant-numeric:tabular-nums; font-weight:600; }
+  .wm-day.done .wd-km::after { content:' ✓'; color:#27ae60; font-weight:700; }
 </style>
 </head>
 <body>
@@ -1026,6 +1043,7 @@
           <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Flights</div></div>
           <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Hotels</div></div>
         </div>
+        <div id="walk-meter"></div>
         <div class="cal-title">Trip Calendar</div>
         <div class="cal-grid" id="cal-grid"></div>
         <div style="text-align:center;margin-top:18px;">
@@ -2728,6 +2746,66 @@ function renderOverview() {
     }
     grid.appendChild(cell);
   });
+
+  renderWalkMeter();
+}
+
+// ─────────────────────────────────────────────
+// WALKED ACROSS ITALY — directional km from itinerary walk times
+// ─────────────────────────────────────────────
+const WALK_KMH = 5; // assumed walking pace → km = minutes / 12
+
+function walkRows() {
+  const todayISO = getItalyDateStr();
+  return Object.keys(TRIP_DAY_MAP).sort().map(iso => {
+    const { section, dayIdx } = TRIP_DAY_MAP[iso];
+    const day = SECTIONS[section] && SECTIONS[section].days[dayIdx];
+    let mins = 0;
+    if (day && day.walkTimes) {
+      day.walkTimes.forEach(w => {
+        const m = w && /(\d+)\s*min\s*walk/i.exec(w);
+        if (m) mins += Number(m[1]);
+      });
+    }
+    return { iso, day, label: day ? day.label : iso, km: mins * WALK_KMH / 60, elapsed: iso <= todayISO };
+  }).filter(r => r.day);
+}
+
+function walkEquiv(km) {
+  if (km <= 0)  return 'Lace up — the wandering begins June 23. 🥾';
+  if (km < 1)   return "Already more than a lap of the Colosseum. 🏛️";
+  if (km < 3)   return `About the Ponte Vecchio crossed ${Math.max(1, Math.round(km / 0.084))} times. 🌉`;
+  if (km < 6)   return 'Roughly the climb to Piazzale Michelangelo and back. 🌇';
+  if (km < 12)  return 'Florence end-to-end across the Arno, near enough. 🚶';
+  if (km < 20)  return 'Closing in on Siena to the next hill town. 🌻';
+  return 'Enough to march clean out of Rome and keep going. 🗺️';
+}
+
+function renderWalkMeter() {
+  const el = document.getElementById('walk-meter');
+  if (!el) return;
+  const rows = walkRows();
+  const total = rows.reduce((s, r) => s + r.km, 0);
+  const walked = rows.reduce((s, r) => s + (r.elapsed ? r.km : 0), 0);
+  const pct = total > 0 ? Math.min(100, Math.round(walked / total * 100)) : 0;
+
+  el.innerHTML = `
+    <div class="walk-meter">
+      <div class="wm-head">
+        <h3>🥾 Walked Across Italy</h3>
+        <span class="wm-of">of ~${total.toFixed(1)} km planned</span>
+      </div>
+      <div class="wm-big">${walked.toFixed(1)} <span>km so far</span></div>
+      <div class="wm-bar"><div class="wm-bar-fill" style="width:${pct}%"></div></div>
+      <div class="wm-equiv">${walkEquiv(walked)}</div>
+      <div class="wm-days">
+        ${rows.map(r => `
+          <div class="wm-day${r.elapsed ? ' done' : ''}">
+            <span>${r.label} · ${r.day.date || ''}</span>
+            <span class="wd-km">${r.km.toFixed(1)} km</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
 }
 
 // ─────────────────────────────────────────────
