@@ -956,6 +956,52 @@
   .wm-day.done { color:#3d2b1f; }
   .wm-day .wd-km { color:#8B3A2F; font-variant-numeric:tabular-nums; font-weight:600; }
   .wm-day.done .wd-km::after { content:' ✓'; color:#27ae60; font-weight:700; }
+
+  /* ── Money / Expense splitter ── */
+  .mn-hero { text-align:center; margin-bottom:6px; }
+  .mn-hero h2 { margin:0 0 3px; font-size:1.5rem; color:#8B3A2F; font-weight:800; }
+  .mn-hero p { margin:0; font-size:0.82rem; color:#7a6155; }
+  .mn-note { background:#fff8e6; border:1px solid #ece0a8; border-radius:10px; padding:9px 13px; margin:12px 0 16px; font-size:0.74rem; color:#7a5e00; text-align:center; }
+  .mn-bar { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .mn-rate { font-size:0.78rem; color:#7a6155; display:flex; align-items:center; gap:6px; }
+  .mn-rate input { width:64px; border:1px solid #d4c4bc; border-radius:8px; padding:5px 8px; font-size:0.85rem; font-family:inherit; text-align:right; background:#fff; color:#2a1f17; }
+  .mn-total { font-size:0.82rem; color:#3d2b1f; font-weight:700; }
+  .mn-addbtn { width:100%; border:none; border-radius:14px; padding:14px; font-size:0.95rem; font-weight:700; cursor:pointer; color:#fff; background:linear-gradient(135deg,#3a8a5a,#1d6a40); box-shadow:0 2px 8px rgba(29,106,64,0.18); margin-bottom:16px; -webkit-tap-highlight-color:transparent; }
+  .mn-addbtn:active { transform:scale(0.98); }
+  .mn-form { background:#f4faf6; border:1.5px solid #3a8a5a; border-radius:16px; padding:16px; margin-bottom:18px; }
+  .mn-form h3 { margin:0 0 12px; font-size:1rem; color:#1d6a40; }
+  .mn-field { margin-bottom:11px; }
+  .mn-field label { display:block; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.5px; color:#7a6155; font-weight:700; margin-bottom:4px; }
+  .mn-field input, .mn-field select { width:100%; box-sizing:border-box; border:1px solid #d4c4bc; border-radius:9px; padding:9px 11px; font-size:0.9rem; font-family:inherit; background:#fff; color:#2a1f17; }
+  .mn-amt-row { display:flex; gap:8px; }
+  .mn-amt-row input { flex:1; }
+  .mn-cur { display:flex; border:1px solid #d4c4bc; border-radius:9px; overflow:hidden; }
+  .mn-cur button { border:none; background:#fff; color:#7a6155; font-size:1rem; font-weight:700; padding:0 14px; cursor:pointer; }
+  .mn-cur button.on { background:#1d6a40; color:#fff; }
+  .mn-who { display:flex; flex-wrap:wrap; gap:7px; }
+  .mn-chip { font-size:0.8rem; font-weight:600; padding:7px 13px; border-radius:999px; border:1.5px solid #d4c4bc; background:#fff; color:#7a6155; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
+  .mn-chip.on { background:#fff8e6; border-color:#e0a020; color:#8B3A2F; }
+  .mn-form-btns { display:flex; gap:9px; margin-top:14px; }
+  .mn-save { flex:1; background:#1d6a40; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; font-size:0.9rem; cursor:pointer; }
+  .mn-cancel { background:#ede7df; color:#5a4535; border:none; border-radius:10px; padding:11px 18px; font-weight:600; font-size:0.9rem; cursor:pointer; }
+  .mn-section-title { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:#8B3A2F; font-weight:800; margin:18px 0 11px; padding-bottom:6px; border-bottom:1.5px solid #e0d5cc; }
+  .mn-bal { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:10px; margin-bottom:5px; background:#faf7f4; border:1px solid #e0d5cc; }
+  .mn-bal .nm { font-weight:600; color:#3d2b1f; font-size:0.88rem; }
+  .mn-bal .amt { font-size:0.85rem; font-weight:700; font-variant-numeric:tabular-nums; }
+  .mn-bal .amt.pos { color:#1d7a40; }
+  .mn-bal .amt.neg { color:#c0392b; }
+  .mn-bal .amt.zero { color:#9a8575; }
+  .mn-settle { background:#fff8ef; border:1px solid #e0a020; border-radius:11px; padding:10px 13px; margin-bottom:6px; font-size:0.86rem; color:#3d2b1f; }
+  .mn-settle b { color:#8B3A2F; }
+  .mn-settle .usd { color:#9a8575; font-size:0.78rem; }
+  .mn-settled { text-align:center; color:#1d7a40; font-size:0.86rem; padding:14px; font-weight:600; }
+  .mn-exp { display:flex; align-items:flex-start; gap:10px; background:#faf7f4; border:1px solid #e0d5cc; border-radius:12px; padding:11px 13px; margin-bottom:8px; }
+  .mn-exp .me-body { flex:1; min-width:0; }
+  .mn-exp .me-desc { font-weight:700; color:#3d2b1f; font-size:0.9rem; }
+  .mn-exp .me-meta { font-size:0.76rem; color:#7a6155; margin-top:2px; }
+  .mn-exp .me-amt { font-weight:700; color:#8B3A2F; font-size:0.9rem; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .mn-exp .me-del { background:none; border:none; color:#c0a89c; font-size:1.05rem; cursor:pointer; padding:2px 4px; line-height:1; }
+  .mn-empty { text-align:center; color:#9a8575; font-size:0.85rem; padding:22px 12px; }
 </style>
 </head>
 <body>
@@ -1010,6 +1056,7 @@
     <button class="tab-btn" data-section="rome">Rome</button>
     <button class="tab-btn" data-section="logistics">Logistics</button>
     <button class="tab-btn" data-section="passport">🍦 Passport</button>
+    <button class="tab-btn" data-section="money">💶 Money</button>
   </nav>
 
   <!-- Today / Now banner -->
@@ -1165,6 +1212,9 @@
 
       <!-- Passport content (Gelato & Espresso) -->
       <div id="passport-content" style="display:none"></div>
+
+      <!-- Money content (expense splitter) -->
+      <div id="money-content" style="display:none"></div>
     </div><!-- /fullwidth-view -->
 
   </div><!-- /content -->
@@ -2723,6 +2773,7 @@ function renderOverview() {
   document.getElementById('overview-content').style.display = 'block';
   document.getElementById('logistics-content').style.display = 'none';
   document.getElementById('passport-content').style.display = 'none';
+  document.getElementById('money-content').style.display = 'none';
 
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
@@ -2818,6 +2869,7 @@ function renderLogistics() {
   document.getElementById('overview-content').style.display = 'none';
   document.getElementById('logistics-content').style.display = 'block';
   document.getElementById('passport-content').style.display = 'none';
+  document.getElementById('money-content').style.display = 'none';
 }
 
 // ─────────────────────────────────────────────
@@ -2855,10 +2907,10 @@ function ppBadges() {
   const maxFlavor = Object.values(flavorCounts).reduce((m, n) => Math.max(m, n), 0);
   return [
     { icon:'🥄', name:'First Scoop',           desc:'Log a gelato',            earned: cones.length >= 1 },
-    { icon:'🔟', name:'10-Cone Club',          desc:'10 gelati logged',        earned: cones.length >= 10 },
+    { icon:'🖐️', name:'5-Cone Club',           desc:'5 gelati logged',         earned: cones.length >= 5 },
     { icon:'🎓', name:'Stracciatella Scholar', desc:'3+ of one flavor',        earned: maxFlavor >= 3 },
     { icon:'☕', name:'Espresso al Banco',     desc:'Log a coffee',            earned: coffees.length >= 1 },
-    { icon:'⚡', name:'Caffeine Circuit',      desc:'10 coffees logged',       earned: coffees.length >= 10 },
+    { icon:'⚡', name:'Caffeine Circuit',      desc:'5 coffees logged',        earned: coffees.length >= 5 },
     { icon:'🇮🇹', name:'Tre Città',            desc:'A treat in all 3 cities', earned: ['siena','florence','rome'].every(c => cities.has(c)) },
   ];
 }
@@ -2868,6 +2920,7 @@ function renderPassport() {
   document.getElementById('fullwidth-view').style.display = 'block';
   document.getElementById('overview-content').style.display = 'none';
   document.getElementById('logistics-content').style.display = 'none';
+  document.getElementById('money-content').style.display = 'none';
   const el = document.getElementById('passport-content');
   el.style.display = 'block';
 
@@ -3005,6 +3058,218 @@ function deletePassportEntry(id) {
 }
 
 // ─────────────────────────────────────────────
+// RENDER MONEY (Who-Paid expense splitter)
+// ─────────────────────────────────────────────
+const TRAVELERS = ['Brian', 'Audra', 'Grace', 'Chris', 'Priscilla', 'Noah', 'Zach'];
+let expenseData = { rate: 1.08, items: [] };
+let mnFormOpen = false;
+let mnCurrency = 'EUR';
+let mnSplit = {};   // name -> bool (form selection)
+
+function loadExpenses() {
+  try {
+    const d = JSON.parse(localStorage.getItem('italy-expenses') || 'null');
+    if (d && Array.isArray(d.items)) {
+      expenseData = d;
+      if (!expenseData.rate) expenseData.rate = 1.08;
+    }
+  } catch (e) { expenseData = { rate: 1.08, items: [] }; }
+}
+function saveExpenses() {
+  try { localStorage.setItem('italy-expenses', JSON.stringify(expenseData)); } catch (e) {}
+}
+
+function expenseEUR(it) {
+  return it.currency === 'USD' ? it.amount / expenseData.rate : it.amount;
+}
+function fmtMoney(eur) {
+  return `€${eur.toFixed(2)} <span class="usd">($${(eur * expenseData.rate).toFixed(2)})</span>`;
+}
+
+function computeBalances() {
+  const net = {}; TRAVELERS.forEach(t => net[t] = 0);
+  expenseData.items.forEach(it => {
+    const who = (it.splitAmong || []).filter(p => net[p] !== undefined);
+    if (who.length === 0) return;
+    const eur = expenseEUR(it);
+    const share = eur / who.length;
+    if (net[it.paidBy] !== undefined) net[it.paidBy] += eur;
+    who.forEach(p => { net[p] -= share; });
+  });
+  return net;
+}
+
+function settleUp(net) {
+  const eps = 0.01;
+  const debt = [], cred = [];
+  Object.keys(net).forEach(p => {
+    if (net[p] < -eps) debt.push({ p, a: -net[p] });
+    else if (net[p] > eps) cred.push({ p, a: net[p] });
+  });
+  debt.sort((x, y) => y.a - x.a);
+  cred.sort((x, y) => y.a - x.a);
+  const tx = [];
+  let i = 0, j = 0;
+  while (i < debt.length && j < cred.length) {
+    const amt = Math.min(debt[i].a, cred[j].a);
+    tx.push({ from: debt[i].p, to: cred[j].p, eur: amt });
+    debt[i].a -= amt; cred[j].a -= amt;
+    if (debt[i].a < eps) i++;
+    if (cred[j].a < eps) j++;
+  }
+  return tx;
+}
+
+function renderMoney() {
+  document.getElementById('twopane').style.display = 'none';
+  document.getElementById('fullwidth-view').style.display = 'block';
+  document.getElementById('overview-content').style.display = 'none';
+  document.getElementById('logistics-content').style.display = 'none';
+  document.getElementById('passport-content').style.display = 'none';
+  const el = document.getElementById('money-content');
+  el.style.display = 'block';
+
+  const totalEUR = expenseData.items.reduce((s, it) => s + expenseEUR(it), 0);
+  const net = computeBalances();
+  const tx = settleUp(net);
+
+  let html = `
+    <div class="mn-hero">
+      <h2>💶 Trip Money</h2>
+      <p>Who paid, who owes, all squared up.</p>
+    </div>
+    <div class="mn-note">📱 No accounts — this ledger lives on <b>this phone only</b>. Keep it on one "trip wallet" device.</div>
+    <div class="mn-bar">
+      <span class="mn-rate">€1 = $<input id="mn-rate" type="number" step="0.01" min="0.5" max="2" value="${expenseData.rate}" onchange="updateRate(this.value)"></span>
+      <span class="mn-total">Total: €${totalEUR.toFixed(2)}</span>
+    </div>`;
+
+  if (mnFormOpen) {
+    html += `
+      <div class="mn-form">
+        <h3>＋ New expense</h3>
+        <div class="mn-field">
+          <label>What for?</label>
+          <input id="mn-desc" type="text" placeholder="e.g. Dinner at Roma Sparita" autocomplete="off">
+        </div>
+        <div class="mn-field">
+          <label>Amount</label>
+          <div class="mn-amt-row">
+            <input id="mn-amount" type="number" step="0.01" min="0" inputmode="decimal" placeholder="0.00">
+            <div class="mn-cur">
+              <button type="button" data-cur="EUR" class="${mnCurrency === 'EUR' ? 'on' : ''}" onclick="setMnCurrency('EUR')">€</button>
+              <button type="button" data-cur="USD" class="${mnCurrency === 'USD' ? 'on' : ''}" onclick="setMnCurrency('USD')">$</button>
+            </div>
+          </div>
+        </div>
+        <div class="mn-field">
+          <label>Paid by</label>
+          <select id="mn-paidby">${TRAVELERS.map(t => `<option value="${t}">${t}</option>`).join('')}</select>
+        </div>
+        <div class="mn-field">
+          <label>Split among (tap to toggle)</label>
+          <div class="mn-who" id="mn-who">
+            ${TRAVELERS.map(t => `<span class="mn-chip ${mnSplit[t] ? 'on' : ''}" data-name="${t}" onclick="toggleSplit('${t}')">${t}</span>`).join('')}
+          </div>
+        </div>
+        <div class="mn-form-btns">
+          <button class="mn-save" onclick="saveExpense()">Add expense</button>
+          <button class="mn-cancel" onclick="closeMoneyForm()">Cancel</button>
+        </div>
+      </div>`;
+  } else {
+    html += `<button class="mn-addbtn" onclick="openMoneyForm()">＋ Add an expense</button>`;
+  }
+
+  // Balances
+  html += `<div class="mn-section-title">Balances</div>`;
+  html += TRAVELERS.map(t => {
+    const v = net[t] || 0;
+    const cls = v > 0.01 ? 'pos' : (v < -0.01 ? 'neg' : 'zero');
+    const label = v > 0.01 ? `is owed ${fmtMoney(v)}` : (v < -0.01 ? `owes ${fmtMoney(-v)}` : 'settled');
+    return `<div class="mn-bal"><span class="nm">${t}</span><span class="amt ${cls}">${label}</span></div>`;
+  }).join('');
+
+  // Settle-up
+  html += `<div class="mn-section-title">Settle up</div>`;
+  if (expenseData.items.length === 0) {
+    html += `<div class="mn-empty">No expenses yet — add the first one above.</div>`;
+  } else if (tx.length === 0) {
+    html += `<div class="mn-settled">✓ All square — nobody owes anybody.</div>`;
+  } else {
+    html += tx.map(t =>
+      `<div class="mn-settle"><b>${t.from}</b> → <b>${t.to}</b> &nbsp;${fmtMoney(t.eur)}</div>`
+    ).join('');
+  }
+
+  // Expense list
+  html += `<div class="mn-section-title">Expenses</div>`;
+  if (expenseData.items.length === 0) {
+    html += `<div class="mn-empty">Nothing logged yet.</div>`;
+  } else {
+    html += [...expenseData.items].reverse().map(it => {
+      const eur = expenseEUR(it);
+      const who = (it.splitAmong || []).length === TRAVELERS.length ? 'everyone'
+        : (it.splitAmong || []).join(', ');
+      const orig = it.currency === 'USD' ? `$${it.amount.toFixed(2)}` : `€${it.amount.toFixed(2)}`;
+      return `
+        <div class="mn-exp">
+          <div class="me-body">
+            <div class="me-desc">${escapeHtml(it.desc) || 'Expense'}</div>
+            <div class="me-meta">${escapeHtml(it.paidBy)} paid · split: ${escapeHtml(who)}</div>
+          </div>
+          <div class="me-amt">${orig}</div>
+          <button class="me-del" onclick="deleteExpense('${it.id}')" title="Delete">✕</button>
+        </div>`;
+    }).join('');
+  }
+
+  el.innerHTML = html;
+}
+
+function updateRate(v) {
+  const r = parseFloat(v);
+  if (r && r > 0) { expenseData.rate = r; saveExpenses(); renderMoney(); }
+}
+function openMoneyForm() {
+  mnFormOpen = true;
+  mnCurrency = 'EUR';
+  mnSplit = {}; TRAVELERS.forEach(t => mnSplit[t] = true);  // default: split among all
+  renderMoney();
+  const d = document.getElementById('mn-desc'); if (d) d.focus();
+}
+function closeMoneyForm() { mnFormOpen = false; renderMoney(); }
+function setMnCurrency(c) {
+  mnCurrency = c;
+  document.querySelectorAll('.mn-cur button').forEach(b => b.classList.toggle('on', b.dataset.cur === c));
+}
+function toggleSplit(name) {
+  mnSplit[name] = !mnSplit[name];
+  const chip = document.querySelector(`.mn-chip[data-name="${name}"]`);
+  if (chip) chip.classList.toggle('on', mnSplit[name]);
+}
+function saveExpense() {
+  const desc = document.getElementById('mn-desc').value.trim();
+  const amount = parseFloat(document.getElementById('mn-amount').value);
+  const paidBy = document.getElementById('mn-paidby').value;
+  const splitAmong = TRAVELERS.filter(t => mnSplit[t]);
+  if (!amount || amount <= 0) { alert('Enter an amount greater than 0.'); return; }
+  if (splitAmong.length === 0) { alert('Pick at least one person to split among.'); return; }
+  expenseData.items.push({
+    id: 'e' + Date.now() + Math.random().toString(36).slice(2, 6),
+    desc, amount, currency: mnCurrency, paidBy, splitAmong, ts: Date.now(),
+  });
+  saveExpenses();
+  mnFormOpen = false;
+  renderMoney();
+}
+function deleteExpense(id) {
+  expenseData.items = expenseData.items.filter(it => it.id !== id);
+  saveExpenses();
+  renderMoney();
+}
+
+// ─────────────────────────────────────────────
 // MOBILE MAP TOGGLE
 // ─────────────────────────────────────────────
 function showMap() {
@@ -3043,6 +3308,7 @@ function switchSection(section) {
     case 'overview':  renderOverview(); break;
     case 'logistics': renderLogistics(); break;
     case 'passport':  renderPassport(); break;
+    case 'money':     renderMoney(); break;
     case 'siena':
     case 'florence':
     case 'rome':
@@ -3391,6 +3657,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 loadOverrides();
 loadDurationOverrides();
 loadGelatoLog();
+loadExpenses();
 loadWeatherCache();
 fetchWeather();
 updateTodayBanner();
