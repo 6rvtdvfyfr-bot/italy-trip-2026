@@ -950,7 +950,7 @@
   .wm-bar { height:10px; background:#ede7df; border-radius:6px; overflow:hidden; margin:12px 0 8px; }
   .wm-bar-fill { height:100%; background:linear-gradient(90deg,#e0a020,#8B3A2F); border-radius:6px; transition:width 0.5s ease; }
   .wm-equiv { font-size:0.85rem; color:#7a6155; font-style:italic; }
-  .wm-days { margin-top:14px; display:flex; flex-direction:column; gap:2px; }
+  .wm-days-list { display:flex; flex-direction:column; gap:2px; margin-top:6px; }
   .wm-day { display:flex; justify-content:space-between; font-size:0.8rem; color:#b3a496; padding:3px 0; border-top:1px solid #ede7df; }
   .wm-day:first-child { border-top:none; }
   .wm-day.done { color:#3d2b1f; }
@@ -1002,6 +1002,25 @@
   .mn-exp .me-amt { font-weight:700; color:#8B3A2F; font-size:0.9rem; font-variant-numeric:tabular-nums; white-space:nowrap; }
   .mn-exp .me-del { background:none; border:none; color:#c0a89c; font-size:1.05rem; cursor:pointer; padding:2px 4px; line-height:1; }
   .mn-empty { text-align:center; color:#9a8575; font-size:0.85rem; padding:22px 12px; }
+  .mn-backup { margin-top:22px; border:1px solid #e0d5cc; border-radius:12px; background:#faf7f4; overflow:hidden; }
+  .mn-backup > summary { cursor:pointer; padding:12px 15px; font-size:0.82rem; font-weight:700; color:#5a4535; list-style:none; -webkit-tap-highlight-color:transparent; }
+  .mn-backup > summary::-webkit-details-marker { display:none; }
+  .mn-backup > summary::after { content:' ▾'; color:#9a8575; }
+  .mn-backup[open] > summary::after { content:' ▴'; }
+  .mn-backup-inner { padding:0 15px 15px; }
+  .mn-backup-hint { font-size:0.76rem; color:#7a6155; margin:0 0 10px; line-height:1.5; }
+  .mn-backup-ta { width:100%; box-sizing:border-box; height:78px; border:1px solid #d4c4bc; border-radius:9px; padding:9px 11px; font-size:0.72rem; font-family:ui-monospace,Menlo,monospace; background:#fff; color:#5a4535; resize:vertical; }
+  .mn-backup-btns { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .mn-backup-btns button { flex:1; min-width:96px; background:#ede7df; color:#5a4535; border:none; border-radius:9px; padding:10px; font-weight:600; font-size:0.82rem; cursor:pointer; }
+  .mn-backup-btns button:active { transform:scale(0.97); }
+  .mn-backup-status { font-size:0.78rem; font-weight:600; margin-top:9px; min-height:1rem; }
+
+  /* collapsible walk-meter day list */
+  .wm-days { margin-top:10px; }
+  .wm-days > summary { cursor:pointer; list-style:none; font-size:0.78rem; font-weight:700; color:#8B3A2F; padding:6px 0 2px; -webkit-tap-highlight-color:transparent; }
+  .wm-days > summary::-webkit-details-marker { display:none; }
+  .wm-days > summary::after { content:' ▾'; color:#b3a496; }
+  .wm-days[open] > summary::after { content:' ▴'; }
 </style>
 </head>
 <body>
@@ -2814,7 +2833,8 @@ function walkRows() {
     let mins = 0;
     if (day && day.walkTimes) {
       day.walkTimes.forEach(w => {
-        const m = w && /(\d+)\s*min\s*walk/i.exec(w);
+        if (!w || /drive/i.test(w)) return;          // skip car legs
+        const m = /(\d+)\s*min/i.exec(w);            // any "N min" that isn't a drive = on foot
         if (m) mins += Number(m[1]);
       });
     }
@@ -2849,13 +2869,16 @@ function renderWalkMeter() {
       <div class="wm-big">${walked.toFixed(1)} <span>km so far</span></div>
       <div class="wm-bar"><div class="wm-bar-fill" style="width:${pct}%"></div></div>
       <div class="wm-equiv">${walkEquiv(walked)}</div>
-      <div class="wm-days">
-        ${rows.map(r => `
-          <div class="wm-day${r.elapsed ? ' done' : ''}">
-            <span>${r.label} · ${r.day.date || ''}</span>
-            <span class="wd-km">${r.km.toFixed(1)} km</span>
-          </div>`).join('')}
-      </div>
+      <details class="wm-days">
+        <summary>Day-by-day</summary>
+        <div class="wm-days-list">
+          ${rows.map(r => `
+            <div class="wm-day${r.elapsed ? ' done' : ''}">
+              <span>${r.label} · ${r.day.date || ''}</span>
+              <span class="wd-km">${r.km.toFixed(1)} km</span>
+            </div>`).join('')}
+        </div>
+      </details>
     </div>`;
 }
 
@@ -3060,7 +3083,7 @@ function deletePassportEntry(id) {
 // ─────────────────────────────────────────────
 // RENDER MONEY (Who-Paid expense splitter)
 // ─────────────────────────────────────────────
-const TRAVELERS = ['Brian', 'Audra', 'Grace', 'Chris', 'Priscilla', 'Noah', 'Zach'];
+const PARTIES = ['Gollenbergs', 'Wachters'];
 let expenseData = { rate: 1.08, items: [] };
 let mnFormOpen = false;
 let mnCurrency = 'EUR';
@@ -3087,7 +3110,7 @@ function fmtMoney(eur) {
 }
 
 function computeBalances() {
-  const net = {}; TRAVELERS.forEach(t => net[t] = 0);
+  const net = {}; PARTIES.forEach(t => net[t] = 0);
   expenseData.items.forEach(it => {
     const who = (it.splitAmong || []).filter(p => net[p] !== undefined);
     if (who.length === 0) return;
@@ -3136,9 +3159,9 @@ function renderMoney() {
   let html = `
     <div class="mn-hero">
       <h2>💶 Trip Money</h2>
-      <p>Who paid, who owes, all squared up.</p>
+      <p>Gollenbergs &amp; Wachters — who paid, who owes.</p>
     </div>
-    <div class="mn-note">📱 No accounts — this ledger lives on <b>this phone only</b>. Keep it on one "trip wallet" device.</div>
+    <div class="mn-note">📱 Lives on <b>this phone only</b> — keep it on one "trip wallet" device, and <b>back it up</b> below so clearing Safari can't wipe it.</div>
     <div class="mn-bar">
       <span class="mn-rate">€1 = $<input id="mn-rate" type="number" step="0.01" min="0.5" max="2" value="${expenseData.rate}" onchange="updateRate(this.value)"></span>
       <span class="mn-total">Total: €${totalEUR.toFixed(2)}</span>
@@ -3164,12 +3187,12 @@ function renderMoney() {
         </div>
         <div class="mn-field">
           <label>Paid by</label>
-          <select id="mn-paidby">${TRAVELERS.map(t => `<option value="${t}">${t}</option>`).join('')}</select>
+          <select id="mn-paidby">${PARTIES.map(t => `<option value="${t}">${t}</option>`).join('')}</select>
         </div>
         <div class="mn-field">
           <label>Split among (tap to toggle)</label>
           <div class="mn-who" id="mn-who">
-            ${TRAVELERS.map(t => `<span class="mn-chip ${mnSplit[t] ? 'on' : ''}" data-name="${t}" onclick="toggleSplit('${t}')">${t}</span>`).join('')}
+            ${PARTIES.map(t => `<span class="mn-chip ${mnSplit[t] ? 'on' : ''}" data-name="${t}" onclick="toggleSplit('${t}')">${t}</span>`).join('')}
           </div>
         </div>
         <div class="mn-form-btns">
@@ -3183,7 +3206,7 @@ function renderMoney() {
 
   // Balances
   html += `<div class="mn-section-title">Balances</div>`;
-  html += TRAVELERS.map(t => {
+  html += PARTIES.map(t => {
     const v = net[t] || 0;
     const cls = v > 0.01 ? 'pos' : (v < -0.01 ? 'neg' : 'zero');
     const label = v > 0.01 ? `is owed ${fmtMoney(v)}` : (v < -0.01 ? `owes ${fmtMoney(-v)}` : 'settled');
@@ -3209,7 +3232,7 @@ function renderMoney() {
   } else {
     html += [...expenseData.items].reverse().map(it => {
       const eur = expenseEUR(it);
-      const who = (it.splitAmong || []).length === TRAVELERS.length ? 'everyone'
+      const who = (it.splitAmong || []).length === PARTIES.length ? 'both families'
         : (it.splitAmong || []).join(', ');
       const orig = it.currency === 'USD' ? `$${it.amount.toFixed(2)}` : `€${it.amount.toFixed(2)}`;
       return `
@@ -3224,7 +3247,80 @@ function renderMoney() {
     }).join('');
   }
 
+  // Backup & restore (collapsed)
+  html += `
+    <details class="mn-backup">
+      <summary>🔐 Backup &amp; restore</summary>
+      <div class="mn-backup-inner">
+        <p class="mn-backup-hint">Copy this code into Notes or a text to yourself. Clearing Safari wipes the app's saved data — this is your safety net. To restore (here or on another phone), paste a code in and tap Restore. Covers expenses + gelato passport.</p>
+        <textarea id="mn-backup-code" class="mn-backup-ta" spellcheck="false" autocapitalize="off" autocomplete="off">${escapeHtml(backupPayload())}</textarea>
+        <div class="mn-backup-btns">
+          <button type="button" onclick="copyBackup()">📋 Copy code</button>
+          <button type="button" onclick="downloadBackup()">⬇️ Save file</button>
+          <button type="button" onclick="restoreBackup()">♻️ Restore</button>
+        </div>
+        <div id="mn-backup-status" class="mn-backup-status"></div>
+      </div>
+    </details>`;
+
   el.innerHTML = html;
+}
+
+function backupPayload() {
+  return JSON.stringify({ v: 1, savedAt: new Date().toISOString(), expenses: expenseData, gelato: gelatoLog });
+}
+function mnBackupStatus(msg, ok) {
+  const s = document.getElementById('mn-backup-status');
+  if (!s) return;
+  s.textContent = msg;
+  s.style.color = ok === false ? '#c0392b' : '#1d7a40';
+}
+function copyBackup() {
+  const ta = document.getElementById('mn-backup-code');
+  if (!ta) return;
+  ta.focus(); ta.select();
+  try { ta.setSelectionRange(0, ta.value.length); } catch (e) {}
+  const done = () => mnBackupStatus('Copied ✓ — paste it into Notes or a text to yourself.');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(done).catch(() => {
+      try { document.execCommand('copy'); done(); }
+      catch (e) { mnBackupStatus('Couldn’t auto-copy — select all in the box and copy manually.', false); }
+    });
+  } else {
+    try { document.execCommand('copy'); done(); }
+    catch (e) { mnBackupStatus('Select all in the box and copy manually.', false); }
+  }
+}
+function downloadBackup() {
+  try {
+    const blob = new Blob([backupPayload()], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'italy-trip-backup-' + getItalyDateStr() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    mnBackupStatus('Saved ✓ — look in Files / Downloads (or use Copy code).');
+  } catch (e) {
+    mnBackupStatus('Saving a file isn’t supported here — use Copy code instead.', false);
+  }
+}
+function restoreBackup() {
+  const ta = document.getElementById('mn-backup-code');
+  if (!ta) return;
+  let d;
+  try { d = JSON.parse(ta.value.trim()); }
+  catch (e) { mnBackupStatus('That code didn’t parse — paste the full backup code.', false); return; }
+  const restored = [];
+  if (d.expenses && Array.isArray(d.expenses.items)) {
+    expenseData = d.expenses;
+    if (!expenseData.rate) expenseData.rate = 1.08;
+    saveExpenses(); restored.push('expenses');
+  }
+  if (Array.isArray(d.gelato)) { gelatoLog = d.gelato; saveGelatoLog(); restored.push('gelato passport'); }
+  if (restored.length === 0) { mnBackupStatus('No recognizable data in that code.', false); return; }
+  alert('Restored ' + restored.join(' + ') + ' ✓');
+  renderMoney();
 }
 
 function updateRate(v) {
@@ -3234,7 +3330,7 @@ function updateRate(v) {
 function openMoneyForm() {
   mnFormOpen = true;
   mnCurrency = 'EUR';
-  mnSplit = {}; TRAVELERS.forEach(t => mnSplit[t] = true);  // default: split among all
+  mnSplit = {}; PARTIES.forEach(t => mnSplit[t] = true);  // default: split among all
   renderMoney();
   const d = document.getElementById('mn-desc'); if (d) d.focus();
 }
@@ -3252,7 +3348,7 @@ function saveExpense() {
   const desc = document.getElementById('mn-desc').value.trim();
   const amount = parseFloat(document.getElementById('mn-amount').value);
   const paidBy = document.getElementById('mn-paidby').value;
-  const splitAmong = TRAVELERS.filter(t => mnSplit[t]);
+  const splitAmong = PARTIES.filter(t => mnSplit[t]);
   if (!amount || amount <= 0) { alert('Enter an amount greater than 0.'); return; }
   if (splitAmong.length === 0) { alert('Pick at least one person to split among.'); return; }
   expenseData.items.push({
