@@ -954,8 +954,19 @@
   .wm-day { display:flex; justify-content:space-between; font-size:0.8rem; color:#b3a496; padding:3px 0; border-top:1px solid #ede7df; }
   .wm-day:first-child { border-top:none; }
   .wm-day.done { color:#3d2b1f; }
-  .wm-day .wd-km { color:#8B3A2F; font-variant-numeric:tabular-nums; font-weight:600; }
-  .wm-day.done .wd-km::after { content:' ✓'; color:#27ae60; font-weight:700; }
+  .wm-day.editing { align-items:center; }
+  .wm-day .wd-km { color:#8B3A2F; font-variant-numeric:tabular-nums; font-weight:600; display:inline-flex; align-items:center; gap:6px; }
+  .wm-tag { font-size:0.58rem; text-transform:uppercase; letter-spacing:0.4px; font-weight:800; padding:2px 5px; border-radius:5px; background:#ede7df; color:#9a8575; }
+  .wm-tag.actual { background:#eaf7ee; color:#1d7a40; }
+  .wm-edit-btn { background:none; border:none; cursor:pointer; font-size:0.8rem; padding:0 2px; opacity:0.65; -webkit-tap-highlight-color:transparent; }
+  .wm-edit-btn:active { opacity:1; }
+  .wm-edit { display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; color:#7a6155; }
+  .wm-edit input { width:54px; border:1px solid #e0a020; border-radius:7px; padding:4px 6px; font-size:0.8rem; font-family:inherit; text-align:right; background:#fff; color:#2a1f17; }
+  .wm-edit button { border:none; border-radius:7px; padding:5px 9px; font-size:0.74rem; font-weight:700; cursor:pointer; }
+  .wm-e-save { background:#8B3A2F; color:#fff; }
+  .wm-e-clear { background:#ede7df; color:#5a4535; }
+  .wm-e-cancel { background:#ede7df; color:#9a8575; }
+  .wm-edit-hint { font-size:0.7rem; color:#b3a496; margin-top:8px; font-style:italic; }
 
   /* ── Money / Expense splitter ── */
   .mn-hero { text-align:center; margin-bottom:6px; }
@@ -2824,6 +2835,28 @@ function renderOverview() {
 // WALKED ACROSS ITALY — directional km from itinerary walk times
 // ─────────────────────────────────────────────
 const WALK_KMH = 5; // assumed walking pace → km = minutes / 12
+let walkOverrides = {};   // iso date -> actual km (manual override of the plan)
+let wmEditDay = null;     // iso date currently being edited
+let wmDaysOpen = false;   // keep the day-by-day <details> open across re-renders
+
+function loadWalkOverrides() {
+  try { walkOverrides = JSON.parse(localStorage.getItem('italy-walk-overrides') || '{}'); }
+  catch (e) { walkOverrides = {}; }
+}
+function saveWalkOverrides() {
+  try { localStorage.setItem('italy-walk-overrides', JSON.stringify(walkOverrides)); } catch (e) {}
+}
+function editWalkDay(iso) { wmEditDay = iso; wmDaysOpen = true; renderWalkMeter(); }
+function cancelWalkEdit() { wmEditDay = null; renderWalkMeter(); }
+function saveWalkDay(iso) {
+  const v = parseFloat(document.getElementById('wm-edit-input').value);
+  if (!isNaN(v) && v >= 0) { walkOverrides[iso] = v; saveWalkOverrides(); }
+  wmEditDay = null; renderWalkMeter();
+}
+function clearWalkDay(iso) {
+  delete walkOverrides[iso]; saveWalkOverrides();
+  wmEditDay = null; renderWalkMeter();
+}
 
 function walkRows() {
   const todayISO = getItalyDateStr();
@@ -2855,9 +2888,12 @@ function walkEquiv(km) {
 function renderWalkMeter() {
   const el = document.getElementById('walk-meter');
   if (!el) return;
-  const rows = walkRows();
-  const total = rows.reduce((s, r) => s + r.km, 0);
-  const walked = rows.reduce((s, r) => s + (r.elapsed ? r.km : 0), 0);
+  const rows = walkRows().map(r => {
+    const overridden = Object.prototype.hasOwnProperty.call(walkOverrides, r.iso);
+    return { ...r, planned: r.km, eff: overridden ? walkOverrides[r.iso] : r.km, overridden };
+  });
+  const total = rows.reduce((s, r) => s + r.planned, 0);             // denominator = the plan
+  const walked = rows.reduce((s, r) => s + (r.elapsed ? r.eff : 0), 0); // actuals where entered
   const pct = total > 0 ? Math.min(100, Math.round(walked / total * 100)) : 0;
 
   el.innerHTML = `
@@ -2869,17 +2905,44 @@ function renderWalkMeter() {
       <div class="wm-big">${walked.toFixed(1)} <span>km so far</span></div>
       <div class="wm-bar"><div class="wm-bar-fill" style="width:${pct}%"></div></div>
       <div class="wm-equiv">${walkEquiv(walked)}</div>
-      <details class="wm-days">
-        <summary>Day-by-day</summary>
+      <details class="wm-days"${wmDaysOpen ? ' open' : ''}>
+        <summary>Day-by-day${rows.some(r => r.overridden) ? ' · actuals saved' : ''}</summary>
         <div class="wm-days-list">
-          ${rows.map(r => `
-            <div class="wm-day${r.elapsed ? ' done' : ''}">
-              <span>${r.label} · ${r.day.date || ''}</span>
-              <span class="wd-km">${r.km.toFixed(1)} km</span>
-            </div>`).join('')}
+          ${rows.map(r => {
+            const head = `<span>${r.label} · ${r.day.date || ''}</span>`;
+            if (wmEditDay === r.iso) {
+              return `
+                <div class="wm-day done editing">
+                  ${head}
+                  <span class="wm-edit">
+                    <input id="wm-edit-input" type="number" step="0.1" min="0" inputmode="decimal" value="${r.eff.toFixed(1)}">km
+                    <button class="wm-e-save" onclick="saveWalkDay('${r.iso}')">Save</button>
+                    ${r.overridden ? `<button class="wm-e-clear" onclick="clearWalkDay('${r.iso}')" title="Back to plan">↺</button>` : ''}
+                    <button class="wm-e-cancel" onclick="cancelWalkEdit()" title="Cancel">✕</button>
+                  </span>
+                </div>`;
+            }
+            const tag = r.overridden
+              ? `<span class="wm-tag actual">actual</span>`
+              : (r.elapsed ? `<span class="wm-tag">plan</span>` : '');
+            const edit = r.elapsed
+              ? `<button class="wm-edit-btn" onclick="editWalkDay('${r.iso}')" title="Enter actual distance">✏️</button>`
+              : '';
+            return `
+              <div class="wm-day${r.elapsed ? ' done' : ''}">
+                ${head}
+                <span class="wd-km">${tag}${r.eff.toFixed(1)} km${edit}</span>
+              </div>`;
+          }).join('')}
         </div>
+        ${rows.some(r => r.elapsed) ? `<div class="wm-edit-hint">Tap ✏️ on a finished day to log your real distance.</div>` : ''}
       </details>
     </div>`;
+
+  const det = el.querySelector('.wm-days');
+  if (det) det.addEventListener('toggle', () => { wmDaysOpen = det.open; });
+  const inp = document.getElementById('wm-edit-input');
+  if (inp) { inp.focus(); try { inp.select(); } catch (e) {} }
 }
 
 // ─────────────────────────────────────────────
@@ -3267,7 +3330,7 @@ function renderMoney() {
 }
 
 function backupPayload() {
-  return JSON.stringify({ v: 1, savedAt: new Date().toISOString(), expenses: expenseData, gelato: gelatoLog });
+  return JSON.stringify({ v: 1, savedAt: new Date().toISOString(), expenses: expenseData, gelato: gelatoLog, walk: walkOverrides });
 }
 function mnBackupStatus(msg, ok) {
   const s = document.getElementById('mn-backup-status');
@@ -3318,6 +3381,7 @@ function restoreBackup() {
     saveExpenses(); restored.push('expenses');
   }
   if (Array.isArray(d.gelato)) { gelatoLog = d.gelato; saveGelatoLog(); restored.push('gelato passport'); }
+  if (d.walk && typeof d.walk === 'object') { walkOverrides = d.walk; saveWalkOverrides(); restored.push('walk actuals'); }
   if (restored.length === 0) { mnBackupStatus('No recognizable data in that code.', false); return; }
   alert('Restored ' + restored.join(' + ') + ' ✓');
   renderMoney();
@@ -3754,6 +3818,7 @@ loadOverrides();
 loadDurationOverrides();
 loadGelatoLog();
 loadExpenses();
+loadWalkOverrides();
 loadWeatherCache();
 fetchWeather();
 updateTodayBanner();
